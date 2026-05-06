@@ -2842,10 +2842,10 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     function toggleFaq(btn) {
       var answer = btn.nextElementSibling;
       if (!answer) return;
-      var isOpen = answer.classList.contains('open');
-
-      // Close all — use classList only, never inline style (inline style overrides CSS and causes freeze)
+      var isOpen = (answer.style.display === 'block');
+      // Hide all answers first
       document.querySelectorAll('.faq-answer, .faq-a').forEach(function(a) {
+        a.style.display = 'none';
         a.classList.remove('open');
       });
       document.querySelectorAll('.faq-question, .faq-q').forEach(function(b) {
@@ -2855,9 +2855,9 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
         var ar = b.querySelector('.faq-arrow');
         if (ar) ar.textContent = '▼';
       });
-
       // If it was closed, open it
       if (!isOpen) {
+        answer.style.display = 'block';
         answer.classList.add('open');
         btn.classList.add('open');
         var icon = btn.querySelector('.faq-icon');
@@ -2980,4 +2980,30 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       try { localStorage.setItem('nordicwings_cookies','all'); } catch(ex){}
       document.getElementById('cookie-banner').style.display = 'none';
     }
+    function declineCookies() {
+      try { localStorage.setItem('nordicwings_cookies','essential'); } catch(ex){}
+      document.getElementById('cookie-banner').style.display = 'none';
+    }
+
+    /* ESC key closes policy modal */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        var o = document.getElementById('policy-modal-overlay');
+        if (o) { o.style.display = 'none'; document.body.style.overflow = ''; }
+      }
+    });
+
+    /* Show cookie banner if not yet answered */
+    (function() {
+      try {
+        if (!localStorage.getItem('nordicwings_cookies')) {
+          var b = document.getElementById('cookie-banner');
+          if (b) b.style.display = 'block';
+        }
+      } catch(ex) {}
+    })();
+
+  </script>
+</body>
+</html>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
