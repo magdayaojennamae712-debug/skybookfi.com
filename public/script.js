@@ -1315,6 +1315,40 @@ function renderAffiliateResults(orig, dest, date, adults, children, infants) {
       <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 16px;font-size:.78rem;color:#166534;text-align:center;">
         ✓ All links are real airlines &amp; trusted booking sites &nbsp;·&nbsp; ✓ Secure payment on their website &nbsp;·&nbsp; ✓ Real ticket issued instantly
       </div>
+
+      <!-- HOTEL UPSELL BANNER -->
+      <div style="margin-top:20px;background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:16px;padding:20px 22px;">
+        <div style="color:#fff;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">🏨 Also need a hotel?</div>
+        <div style="color:#fff;font-weight:800;font-size:1rem;margin-bottom:4px;">Book your hotel at ${toName} — best prices guaranteed</div>
+        <div style="color:rgba(255,255,255,.8);font-size:.8rem;margin-bottom:14px;">Hotels earn up to 6% commission — compare thousands of options with free cancellation</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <a href="https://www.jdoqocy.com/click-101737492-13852728" target="_blank" rel="noopener"
+            onclick="typeof gtag==='function'&&gtag('event','affiliate_click',{event_category:'Revenue',event_label:'Expedia Hotel: '+dest,value:3})"
+            style="display:inline-flex;align-items:center;gap:7px;background:#fff;color:#1e3a8a;font-weight:800;font-size:.88rem;padding:10px 20px;border-radius:10px;text-decoration:none;flex:1;min-width:140px;justify-content:center;">
+            🏨 Expedia Hotels →
+          </a>
+          <a href="https://www.trip.com/hotels/?Allianceid=8098413&SID=306552835&trip_sub1=hotels" target="_blank" rel="noopener"
+            onclick="typeof gtag==='function'&&gtag('event','affiliate_click',{event_category:'Revenue',event_label:'Trip.com Hotel: '+dest,value:3})"
+            style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.15);color:#fff;font-weight:700;font-size:.88rem;padding:10px 20px;border-radius:10px;text-decoration:none;border:1.5px solid rgba(255,255,255,.4);flex:1;min-width:140px;justify-content:center;">
+            🌐 Trip.com Hotels →
+          </a>
+        </div>
+      </div>
+
+      <!-- INSURANCE UPSELL BANNER -->
+      <div style="margin-top:12px;background:linear-gradient(135deg,#065f46,#059669);border-radius:16px;padding:20px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:180px;">
+          <div style="color:#fff;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">🛡️ Travel Insurance</div>
+          <div style="color:#fff;font-weight:800;font-size:.95rem;margin-bottom:3px;">Protect your trip with World Nomads</div>
+          <div style="color:rgba(255,255,255,.85);font-size:.78rem;">Medical emergencies, cancellations, lost baggage &amp; more — from €3/day</div>
+        </div>
+        <a href="https://www.jdoqocy.com/click-101737492-15403748" target="_blank" rel="noopener"
+          onclick="typeof gtag==='function'&&gtag('event','affiliate_click',{event_category:'Revenue',event_label:'WorldNomads Insurance',value:5})"
+          style="display:inline-flex;align-items:center;gap:7px;background:#fff;color:#065f46;font-weight:800;font-size:.9rem;padding:12px 22px;border-radius:10px;text-decoration:none;white-space:nowrap;">
+          Get a Free Quote →
+        </a>
+      </div>
+
     </div>
   `;
 }
