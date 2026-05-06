@@ -2842,26 +2842,28 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     function toggleFaq(btn) {
       var answer = btn.nextElementSibling;
       if (!answer) return;
-      var isOpen = answer.style.display === 'block';
+      var isOpen = answer.classList.contains('open');
 
-      // Close all open FAQ answers on the page
+      // Close all — use classList only, never inline style (inline style overrides CSS and causes freeze)
       document.querySelectorAll('.faq-answer, .faq-a').forEach(function(a) {
-        a.style.display = 'none';
         a.classList.remove('open');
       });
       document.querySelectorAll('.faq-question, .faq-q').forEach(function(b) {
         b.classList.remove('open');
         var ic = b.querySelector('.faq-icon');
         if (ic) ic.textContent = '+';
+        var ar = b.querySelector('.faq-arrow');
+        if (ar) ar.textContent = '▼';
       });
 
       // If it was closed, open it
       if (!isOpen) {
-        answer.style.display = 'block';
         answer.classList.add('open');
         btn.classList.add('open');
         var icon = btn.querySelector('.faq-icon');
-        if (icon) icon.textContent = '-';
+        if (icon) icon.textContent = '−';
+        var arrow = btn.querySelector('.faq-arrow');
+        if (arrow) arrow.textContent = '▲';
       }
     }
     /* ── Currency Toggle ── */
@@ -2961,7 +2963,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     function openPolicyModal(type) {
       var c = POLICY_CONTENT[type];
       if (!c) return;
-      document.getElementById('policy-modal-title').textContent = c.title;
+      document.getElementById('policy-modal-title').innerHTML = c.title;
       document.getElementById('policy-modal-body').innerHTML = c.html;
       document.getElementById('policy-modal-overlay').style.display = 'flex';
       document.body.style.overflow = 'hidden';
