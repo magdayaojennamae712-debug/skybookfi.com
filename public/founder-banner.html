@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Founder Banner Download</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; gap: 20px; padding: 24px; }
+    h1 { color: #f1f5f9; font-size: 1rem; margin: 0; font-weight: 600; }
+    canvas { border-radius: 10px; max-width: 100%; box-shadow: 0 8px 40px rgba(0,0,0,.6); }
+    .btn { background: #0ea5e9; color: #fff; border: none; padding: 14px 40px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+    .btn:hover { background: #0284c7; }
+    small { color: #475569; font-size: .78rem; }
+  </style>
+</head>
+<body>
+  <h1>Personal Founder Banner (1584 × 396 px)</h1>
+  <canvas id="c" width="1584" height="396"></canvas>
+  <button class="btn" onclick="dl()">⬇ Download PNG</button>
+  <small>Upload to LinkedIn → Profile → pencil icon on background photo</small>
+
+  <script>
+    const c = document.getElementById('c');
+    const x = c.getContext('2d');
+    const W = 1584, H = 396;
+
+    // Deep dark background
+    x.fillStyle = '#080e1a';
+    x.fillRect(0, 0, W, H);
+
+    // Subtle diagonal gradient overlay
+    const g = x.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, 'rgba(14,165,233,0.08)');
+    g.addColorStop(0.5, 'rgba(0,0,0,0)');
+    g.addColorStop(1, 'rgba(99,102,241,0.10)');
+    x.fillStyle = g;
+    x.fillRect(0, 0, W, H);
+
+    // Glowing orb left
+    const orb1 = x.createRadialGradient(200, H/2, 0, 200, H/2, 300);
+    orb1.addColorStop(0, 'rgba(14,165,233,0.12)');
+    orb1.addColorStop(1, 'rgba(14,165,233,0)');
+    x.fillStyle = orb1;
+    x.fillRect(0, 0, W, H);
+
+    // Glowing orb right
+    const orb2 = x.createRadialGradient(W - 200, H/2, 0, W - 200, H/2, 280);
+    orb2.addColorStop(0, 'rgba(99,102,241,0.10)');
+    orb2.addColorStop(1, 'rgba(99,102,241,0)');
+    x.fillStyle = orb2;
+    x.fillRect(0, 0, W, H);
+
+    // Thin horizontal lines (decorative)
+    for (let i = 0; i < 5; i++) {
+      x.strokeStyle = `rgba(255,255,255,0.03)`;
+      x.lineWidth = 1;
+      x.beginPath();
+      x.moveTo(0, 60 + i * 70);
+      x.lineTo(W, 60 + i * 70);
+      x.stroke();
+    }
+
+    // Left bold accent bar
+    x.fillStyle = '#0ea5e9';
+    x.beginPath();
+    x.roundRect(72, H/2 - 55, 4, 110, 2);
+    x.fill();
+
+    // Name — elegant serif feel
+    x.fillStyle = '#f8fafc';
+    x.font = '300 72px Georgia, "Times New Roman", serif';
+    x.fillText('Jennamae Saarela', 96, H/2 + 10);
+
+    // Founder title
+    x.fillStyle = '#38bdf8';
+    x.font = '600 20px -apple-system, BlinkMacSystemFont, sans-serif';
+    x.letterSpacing = '4px';
+    x.fillText('F O U N D E R', 100, H/2 + 50);
+
+    // Companies
+    x.fillStyle = 'rgba(148,163,184,0.7)';
+    x.font = '400 17px -apple-system, BlinkMacSystemFont, sans-serif';
+    x.fillText('NordicWings.net  ·  NordAssist.co', 100, H/2 + 84);
+
+    // Right side — JS monogram circle
+    const cx = W - 130, cy = H/2;
+    x.beginPath();
+    x.arc(cx, cy, 65, 0, Math.PI * 2);
+    x.strokeStyle = 'rgba(56,189,248,0.25)';
+    x.lineWidth = 1.5;
+    x.stroke();
+    x.beginPath();
+    x.arc(cx, cy, 50, 0, Math.PI * 2);
+    x.strokeStyle = 'rgba(56,189,248,0.12)';
+    x.lineWidth = 1;
+    x.stroke();
+    x.fillStyle = 'rgba(14,165,233,0.10)';
+    x.beginPath();
+    x.arc(cx, cy, 50, 0, Math.PI * 2);
+    x.fill();
+    x.fillStyle = '#38bdf8';
+    x.font = 'bold 36px Georgia, serif';
+    x.textAlign = 'center';
+    x.fillText('JS', cx, cy + 13);
+
+    // Bottom accent line
+    const line = x.createLinearGradient(0, 0, W, 0);
+    line.addColorStop(0, 'rgba(14,165,233,0)');
+    line.addColorStop(0.3, 'rgba(14,165,233,0.8)');
+    line.addColorStop(0.7, 'rgba(99,102,241,0.8)');
+    line.addColorStop(1, 'rgba(99,102,241,0)');
+    x.fillStyle = line;
+    x.fillRect(0, H - 4, W, 4);
+
+    function dl() {
+      const a = document.createElement('a');
+      a.download = 'Jennamae-Saarela-Founder-Banner.png';
+      a.href = c.toDataURL('image/png');
+      a.click();
+    }
+  </script>
+</body>
+</html>
