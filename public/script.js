@@ -312,6 +312,27 @@ function checkUrlParams() {
 document.addEventListener('DOMContentLoaded', checkUrlParams);
 
 // ─────────────────────────────────────────────────────────────
+// BROWSER BACK BUTTON — return to homepage search from results
+// ─────────────────────────────────────────────────────────────
+window.addEventListener('popstate', function(e) {
+  // If user presses Back from results page, go back to homepage search view
+  const resultsList = document.getElementById('results-list');
+  const resultsSection = document.getElementById('results-section') || document.querySelector('.results-section');
+  const searchSection = document.getElementById('search-section') || document.querySelector('.search-section');
+
+  if (resultsList) resultsList.style.display = 'none';
+
+  // Scroll back to top / search form
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // If we have no state (back to homepage), clear URL params cleanly
+  if (!e.state || e.state.view !== 'results') {
+    // Replace URL back to clean homepage
+    history.replaceState(null, '', '/');
+  }
+});
+
+// ─────────────────────────────────────────────────────────────
 // PAGE NAVIGATION
 // ─────────────────────────────────────────────────────────────
 function showPage(pageId) {
@@ -1167,6 +1188,14 @@ async function searchFlights() {
 
   // Defer results render 80ms — lets browser paint the loading spinner first (critical on Android)
   var _orig=origin, _dest=dest, _date=departDate, _ad=numAdults, _ch=numChildren, _in=numInfants;
+
+  // Push state so browser Back button returns to homepage search
+  history.pushState(
+    { view: 'results', orig: _orig, dest: _dest, date: _date, adults: _ad },
+    '',
+    '?from=' + _orig + '&to=' + _dest + '&date=' + _date + '&pax=' + _ad
+  );
+
   setTimeout(function() {
     document.getElementById('results-loading').style.display = 'none';
     document.getElementById('results-list').style.display    = 'block';
