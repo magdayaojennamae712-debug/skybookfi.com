@@ -1,49 +1,61 @@
-// NordicWings Service Worker
-// Caches app files so it works offline and loads faster
-
-const CACHE_NAME = 'nordicwings-v6';
-const ASSETS = [
+const CACHE_NAME = 'nordicwings-v2';
+const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/style.css',
-  '/script.js',
   '/manifest.json',
   '/icon-192.png',
-  '/icon-512.png'
+  '/icon-512.png',
+  '/blog/',
+  '/blog/index.html',
+  '/blog/cheapest-flights-helsinki-bangkok.html',
+  '/blog/cheapest-time-fly-helsinki-manila.html',
+  '/blog/cheapest-european-cities-from-helsinki.html',
+  '/blog/trending-flights-from-helsinki-summer-2026.html'
 ];
 
-// Install — cache all assets fresh
+// Install: cache static assets
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
   self.skipWaiting();
 });
 
-// Activate — delete ALL old caches immediately
+// Activate: clean old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    )
   );
+  self.clients.claim();
 });
 
-// Fetch — network first for HTML, cache fallback for assets
+// Fetch: network-first for HTML, cache-first for assets
 self.addEventListener('fetch', event => {
-  // Always fetch fresh from network for API calls and HTML
-  if (event.request.url.includes('/api/') ||
-      event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request).catch(() => caches.match('/index.html'))
-    );
-    return;
-  }
+  const url = new URL(event.request.url);
+  if (event.request.method !== 'GET') return;
+  // Skip external requests
+  if (url.origin !== location.origin) return;
 
-  // Cache first for static assets (css, js, images)
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request);
-    })
-  );
+  const isHTML = event.request.headers.get('accept')?.includes('text/html');
+
+  if (isHTML) {
+    // Network first for pages
+    event.respondWith(
+      fetch(event.request)
+        .then(res => {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
+          return res;
+        })
+        .catch(() => caches.match(event.request))
+    );
+  } else {
+    // Cache first for assets
+    event.respondWith(
+      caches.match(event.request).then(cached => cached || fetch(event.request))
+    );
+  }
 });
