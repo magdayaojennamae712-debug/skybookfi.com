@@ -304,6 +304,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       </a>
       <nav class="header-nav">
         <a href="javascript:void(0)" class="nav-link" onclick="showPage('home')">Home</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('hotels')" style="color:#0ea5e9;font-weight:700;">🏨 Hotels</a>
         <a href="#destinations" class="nav-link">Destinations</a>
         <a href="/blog/" class="nav-link">Blog</a>
         <a href="javascript:void(0)" class="nav-link" onclick="showPage('book')" style="color:#0369a1;font-weight:700;">⚓ Sea Travel</a>
@@ -341,6 +342,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     </div>
     <div class="mobile-menu" id="mobile-menu">
       <a href="javascript:void(0)" onclick="showPage('home');toggleMobileMenu()">Home</a>
+      <a href="javascript:void(0)" onclick="showPage('hotels');toggleMobileMenu()" style="color:#0ea5e9;font-weight:700;">🏨 Hotels</a>
       <a href="#destinations" onclick="toggleMobileMenu()">Destinations</a>
       <a href="javascript:void(0)" onclick="showPage('book');toggleMobileMenu()" style="color:#0369a1;font-weight:700;">⚓ Sea Travel</a>
       <a href="javascript:void(0)" onclick="showPage('support');toggleMobileMenu()">Support</a>
@@ -2392,6 +2394,192 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
   </main>
 
   <!-- ═══════════════════════════════════════════════════════
+       PAGE: HOTELS
+  ════════════════════════════════════════════════════════ -->
+  <main id="page-hotels" class="page">
+    <div class="page-inner" style="max-width:1100px;padding:0 16px 60px;">
+      <button class="back-btn" onclick="showPage('home')" style="margin:24px 0 16px;">← Back to Home</button>
+
+      <!-- Hero -->
+      <div style="background:linear-gradient(135deg,#1a2b4a 0%,#0c4a6e 100%);border-radius:20px;padding:40px 28px;text-align:center;color:#fff;margin-bottom:36px;">
+        <div style="font-size:2.5rem;margin-bottom:10px;">🏨</div>
+        <h1 style="font-size:clamp(1.6rem,4vw,2.2rem);font-weight:900;margin-bottom:10px;">Find &amp; Book Your Hotel</h1>
+        <p style="color:#bae6fd;font-size:1rem;max-width:520px;margin:0 auto;">Compare thousands of hotels worldwide — best prices from Booking.com, Expedia, Trip.com, Hotels.com &amp; Agoda. Free cancellation on most bookings.</p>
+      </div>
+
+      <!-- Top affiliate buttons -->
+      <h2 style="font-size:1.2rem;font-weight:800;color:#0c2340;margin-bottom:16px;">🌍 Search Hotels by Partner</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:36px;">
+
+        <!-- Booking.com -->
+        <a href="https://www.booking.com/?marker=719573" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:#003580;color:#fff;border-radius:14px;padding:16px 18px;font-weight:700;font-size:.95rem;text-decoration:none;transition:opacity .2s;"
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <span style="font-size:1.5rem;">🏨</span>
+          <div><div style="font-weight:800;">Booking.com</div><div style="font-size:.75rem;opacity:.85;">Free cancellation</div></div>
+        </a>
+
+        <!-- Expedia -->
+        <a href="https://www.jdoqocy.com/click-101737492-13852728?url=https%3A%2F%2Fwww.expedia.fi%2FHotellit" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:#1b0088;color:#fff;border-radius:14px;padding:16px 18px;font-weight:700;font-size:.95rem;text-decoration:none;transition:opacity .2s;"
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <span style="font-size:1.5rem;">✈️</span>
+          <div><div style="font-weight:800;">Expedia</div><div style="font-size:.75rem;opacity:.85;">Best price guarantee</div></div>
+        </a>
+
+        <!-- Trip.com -->
+        <a href="https://www.trip.com/hotels/?Allianceid=8098413&SID=306552835&trip_sub1=hotels&trip_sub3=D16144585" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:#e53e3e;color:#fff;border-radius:14px;padding:16px 18px;font-weight:700;font-size:.95rem;text-decoration:none;transition:opacity .2s;"
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <span style="font-size:1.5rem;">🌏</span>
+          <div><div style="font-weight:800;">Trip.com</div><div style="font-size:.75rem;opacity:.85;">Great Asia deals</div></div>
+        </a>
+
+        <!-- Hotels.com -->
+        <a href="https://www.hotels.com/?pos=HCOM_FI&locale=en_FI&affid=719573" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:#c8102e;color:#fff;border-radius:14px;padding:16px 18px;font-weight:700;font-size:.95rem;text-decoration:none;transition:opacity .2s;"
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <span style="font-size:1.5rem;">🏩</span>
+          <div><div style="font-weight:800;">Hotels.com</div><div style="font-size:.75rem;opacity:.85;">Earn free nights</div></div>
+        </a>
+
+        <!-- Agoda -->
+        <a href="https://www.agoda.com/?cid=1932011" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:#e7710d;color:#fff;border-radius:14px;padding:16px 18px;font-weight:700;font-size:.95rem;text-decoration:none;transition:opacity .2s;"
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <span style="font-size:1.5rem;">🌴</span>
+          <div><div style="font-weight:800;">Agoda</div><div style="font-size:.75rem;opacity:.85;">Best Asia prices</div></div>
+        </a>
+
+        <!-- Hostelworld -->
+        <a href="https://www.hostelworld.com/?affiliate=nordicwings" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:12px;background:#6d28d9;color:#fff;border-radius:14px;padding:16px 18px;font-weight:700;font-size:.95rem;text-decoration:none;transition:opacity .2s;"
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <span style="font-size:1.5rem;">🎒</span>
+          <div><div style="font-weight:800;">Hostelworld</div><div style="font-size:.75rem;opacity:.85;">Budget &amp; hostels</div></div>
+        </a>
+
+      </div>
+
+      <!-- Search by region -->
+      <h2 style="font-size:1.2rem;font-weight:800;color:#0c2340;margin-bottom:16px;">📍 Search Hotels by Region</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:40px;">
+
+        <!-- Finland -->
+        <a href="https://www.booking.com/searchresults.html?ss=Finland&marker=719573" target="_blank" rel="noopener"
+           style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);text-decoration:none;display:block;transition:transform .2s,box-shadow .2s;"
+           onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.14)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 2px 12px rgba(0,0,0,.08)'">
+          <div style="background:linear-gradient(135deg,#00355f,#0066cc);height:80px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🇫🇮</div>
+          <div style="padding:14px 16px;">
+            <div style="font-weight:800;color:#0c2340;margin-bottom:4px;">Hotels in Finland</div>
+            <div style="font-size:.8rem;color:#64748b;">Helsinki, Oulu, Tampere, Rovaniemi</div>
+            <div style="margin-top:10px;background:#003580;color:#fff;padding:7px 12px;border-radius:8px;font-weight:700;font-size:.78rem;text-align:center;">Search Hotels →</div>
+          </div>
+        </a>
+
+        <!-- Philippines -->
+        <a href="https://www.booking.com/searchresults.html?ss=Philippines&marker=719573" target="_blank" rel="noopener"
+           style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);text-decoration:none;display:block;transition:transform .2s,box-shadow .2s;"
+           onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.14)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 2px 12px rgba(0,0,0,.08)'">
+          <div style="background:linear-gradient(135deg,#0369a1,#06b6d4);height:80px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🇵🇭</div>
+          <div style="padding:14px 16px;">
+            <div style="font-weight:800;color:#0c2340;margin-bottom:4px;">Hotels in Philippines</div>
+            <div style="font-size:.8rem;color:#64748b;">Manila, Cebu, Davao, Palawan, Boracay</div>
+            <div style="margin-top:10px;background:#003580;color:#fff;padding:7px 12px;border-radius:8px;font-weight:700;font-size:.78rem;text-align:center;">Search Hotels →</div>
+          </div>
+        </a>
+
+        <!-- Thailand -->
+        <a href="https://www.agoda.com/country/thailand.html?cid=1932011" target="_blank" rel="noopener"
+           style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);text-decoration:none;display:block;transition:transform .2s,box-shadow .2s;"
+           onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.14)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 2px 12px rgba(0,0,0,.08)'">
+          <div style="background:linear-gradient(135deg,#b91c1c,#fbbf24);height:80px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🇹🇭</div>
+          <div style="padding:14px 16px;">
+            <div style="font-weight:800;color:#0c2340;margin-bottom:4px;">Hotels in Thailand</div>
+            <div style="font-size:.8rem;color:#64748b;">Bangkok, Phuket, Chiang Mai, Pattaya</div>
+            <div style="margin-top:10px;background:#e7710d;color:#fff;padding:7px 12px;border-radius:8px;font-weight:700;font-size:.78rem;text-align:center;">Search on Agoda →</div>
+          </div>
+        </a>
+
+        <!-- Europe -->
+        <a href="https://www.jdoqocy.com/click-101737492-13852728?url=https%3A%2F%2Fwww.expedia.fi%2FEurooppa-Hotellit.d6048971.Travel-Guide-Hotels" target="_blank" rel="noopener"
+           style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);text-decoration:none;display:block;transition:transform .2s,box-shadow .2s;"
+           onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.14)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 2px 12px rgba(0,0,0,.08)'">
+          <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);height:80px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🇪🇺</div>
+          <div style="padding:14px 16px;">
+            <div style="font-weight:800;color:#0c2340;margin-bottom:4px;">Hotels in Europe</div>
+            <div style="font-size:.8rem;color:#64748b;">Paris, Rome, Barcelona, Amsterdam</div>
+            <div style="margin-top:10px;background:#1b0088;color:#fff;padding:7px 12px;border-radius:8px;font-weight:700;font-size:.78rem;text-align:center;">Search on Expedia →</div>
+          </div>
+        </a>
+
+        <!-- Bali -->
+        <a href="https://www.agoda.com/country/indonesia.html?cid=1932011" target="_blank" rel="noopener"
+           style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);text-decoration:none;display:block;transition:transform .2s,box-shadow .2s;"
+           onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.14)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 2px 12px rgba(0,0,0,.08)'">
+          <div style="background:linear-gradient(135deg,#065f46,#10b981);height:80px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🇮🇩</div>
+          <div style="padding:14px 16px;">
+            <div style="font-weight:800;color:#0c2340;margin-bottom:4px;">Hotels in Bali &amp; Indonesia</div>
+            <div style="font-size:.8rem;color:#64748b;">Bali, Jakarta, Lombok, Komodo</div>
+            <div style="margin-top:10px;background:#e7710d;color:#fff;padding:7px 12px;border-radius:8px;font-weight:700;font-size:.78rem;text-align:center;">Search on Agoda →</div>
+          </div>
+        </a>
+
+        <!-- Middle East -->
+        <a href="https://www.jdoqocy.com/click-101737492-13852728?url=https%3A%2F%2Fwww.expedia.fi%2FLahi-ita-Hotellit.d602003.Travel-Guide-Hotels" target="_blank" rel="noopener"
+           style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);text-decoration:none;display:block;transition:transform .2s,box-shadow .2s;"
+           onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.14)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 2px 12px rgba(0,0,0,.08)'">
+          <div style="background:linear-gradient(135deg,#78350f,#f59e0b);height:80px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🕌</div>
+          <div style="padding:14px 16px;">
+            <div style="font-weight:800;color:#0c2340;margin-bottom:4px;">Hotels in Middle East</div>
+            <div style="font-size:.8rem;color:#64748b;">Dubai, Abu Dhabi, Doha, Istanbul</div>
+            <div style="margin-top:10px;background:#1b0088;color:#fff;padding:7px 12px;border-radius:8px;font-weight:700;font-size:.78rem;text-align:center;">Search on Expedia →</div>
+          </div>
+        </a>
+
+        <!-- Asia -->
+        <a href="https://www.trip.com/hotels/?Allianceid=8098413&SID=306552835&trip_sub1=hotels&trip_sub3=D16144585" target="_blank" rel="noopener"
+           style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);text-decoration:none;display:block;transition:transform .2s,box-shadow .2s;"
+           onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.14)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 2px 12px rgba(0,0,0,.08)'">
+          <div style="background:linear-gradient(135deg,#7c3aed,#c026d3);height:80px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🌏</div>
+          <div style="padding:14px 16px;">
+            <div style="font-weight:800;color:#0c2340;margin-bottom:4px;">Hotels in Asia</div>
+            <div style="font-size:.8rem;color:#64748b;">Singapore, Tokyo, Seoul, Kuala Lumpur</div>
+            <div style="margin-top:10px;background:#e53e3e;color:#fff;padding:7px 12px;border-radius:8px;font-weight:700;font-size:.78rem;text-align:center;">Search on Trip.com →</div>
+          </div>
+        </a>
+
+        <!-- Americas -->
+        <a href="https://www.booking.com/searchresults.html?ss=United+States&marker=719573" target="_blank" rel="noopener"
+           style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);text-decoration:none;display:block;transition:transform .2s,box-shadow .2s;"
+           onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.14)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 2px 12px rgba(0,0,0,.08)'">
+          <div style="background:linear-gradient(135deg,#1e3a5f,#b91c1c);height:80px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🇺🇸</div>
+          <div style="padding:14px 16px;">
+            <div style="font-weight:800;color:#0c2340;margin-bottom:4px;">Hotels in Americas</div>
+            <div style="font-size:.8rem;color:#64748b;">New York, Miami, Los Angeles, Cancún</div>
+            <div style="margin-top:10px;background:#003580;color:#fff;padding:7px 12px;border-radius:8px;font-weight:700;font-size:.78rem;text-align:center;">Search Hotels →</div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Budget tip box -->
+      <div style="background:#f0f9ff;border-left:4px solid #0ea5e9;border-radius:0 12px 12px 0;padding:18px 20px;margin-bottom:32px;">
+        <strong style="color:#0369a1;">💡 Pro tip:</strong> Compare the same hotel across Booking.com, Expedia and Agoda — prices for the same room can differ by €20–€50 per night. Always check all three before booking!
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════
        PAGE: BOOK NOW (Sea travel — Searadar yacht charters + ferries)
   ════════════════════════════════════════════════════════ -->
   <main id="page-book" class="page">
@@ -2920,90 +3108,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       },
       destinations: {
         title: '&#9992; Popular Destinations',
-        html: '<p>NordicWings searches flights to <strong>thousands of destinations worldwide</strong>. Here are our most popular routes:</p><h3>&#127466;&#127482; Europe</h3><ul><li><strong>Helsinki &rarr; London</strong> &mdash; from &euro;150, ~3h direct, Finnair / British Airways</li><li><strong>Helsinki &rarr; Barcelona</strong> &mdash; from &euro;120, ~4h, Vueling / Finnair</li><li><strong>Helsinki &rarr; Paris</strong> &mdash; from &euro;130, ~3.5h, Finnair / Air France</li><li><strong>Helsinki &rarr; Amsterdam</strong> &mdash; from &euro;110, ~3h, KLM / Finnair</li></ul><h3>&#127759; Middle East &amp; Asia</h3><ul><li><strong>Helsinki &rarr; Dubai</strong> &mdash; from &euro;280, ~6h, Emirates / Finnair</li><li><strong>Helsinki &rarr; Bangkok</strong> &mdash; from &euro;350, ~11h, Finnair / Thai Airways</li><li><strong>Helsinki &rarr; Tokyo</strong> &mdash; from &euro;480, ~9.5h direct, Finnair</li></ul><h3>&#127482;&#127480; Americas</h3><ul><li><strong>Helsinki &rarr; New York</strong> &mdash; from &euro;400, ~9h, Finnair / American Airlines</li><li><strong>Helsinki &rarr; Miami</strong> &mdash; from &euro;450, ~11h</li></ul><h3>&#127477;&#127469; Philippines &amp; Southeast Asia</h3><ul><li><strong>Manila &rarr; Helsinki</strong> &mdash; from &euro;380 via connections</li><li><strong>Davao &rarr; Manila</strong> &mdash; from &euro;35, ~1.5h domestic</li><li><strong>Cebu &rarr; Manila</strong> &mdash; from &euro;30, ~1h domestic</li></ul><div class=\'policy-contact-box\'><p>&#128269; Can&#39;t find your route? <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
-      },
-      bookwithus: {
-        title: '&#128269; Search &amp; Book Flights',
-        html: '<p>Searching and booking with NordicWings is completely free. Here is everything you need to know:</p><h3>How to Search</h3><ul><li>Enter your <strong>From</strong> city or airport (e.g. HEL &mdash; Helsinki)</li><li>Enter your <strong>To</strong> destination</li><li>Choose your <strong>travel date</strong> and <strong>number of passengers</strong></li><li>Click <strong>Search Flights</strong></li></ul><h3>One-Way &amp; Round Trip</h3><p>Use the tabs to switch between <strong>One Way</strong> and <strong>Round Trip</strong>. For round trips, select both your outbound and return dates.</p><h3>What You See in Results</h3><ul><li>Airline logo and name</li><li>Departure and arrival times</li><li>Flight duration and number of stops</li><li>Price per person in euros</li><li><strong>Best Value</strong> and <strong>Nonstop</strong> badges</li></ul><h3>Sort &amp; Filter</h3><p>Sort by <strong>Cheapest</strong> or <strong>Fastest</strong>. Filter for <strong>Nonstop Only</strong> flights.</p><div class=\'policy-contact-box\'><p>&#128231; Questions? <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
-      },
-      createaccount: {
-        title: '&#128100; Create a Free Account',
-        html: '<p>Creating a NordicWings account is <strong>100% free</strong> and takes less than 30 seconds.</p><h3>Why Create an Account?</h3><ul><li>Required to <strong>complete a booking</strong> and receive confirmation</li><li>Access <strong>My Bookings</strong> to view and manage all your trips</li><li>Receive instant <strong>booking confirmation emails</strong></li><li>Securely save your booking history</li></ul><h3>How to Sign Up</h3><ol><li>Click the <strong>Sign Up Free</strong> button in the top right corner</li><li>Enter your <strong>full name</strong> and <strong>email address</strong></li><li>Choose a <strong>password</strong> (minimum 6 characters)</li><li>Click <strong>Create Account</strong> &mdash; done!</li></ol><h3>Is My Data Safe?</h3><p>Yes. Your account is secured with <strong>Firebase Authentication</strong> (Google enterprise-grade security). We never share your data with third parties.</p><div class=\'policy-contact-box\'><p>&#128231; Need help signing up? <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
-      },
-      signin: {
-        title: '&#128272; Sign In to NordicWings',
-        html: '<p>Already have a NordicWings account? Signing in gives you access to all your bookings and personal settings.</p><h3>How to Sign In</h3><ol><li>Click <strong>Sign In</strong> in the top navigation bar</li><li>Enter your <strong>email address</strong> and <strong>password</strong></li><li>Click <strong>Sign In</strong> &mdash; you will be logged in instantly</li></ol><h3>What You Can Do When Signed In</h3><ul><li>View all your <strong>past and upcoming bookings</strong></li><li>See your <strong>booking reference numbers</strong></li><li>Cancel a booking if needed</li><li>Search and book new flights</li></ul><h3>Stay Secure</h3><ul><li>Never share your password with anyone</li><li>Always sign out on shared or public computers</li><li>NordicWings will <strong>never</strong> ask for your password by email</li></ul><h3>Problems Signing In?</h3><p>If you have forgotten your password, please contact us and we will assist you.</p><div class=\'policy-contact-box\'><p>&#128231; Sign-in issues? <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
-      },
-      mybookings: {
-        title: '&#128203; My Bookings',
-        html: '<p>The <strong>My Bookings</strong> section is your personal travel dashboard to view and manage all your flights.</p><h3>What You Can See</h3><ul><li>All <strong>confirmed bookings</strong> with reference numbers</li><li>Flight details: route, date, airline, departure and arrival times</li><li>Number of passengers and total amount paid</li><li>Booking status: <strong>Confirmed</strong> or <strong>Cancelled</strong></li></ul><h3>How to Access</h3><ol><li><strong>Sign in</strong> to your NordicWings account</li><li>Click <strong>My Bookings</strong> in the navigation menu</li><li>All your bookings will be listed with full details</li></ol><h3>Cancelling a Booking</h3><p>Find your booking and click the <strong>Cancel Booking</strong> button. You will be asked to confirm before any changes are made.</p><h3>Missing a Booking?</h3><p>Make sure you are signed in with the <strong>same email</strong> used when booking. If it still does not appear, contact support with your reference number.</p><div class=\'policy-contact-box\'><p>&#128231; Booking issue? <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
-      },
-      privacy: {
-        title: '&#128274; Privacy Policy',
-        html: '<p><em>Last updated: April 2026</em></p><p>NordicWings is committed to protecting your personal data in accordance with the <strong>EU GDPR</strong>.</p><h3>What Data We Collect</h3><ul><li><strong>Account data:</strong> Your name and email address</li><li><strong>Booking data:</strong> Passenger names, travel dates, flight details</li><li><strong>Payment data:</strong> Processed by Stripe &mdash; we never store card numbers</li><li><strong>Analytics:</strong> Anonymised browser cookies via Google Analytics</li></ul><h3>How We Use Your Data</h3><ul><li>To process and manage your flight bookings</li><li>To send booking confirmations by email</li><li>To improve our platform via anonymised analytics</li><li>To comply with legal obligations</li></ul><h3>Your GDPR Rights</h3><p>You have the right to access, correct, or delete your data. Contact us at <a href="mailto:support@nordicwings.net">support@nordicwings.net</a>.</p><h3>Data Security</h3><p>Payments processed exclusively by <strong>Stripe</strong>. All data transmitted over HTTPS. We never sell your data. Data retained up to 3 years then securely deleted.</p><div class=\'policy-contact-box\'><p>&#128231; Privacy questions: <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
-      },
-      terms: {
-        title: '&#128203; Terms &amp; Conditions',
-        html: '<p><em>Last updated: April 2026</em></p><p>By using NordicWings (nordicwings.net) you agree to these Terms and Conditions.</p><h3>1. Our Service</h3><p>NordicWings is a flight search, comparison, and booking platform acting as an intermediary between you and the airlines.</p><h3>2. Booking &amp; Payment</h3><ul><li>Bookings subject to seat availability at time of payment</li><li>Prices shown are per person including all displayed taxes</li><li>Payment processed securely by <strong>Stripe</strong></li><li>Booking confirmed only when payment is successfully processed</li></ul><h3>3. Confirmation</h3><p>Booking confirmation with your reference number sent to your registered email. Please keep this for all future communications.</p><h3>4. Affiliate Partners</h3><p>NordicWings may display links to partners (Trip.com, Booking.com, etc.). We may earn a small commission at no extra cost to you.</p><h3>5. Airline Responsibility</h3><p>The airline is solely responsible for flight operations, delays, and cancellations. NordicWings is not liable for airline-caused disruptions.</p><h3>6. Governing Law</h3><p>These terms are governed by the laws of Finland.</p><div class=\'policy-contact-box\'><p>&#128231; Questions: <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
-      },
-      cancellation: {
-        title: '&#8617; Cancellation &amp; Refund Policy',
-        html: '<p><em>Last updated: April 2026</em></p><p>NordicWings is a <strong>free flight comparison and affiliate platform</strong>. We do not process payments or hold bookings &mdash; all bookings are made directly with the airline or partner site you choose.</p><h3>How to Cancel Your Flight</h3><p>Contact the airline or booking partner you booked with directly. Your booking confirmation email will have their cancellation link and contact details.</p><h3>Contact Your Booking Provider</h3><ul><li><strong>Kiwi.com</strong> &rarr; kiwi.com/en/pages/contact</li><li><strong>Expedia</strong> &rarr; expedia.com/service</li><li><strong>Finnair</strong> &rarr; finnair.com/help</li><li><strong>Emirates</strong> &rarr; emirates.com/help</li><li><strong>Qatar Airways</strong> &rarr; qatarairways.com/help</li><li><strong>Jetradar / Aviasales</strong> &rarr; support.aviasales.com</li></ul><h3>Refunds</h3><p>Refund eligibility depends entirely on the fare rules of the airline or partner you booked with. Common rules:</p><ul><li><strong>Flexible fares:</strong> Full refund per airline policy</li><li><strong>Standard fares:</strong> Subject to airline fare conditions</li><li><strong>Non-refundable fares:</strong> Airport taxes only may be refunded</li></ul><h3>EU Passenger Rights</h3><p>If your flight is cancelled or significantly delayed by the airline, you may be entitled to compensation under <strong>EU Regulation 261/2004</strong> regardless of where you booked.</p><div class=\'policy-contact-box\'><p>&#128231; Need help finding the right contact? <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
-      },
-      help: {
-        title: '&#10067; Help Center',
-        html: '<h3>How do I search for flights?</h3><p>Enter your departure city, destination, and travel date in the search box on the homepage. Click <strong>Search Flights</strong> and browse available options.</p><h3>How do I book a flight?</h3><p>Select your preferred flight and click the airline or partner link. You will be taken directly to their site to complete the booking &mdash; NordicWings charges no fees.</p><h3>Do I need an account to book?</h3><p>No &mdash; NordicWings is free to use without an account. Creating an account lets you save favourite routes and track deals.</p><h3>Is my payment secure?</h3><p>Yes. Payment is made directly on the airline or partner site (Kiwi.com, Expedia, Emirates, etc.). NordicWings never sees or stores your payment details.</p><h3>How do I cancel a booking?</h3><p>Contact the airline or partner site directly where you completed your booking. Check your confirmation email for their cancellation link.</p><h3>I did not receive a confirmation email</h3><p>Check your spam/junk folder first. If it is not there, email us with your booking reference number.</p><h3>What airlines does NordicWings cover?</h3><p>500+ airlines including Emirates, British Airways, Lufthansa, Qatar Airways, Finnair, Philippine Airlines, Ryanair, EasyJet, and many more worldwide.</p><div class=\'policy-contact-box\'><p>&#128231; Still need help? <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p><p style="margin-top:6px;font-size:.85rem;color:#374151;">Response time: within 24 hours, Mon&ndash;Fri.</p></div>'
-      },
-      contact: {
-        title: '&#128231; Contact Us',
-        html: '<p>We are here to help! Whether you have a question about a booking, need support, or want to give feedback &mdash; get in touch and we will respond promptly.</p><h3>Customer Support</h3><p>&#128231; <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p><p>For booking enquiries, cancellations, or general questions. Please include your <strong>booking reference number</strong> if your query relates to a specific booking.</p><h3>Response Times</h3><ul><li><strong>Weekdays (Mon&ndash;Fri):</strong> Within 24 hours</li><li><strong>Weekends:</strong> Within 48 hours</li><li><strong>Urgent issues:</strong> Mark subject as <strong>URGENT</strong></li></ul><h3>Business &amp; Partnership Enquiries</h3><p>For advertising, partnerships, or affiliate opportunities, email us at <a href="mailto:support@nordicwings.net">support@nordicwings.net</a>.</p><div class=\'policy-contact-box\'><p>&#128231; <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p><p style="margin-top:6px;font-size:.85rem;color:#374151;">nordicwings.net &middot; Secure &amp; Trusted Flight Booking</p></div>'
-      }
-    };
-
-    function openPolicyModal(type) {
-      var c = POLICY_CONTENT[type];
-      if (!c) return;
-      document.getElementById('policy-modal-title').innerHTML = c.title;
-      document.getElementById('policy-modal-body').innerHTML = c.html;
-      document.getElementById('policy-modal-overlay').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-    function closePolicyModal(e) {
-      var o = document.getElementById('policy-modal-overlay');
-      if (e && e.target !== o) return;
-      o.style.display = 'none';
-      document.body.style.overflow = '';
-    }
-
-    /* COOKIE CONSENT */
-    function acceptCookies() {
-      try { localStorage.setItem('nordicwings_cookies','all'); } catch(ex){}
-      document.getElementById('cookie-banner').style.display = 'none';
-    }
-    function declineCookies() {
-      try { localStorage.setItem('nordicwings_cookies','essential'); } catch(ex){}
-      document.getElementById('cookie-banner').style.display = 'none';
-    }
-
-    /* ESC key closes policy modal */
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        var o = document.getElementById('policy-modal-overlay');
-        if (o) { o.style.display = 'none'; document.body.style.overflow = ''; }
-      }
-    });
-
-    /* Show cookie banner if not yet answered */
-    (function() {
-      try {
-        if (!localStorage.getItem('nordicwings_cookies')) {
-          var b = document.getElementById('cookie-banner');
-          if (b) b.style.display = 'block';
-        }
-      } catch(ex) {}
-    })();
-
-  </script>
-</body>
-</html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        html: '<p>NordicWings searches flights to <strong>thousands of destinations worldwide</strong>. Here are our most popular routes:</p><h3>&#127466;&#127482; Europe</h3><ul><li><strong>Helsinki &rarr; London</strong> &mdash;
