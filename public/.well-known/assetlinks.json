@@ -1,14 +1,8 @@
-[
-  {
-    "relation": [
-      "delegate_permission/common.handle_all_urls"
-    ],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "net.nordicwings.twa",
-      "sha256_cert_fingerprints": [
-        "DD:8B:DD:02:A1:EF:7C:49:BD:B6:AD:EE:7A:59:84:56:DE:9F:42:74:92:55:50:05:4E:42:B7:8F:DB:29:69:E2"
-      ]
-    }
-  }
-]
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "net.nordicwings.twa",
+        "sha256_cert_fingerprints": ["DD:8B:DD:02:A1:EF:7C:49:BD:B6:AD:EE:7A:59:84:56:DE:9F:42:74:92:55:50:05:4E:42:B7:8F:DB:29:69:E2"]
+      }
+    }]
