@@ -341,11 +341,12 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
     </div>
     <div class="mobile-menu" id="mobile-menu">
-      <a href="javascript:void(0)" onclick="showPage('home');toggleMobileMenu()">Home</a>
+      <a href="javascript:void(0)" onclick="showPage('home');toggleMobileMenu()">🏠 Home</a>
       <a href="javascript:void(0)" onclick="showPage('hotels');toggleMobileMenu()" style="color:#0ea5e9;font-weight:700;">🏨 Hotels</a>
-      <a href="#destinations" onclick="toggleMobileMenu()">Destinations</a>
+      <a href="javascript:void(0)" onclick="showPage('home');setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu()">✈ Destinations</a>
+      <a href="/blog/" onclick="toggleMobileMenu()">📝 Blog</a>
       <a href="javascript:void(0)" onclick="showPage('book');toggleMobileMenu()" style="color:#0369a1;font-weight:700;">⚓ Sea Travel</a>
-      <a href="javascript:void(0)" onclick="showPage('support');toggleMobileMenu()">Support</a>
+      <a href="javascript:void(0)" onclick="showPage('support');toggleMobileMenu()">❓ Support</a>
       <button onclick="openAuthModal('login');toggleMobileMenu()">Sign In</button>
       <button onclick="openAuthModal('signup');toggleMobileMenu()">Sign Up Free</button>
       <!-- Language selector in mobile menu -->
@@ -3108,4 +3109,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       },
       destinations: {
         title: '&#9992; Popular Destinations',
-        html: '<p>NordicWings searches flights to <strong>thousands of destinations worldwide</strong>. Here are our most popular routes:</p><h3>&#127466;&#127482; Europe</h3><ul><li><strong>Helsinki &rarr; London</strong> &mdash;
+        
