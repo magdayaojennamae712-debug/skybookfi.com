@@ -336,8 +336,11 @@ window.addEventListener('popstate', function(e) {
 // PAGE NAVIGATION
 // ─────────────────────────────────────────────────────────────
 function showPage(pageId) {
+  var target = document.getElementById('page-' + pageId);
+  if (!target) { target = document.getElementById('page-home'); }
+  if (!target) return;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + pageId).classList.add('active');
+  target.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'instant' });
 
   // Load data when navigating to special pages
