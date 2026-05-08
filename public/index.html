@@ -338,24 +338,24 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           </div>
         </div>
       </nav>
-      <button class="mobile-menu-btn" type="button" id="hamburger-btn">☰</button>
-    </div>
-    <div class="mobile-menu" id="mobile-menu">
-      <a href="javascript:void(0)" onclick="showPage('home');toggleMobileMenu()">🏠 Home</a>
-      <a href="javascript:void(0)" onclick="showPage('hotels');toggleMobileMenu()" style="color:#0ea5e9;font-weight:700;">🏨 Hotels</a>
-      <a href="javascript:void(0)" onclick="showPage('home');setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu()">✈ Destinations</a>
-      <a href="/blog/" onclick="toggleMobileMenu()">📝 Blog</a>
-      <a href="javascript:void(0)" onclick="showPage('book');toggleMobileMenu()" style="color:#0369a1;font-weight:700;">⚓ Sea Travel</a>
-      <a href="javascript:void(0)" onclick="showPage('support');toggleMobileMenu()">❓ Support</a>
-      <button onclick="openAuthModal('login');toggleMobileMenu()">Sign In</button>
-      <button onclick="openAuthModal('signup');toggleMobileMenu()">Sign Up Free</button>
-      <!-- Language selector in mobile menu -->
-      <div style="border-top:1px solid #e2e8f0;margin-top:4px;padding-top:12px;">
-        <div style="font-size:.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🌐 Language</div>
-        <div id="nw-lang-list-mobile" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"></div>
-      </div>
+      <button class="mobile-menu-btn" type="button" onclick="toggleMobileMenu()">☰</button>
     </div>
   </header>
+  <!-- Mobile menu OUTSIDE header — fixes iOS Safari sticky touch bug -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="javascript:void(0)" onclick="showPage('home');toggleMobileMenu()">🏠 Home</a>
+    <a href="javascript:void(0)" onclick="showPage('hotels');toggleMobileMenu()" style="color:#0ea5e9;font-weight:700;">🏨 Hotels</a>
+    <a href="javascript:void(0)" onclick="showPage('home');setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu()">✈ Destinations</a>
+    <a href="/blog/" onclick="toggleMobileMenu()">📝 Blog</a>
+    <a href="javascript:void(0)" onclick="showPage('book');toggleMobileMenu()" style="color:#0369a1;font-weight:700;">⚓ Sea Travel</a>
+    <a href="javascript:void(0)" onclick="showPage('support');toggleMobileMenu()">❓ Support</a>
+    <button onclick="openAuthModal('login');toggleMobileMenu()">Sign In</button>
+    <button onclick="openAuthModal('signup');toggleMobileMenu()">Sign Up Free</button>
+    <div style="border-top:1px solid #e2e8f0;margin-top:4px;padding-top:12px;">
+      <div style="font-size:.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">🌐 Language</div>
+      <div id="nw-lang-list-mobile" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"></div>
+    </div>
+  </div>
 
   <!-- ═══════════════════════════════════════════════════════
        PAGE: HOME
@@ -3097,21 +3097,6 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       document.getElementById('mobile-menu').classList.toggle('open');
     }
 
-    /* iOS Safari fix: attach touch + click to hamburger button */
-    (function() {
-      var btn = document.getElementById('hamburger-btn');
-      if (!btn) return;
-      var fired = false;
-      btn.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        fired = true;
-        toggleMobileMenu();
-      }, { passive: false });
-      btn.addEventListener('click', function(e) {
-        if (fired) { fired = false; return; }
-        toggleMobileMenu();
-      });
-    })();
 
     /* POLICY MODALS */
     var POLICY_CONTENT = {

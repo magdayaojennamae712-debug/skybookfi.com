@@ -150,9 +150,12 @@ img { max-width: 100%; display: block; }
   display: none;
   flex-direction: column;
   padding: 16px 24px;
-  border-top: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
   background: white;
   gap: 8px;
+  position: relative;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }
 .mobile-menu.open { display: flex; }
 .mobile-menu a, .mobile-menu button {
