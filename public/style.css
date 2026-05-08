@@ -77,12 +77,20 @@ img { max-width: 100%; display: block; }
 #site-header {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   box-shadow: var(--shadow-sm);
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+/* iOS Safari: ensure header elements receive touch events */
+#site-header * {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  cursor: pointer;
 }
 
 .header-inner {
