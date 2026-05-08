@@ -129,7 +129,14 @@ img { max-width: 100%; display: block; }
 .mobile-menu-btn {
   display: none;
   background: none; border: none;
-  font-size: 1.4rem; cursor: pointer; color: var(--navy);
+  font-size: 1.6rem; cursor: pointer; color: var(--navy);
+  padding: 10px 12px;
+  margin: -10px -12px;
+  min-width: 44px; min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  position: relative;
+  z-index: 101;
 }
 .mobile-menu {
   display: none;
@@ -1428,4 +1435,5 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 600px) {
   .tp-reviews-section { padding: 28px 0; }
-  .tp-fallback {
+  .tp-fallback { flex-direction: column; gap: 6px; }
+}
