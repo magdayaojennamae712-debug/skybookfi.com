@@ -3110,4 +3110,58 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       },
       destinations: {
         title: '&#9992; Popular Destinations',
-        
+        html: '<p>NordicWings helps you find cheap flights from Helsinki and Finland to top destinations worldwide.</p><h3>Europe</h3><p>Helsinki to Madrid, Barcelona, Rome, Paris, London, Amsterdam, Lisbon, Berlin, Prague, Budapest, Vienna, Athens, Dubrovnik, Warsaw, Tallinn.</p><h3>Asia</h3><p>Helsinki to Bangkok, Singapore, Tokyo, Seoul, Kuala Lumpur, Bali, Ho Chi Minh City, Hong Kong.</p><h3>Philippines</h3><p>Helsinki to Manila, Cebu, Davao.</p><div class=\'policy-contact-box\'><p>📧 <a href="mailto:support@nordicwings.net">support@nordicwings.net</a></p></div>'
+      },
+      contact: {
+        title: '📧 Contact Us',
+        html: '<div class=\'policy-contact-box\'><p>📧 <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p><p>Response time: within 24 hours, Monday–Friday.</p></div>'
+      },
+      help: {
+        title: '❓ Help Center',
+        html: '<p>For help with bookings email <a href="mailto:support@nordicwings.net">support@nordicwings.net</a>.</p>'
+      },
+      cancellation: {
+        title: '❌ Cancellation Policy',
+        html: '<p>All bookings are made via our partner sites. To cancel, contact the partner in your confirmation email. NordicWings does not process refunds directly.</p>'
+      },
+      privacy: {
+        title: '🔒 Privacy Policy',
+        html: '<p>We collect only what is needed to run NordicWings. We do not sell your data. Full policy: <a href="/privacy">nordicwings.net/privacy</a>.</p>'
+      },
+      terms: {
+        title: '📋 Terms & Conditions',
+        html: '<p>NordicWings is a comparison service. All bookings are made on partner sites. Contact <a href="mailto:support@nordicwings.net">support@nordicwings.net</a> for questions.</p>'
+      },
+      bookwithus: {
+        title: '✈️ Search Flights',
+        html: '<p>Search is free — enter your route and date above to get started.</p>'
+      },
+      createaccount: {
+        title: '🆕 Create Account',
+        html: '<p>Click <strong>Sign Up Free</strong> in the top menu. It is free and takes under a minute.</p>'
+      },
+      signin: {
+        title: '🔑 Sign In',
+        html: '<p>Click <strong>Sign In</strong> in the top menu to access your account.</p>'
+      },
+      mybookings: {
+        title: '📁 My Bookings',
+        html: '<p>Sign in and click <strong>My Bookings</strong> in the navigation to view your saved searches and bookings.</p>'
+      }
+    };
+
+    function openPolicyModal(key) {
+      var content = POLICY_CONTENT[key];
+      if (!content) return;
+      document.getElementById('policy-modal-title').textContent = content.title;
+      document.getElementById('policy-modal-body').innerHTML = content.html;
+      var overlay = document.getElementById('policy-modal-overlay');
+      if (overlay) { overlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    }
+    function closePolicyModal(e) {
+      if (e && e.target !== document.getElementById('policy-modal-overlay')) return;
+      var overlay = document.getElementById('policy-modal-overlay');
+      if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
+    }
+  </script>
+</html>
