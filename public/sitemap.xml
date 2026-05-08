@@ -260,4 +260,10 @@
     <priority>0.7</priority>
   </url>
 
+  <url>
+    <loc>https://nordicwings.net/blog/cheapest-flights-helsinki-tokyo.html</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
 </urlset>
