@@ -284,6 +284,18 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
   }
   </script>
   <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+
+  <!-- Google Translate -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+  <div id="google_translate_element" style="display:none;"></div>
 </head>
 <body onclick="void(0)">
 
@@ -3221,6 +3233,75 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       var overlay = document.getElementById('policy-modal-overlay');
       if (overlay) { overlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
     }
+
+    /* ── LANGUAGE SELECTOR ─────────────────────────────────── */
+    var NW_LANGS = [
+      {code:'en',  flag:'🇬🇧', name:'English'},
+      {code:'fi',  flag:'🇫🇮', name:'Suomi (Finnish)'},
+      {code:'tl',  flag:'🇵🇭', name:'Filipino'},
+      {code:'sv',  flag:'🇸🇪', name:'Svenska'},
+      {code:'de',  flag:'🇩🇪', name:'Deutsch'},
+      {code:'es',  flag:'🇪🇸', name:'Español'},
+      {code:'fr',  flag:'🇫🇷', name:'Français'},
+      {code:'ja',  flag:'🇯🇵', name:'日本語'},
+      {code:'th',  flag:'🇹🇭', name:'ภาษาไทย'},
+      {code:'ko',  flag:'🇰🇷', name:'한국어'},
+      {code:'zh-CN',flag:'🇨🇳',name:'中文'},
+      {code:'ar',  flag:'🇸🇦', name:'العربية'},
+      {code:'ru',  flag:'🇷🇺', name:'Русский'},
+      {code:'pt',  flag:'🇵🇹', name:'Português'}
+    ];
+
+    function nwBuildLangList() {
+      var list = document.getElementById('nw-lang-list');
+      var mob  = document.getElementById('nw-lang-list-mobile');
+      if (!list) return;
+      NW_LANGS.forEach(function(l) {
+        var btn = '<button onclick="nwSetLang('' + l.code + '','' + l.flag + ' ' + l.name.split(' ')[0] + '')" ' +
+          'style="display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:9px 14px;cursor:pointer;font-size:.88rem;color:#1e293b;text-align:left;transition:background .15s;" ' +
+          'onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">' +
+          l.flag + ' ' + l.name + '</button>';
+        list.innerHTML += btn;
+        if (mob) {
+          var mbtn = '<button onclick="nwSetLang('' + l.code + '','' + l.flag + ' ' + l.name.split(' ')[0] + '');toggleMobileMenu()" ' +
+            'style="border:1px solid #e2e8f0;border-radius:8px;padding:7px 4px;background:#f8fafc;cursor:pointer;font-size:.78rem;color:#1e293b;">' +
+            l.flag + ' ' + l.name.split(' ')[0] + '</button>';
+          mob.innerHTML += mbtn;
+        }
+      });
+    }
+
+    function nwToggleLang(e) {
+      e.stopPropagation();
+      var dd = document.getElementById('nw-lang-dropdown');
+      dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function nwSetLang(code, label) {
+      document.getElementById('nw-lang-label').textContent = label;
+      var dd = document.getElementById('nw-lang-dropdown');
+      if (dd) dd.style.display = 'none';
+      // Trigger Google Translate
+      var trySet = function(attempts) {
+        var sel = document.querySelector('.goog-te-combo');
+        if (sel) {
+          sel.value = code;
+          sel.dispatchEvent(new Event('change'));
+        } else if (attempts > 0) {
+          setTimeout(function(){ trySet(attempts-1); }, 300);
+        }
+      };
+      trySet(10);
+    }
+
+    document.addEventListener('click', function(e) {
+      var dd = document.getElementById('nw-lang-dropdown');
+      var sel = document.getElementById('nw-lang-selector');
+      if (dd && sel && !sel.contains(e.target)) dd.style.display = 'none';
+    });
+
+    window.addEventListener('DOMContentLoaded', nwBuildLangList);
+
     function closePolicyModal(e) {
       if (e && e.target !== document.getElementById('policy-modal-overlay')) return;
       var overlay = document.getElementById('policy-modal-overlay');
