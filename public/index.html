@@ -414,7 +414,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
             <ul id="dest-list" class="autocomplete-list" style="display:none;position:absolute;top:100%;left:0;width:100%;background:#fff;border:1.5px solid #bae6fd;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:99999;max-height:260px;overflow-y:auto;list-style:none;margin:4px 0 0;padding:0;"></ul>
           </div>
 
-          <div class="input-group">
+          <div class="input-group" id="depart-group">
             <label>Depart</label>
             <input type="date" id="depart-input" />
           </div>
@@ -424,7 +424,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
             <input type="date" id="return-input" />
           </div>
 
-          <div class="input-group" style="position:relative;">
+          <div class="input-group" id="pax-group" style="position:relative;">
             <label>Passengers</label>
             <!-- Hidden inputs carry the actual values -->
             <input type="hidden" id="pax-adults-val"   value="1">
@@ -520,7 +520,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
             </div>
           </div>
 
-          <div class="input-group">
+          <div class="input-group" id="cabin-group">
             <label>Cabin Class</label>
             <select id="cabin-class-input" style="width:100%;background:#fff;border:1.5px solid #e2e8f0;
               border-radius:10px;padding:10px 14px;font-size:.95rem;color:#1e293b;cursor:pointer;">
@@ -3305,7 +3305,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     function closePolicyModal(e) {
       if (e && e.target !== document.getElementById('policy-modal-overlay')) return;
       var overlay = document.getElementById('policy-modal-overlay');
-      if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
-    }
-  </script>
-</html>
+      if (overlay) { overlay.style.display = 'none'; document.body
