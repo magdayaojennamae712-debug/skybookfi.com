@@ -3257,16 +3257,26 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       var mob  = document.getElementById('nw-lang-list-mobile');
       if (!list) return;
       NW_LANGS.forEach(function(l) {
-        var btn = '<button onclick="nwSetLang('' + l.code + '','' + l.flag + ' ' + l.name.split(' ')[0] + '')" ' +
-          'style="display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:9px 14px;cursor:pointer;font-size:.88rem;color:#1e293b;text-align:left;transition:background .15s;" ' +
-          'onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">' +
-          l.flag + ' ' + l.name + '</button>';
-        list.innerHTML += btn;
+        var shortLabel = l.flag + ' ' + l.name.split(' ')[0];
+
+        /* Desktop dropdown button */
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = l.flag + ' ' + l.name;
+        btn.style.cssText = 'display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:9px 14px;cursor:pointer;font-size:.88rem;color:#1e293b;text-align:left;transition:background .15s;';
+        btn.addEventListener('mouseover', function(){ btn.style.background = '#f1f5f9'; });
+        btn.addEventListener('mouseout',  function(){ btn.style.background = 'none'; });
+        btn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); }; })(l.code, shortLabel));
+        list.appendChild(btn);
+
+        /* Mobile menu button */
         if (mob) {
-          var mbtn = '<button onclick="nwSetLang('' + l.code + '','' + l.flag + ' ' + l.name.split(' ')[0] + '');toggleMobileMenu()" ' +
-            'style="border:1px solid #e2e8f0;border-radius:8px;padding:7px 4px;background:#f8fafc;cursor:pointer;font-size:.78rem;color:#1e293b;">' +
-            l.flag + ' ' + l.name.split(' ')[0] + '</button>';
-          mob.innerHTML += mbtn;
+          var mbtn = document.createElement('button');
+          mbtn.type = 'button';
+          mbtn.textContent = shortLabel;
+          mbtn.style.cssText = 'border:1px solid #e2e8f0;border-radius:8px;padding:7px 4px;background:#f8fafc;cursor:pointer;font-size:.78rem;color:#1e293b;';
+          mbtn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); toggleMobileMenu(); }; })(l.code, shortLabel));
+          mob.appendChild(mbtn);
         }
       });
     }
@@ -3305,4 +3315,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     function closePolicyModal(e) {
       if (e && e.target !== document.getElementById('policy-modal-overlay')) return;
       var overlay = document.getElementById('policy-modal-overlay');
-      if (overlay) { overlay.style.display = 'none'; document.body
+      if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
+    }
+  </script>
+</html>
