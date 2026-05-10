@@ -1497,4 +1497,160 @@ img { max-width: 100%; display: block; }
   padding-bottom: 20px; border-bottom: 1px solid #e2e8f0;
 }
 .contact-method { display: flex; align-items: flex-start; gap: 16px; }
-.contact-method-icon { font-size: 1.4rem
+.contact-method-icon { font-size: 1.4rem; margin-top: 2px; flex-shrink: 0; }
+.contact-email-link { font-size: 1rem; font-weight: 700; color: var(--blue); text-decoration: none; }
+.contact-email-link:hover { text-decoration: underline; }
+.contact-method-detail { font-size: .84rem; color: #64748b; margin: 4px 0 0; }
+
+@media(max-width:600px){
+  .contact-title { font-size: 1.4rem; }
+  .contact-card { padding: 16px 18px; }
+  .contact-info-box { padding: 20px 18px; }
+}
+
+/* ══════════════════════════════════════════════
+   FOOTER SOCIAL MEDIA BANNER
+══════════════════════════════════════════════ */
+.footer-social-banner {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px; padding: 20px 28px; margin-bottom: 32px;
+}
+.fsb-text { display: flex; flex-direction: column; gap: 4px; }
+.fsb-text strong { color: #fff; font-size: 1rem; font-weight: 700; }
+.fsb-text span { color: #94a3b8; font-size: .85rem; }
+.fsb-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+.fsb-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 8px;
+  font-size: .88rem; font-weight: 700; text-decoration: none;
+  transition: all .15s; border: none; cursor: pointer;
+}
+.fsb-fb { background: #1877f2; color: #fff; }
+.fsb-fb:hover { background: #1558b0; text-decoration: none; transform: translateY(-1px); }
+.fsb-ig { background: linear-gradient(45deg,#f09433,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888); color: #fff; }
+.fsb-ig:hover { opacity: .9; text-decoration: none; transform: translateY(-1px); }
+@media(max-width:600px){
+  .footer-social-banner { flex-direction: column; align-items: flex-start; }
+}
+
+/* ── SEO Route Guide Section ─────────────────────────────── */
+.seo-route-guide {
+  background: linear-gradient(180deg, #f0f4ff 0%, #f8fafc 100%);
+  border-top: 3px solid #e2e8f0;
+  border-bottom: 3px solid #e2e8f0;
+  padding: 72px 0 60px;
+}
+.seo-route-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 32px;
+  color: #334155;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+.seo-route-inner h2 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #dbeafe;
+}
+.seo-route-inner h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  margin: 40px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.seo-route-inner h3::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 18px;
+  background: #3b82f6;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.seo-route-inner p {
+  margin: 0 0 16px;
+  color: #475569;
+}
+@media (max-width: 600px) {
+  .seo-route-guide { padding: 40px 0 32px; }
+  .seo-route-inner { padding: 0 20px; }
+  .seo-route-inner h2 { font-size: 1.3rem; }
+  .seo-route-inner h3 { font-size: 1rem; }
+}
+
+/* ── Trustpilot Reviews Section ──────────────────────────── */
+.tp-reviews-section {
+  background: linear-gradient(135deg, #0d1f3c, #1a2b4a);
+  padding: 36px 0;
+  text-align: center;
+}
+.tp-reviews-inner {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.tp-logo {
+  height: 26px;
+  filter: brightness(0) invert(1);
+}
+.tp-stars {
+  font-size: 1.2rem;
+  color: #00b67a;
+  letter-spacing: 3px;
+}
+.tp-tagline {
+  color: #94a3b8;
+  font-size: .82rem;
+  margin: 0;
+}
+.tp-fallback {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tp-fallback-stars {
+  font-size: 1rem;
+  color: #00b67a;
+  letter-spacing: 2px;
+}
+.tp-fallback-text {
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: .88rem;
+}
+.tp-leave-review {
+  display: inline-block;
+  background: #00b67a;
+  color: #fff;
+  padding: 9px 22px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: .85rem;
+  text-decoration: none;
+  transition: background .2s;
+}
+.tp-leave-review:hover {
+  background: #009e6a;
+  text-decoration: none;
+}
+@media (max-width: 600px) {
+  .tp-reviews-section { padding: 28px 0; }
+  .tp-fallback { flex-direction: column; gap: 6px; }
+}
