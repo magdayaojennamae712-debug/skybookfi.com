@@ -1646,4 +1646,39 @@ img { max-width: 100%; display: block; }
 }
 .tp-fallback {
   background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tp-fallback-stars {
+  font-size: 1rem;
+  color: #00b67a;
+  letter-spacing: 2px;
+}
+.tp-fallback-text {
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: .88rem;
+}
+.tp-leave-review {
+  display: inline-block;
+  background: #00b67a;
+  color: #fff;
+  padding: 9px 22px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: .85rem;
+  text-decoration: none;
+  transition: background .2s;
+}
+.tp-leave-review:hover {
+  background: #009e6a;
+  text-decoration: none;
+}
+@media (max-width: 600px) {
+  .tp-reviews-section { padding: 28px 0; }
+  .tp-fallback { flex-direction: column; gap: 6px; }
+}
