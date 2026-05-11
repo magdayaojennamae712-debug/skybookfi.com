@@ -3378,4 +3378,78 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       {code:'es',  flag:'🇪🇸', name:'Español'},
       {code:'fr',  flag:'🇫🇷', name:'Français'},
       {code:'ja',  flag:'🇯🇵', name:'日本語'},
-      {co
+      {code:'th',  flag:'🇹🇭', name:'ภาษาไทย'},
+      {code:'ko',  flag:'🇰🇷', name:'한국어'},
+      {code:'zh-CN',flag:'🇨🇳',name:'中文'},
+      {code:'ar',  flag:'🇸🇦', name:'العربية'},
+      {code:'ru',  flag:'🇷🇺', name:'Русский'},
+      {code:'pt',  flag:'🇵🇹', name:'Português'}
+    ];
+
+    function nwBuildLangList() {
+      var list = document.getElementById('nw-lang-list');
+      var mob  = document.getElementById('nw-lang-list-mobile');
+      if (!list) return;
+      NW_LANGS.forEach(function(l) {
+        var shortLabel = l.flag + ' ' + l.name.split(' ')[0];
+
+        /* Desktop dropdown button */
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = l.flag + ' ' + l.name;
+        btn.style.cssText = 'display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:9px 14px;cursor:pointer;font-size:.88rem;color:#1e293b;text-align:left;transition:background .15s;';
+        btn.addEventListener('mouseover', function(){ btn.style.background = '#f1f5f9'; });
+        btn.addEventListener('mouseout',  function(){ btn.style.background = 'none'; });
+        btn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); }; })(l.code, shortLabel));
+        list.appendChild(btn);
+
+        /* Mobile menu button */
+        if (mob) {
+          var mbtn = document.createElement('button');
+          mbtn.type = 'button';
+          mbtn.textContent = shortLabel;
+          mbtn.style.cssText = 'border:1px solid #e2e8f0;border-radius:8px;padding:7px 4px;background:#f8fafc;cursor:pointer;font-size:.78rem;color:#1e293b;';
+          mbtn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); toggleMobileMenu(); }; })(l.code, shortLabel));
+          mob.appendChild(mbtn);
+        }
+      });
+    }
+
+    function nwToggleLang(e) {
+      e.stopPropagation();
+      var dd = document.getElementById('nw-lang-dropdown');
+      dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function nwSetLang(code, label) {
+      document.getElementById('nw-lang-label').textContent = label;
+      var dd = document.getElementById('nw-lang-dropdown');
+      if (dd) dd.style.display = 'none';
+      // Trigger Google Translate
+      var trySet = function(attempts) {
+        var sel = document.querySelector('.goog-te-combo');
+        if (sel) {
+          sel.value = code;
+          sel.dispatchEvent(new Event('change'));
+        } else if (attempts > 0) {
+          setTimeout(function(){ trySet(attempts-1); }, 300);
+        }
+      };
+      trySet(10);
+    }
+
+    document.addEventListener('click', function(e) {
+      var dd = document.getElementById('nw-lang-dropdown');
+      var sel = document.getElementById('nw-lang-selector');
+      if (dd && sel && !sel.contains(e.target)) dd.style.display = 'none';
+    });
+
+    window.addEventListener('DOMContentLoaded', nwBuildLangList);
+
+    function closePolicyModal(e) {
+      if (e && e.target !== document.getElementById('policy-modal-overlay')) return;
+      var overlay = document.getElementById('policy-modal-overlay');
+      if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
+    }
+  </script>
+</html>
