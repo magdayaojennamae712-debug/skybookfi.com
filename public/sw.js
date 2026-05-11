@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nordicwings-v9';
+const CACHE_NAME = 'nordicwings-v10';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -15,7 +15,13 @@ const STATIC_ASSETS = [
   '/blog/cheapest-flights-helsinki-singapore.html',
   '/blog/cheapest-flights-helsinki-tokyo.html',
   '/blog/cheapest-flights-helsinki-dubai.html',
-  '/blog/cheapest-flights-helsinki-philippines-winter.html'
+  '/blog/cheapest-flights-helsinki-philippines-winter.html',
+  '/blog/cheapest-flights-helsinki-new-york.html',
+  '/blog/cheapest-flights-helsinki-rome.html',
+  '/blog/cheapest-flights-helsinki-tenerife.html',
+  '/blog/cheapest-flights-helsinki-bali.html',
+  '/blog/cheapest-flights-helsinki-london.html',
+  '/blog/cheapest-flights-helsinki-cancun.html'
 ];
 
 // Install: cache static assets
@@ -51,15 +57,4 @@ self.addEventListener('fetch', event => {
       fetch(event.request)
         .then(res => {
           const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
-          return res;
-        })
-        .catch(() => caches.match(event.request))
-    );
-  } else {
-    // Cache first for assets
-    event.respondWith(
-      caches.match(event.request).then(cached => cached || fetch(event.request))
-    );
-  }
-});
+          caches.open(CACHE_N
