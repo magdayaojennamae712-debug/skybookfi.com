@@ -568,6 +568,25 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           </div>
         </div>
 
+        <!-- Ferry Strip -->
+        <div id="ferry-strip" style="margin:8px 0 4px;padding:12px 14px;background:linear-gradient(135deg,#f0fdfa,#e0f2fe);border:1.5px solid #99f6e4;border-radius:12px;">
+          <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#0d9488;margin-bottom:8px;">⛴️ Also travelling by ferry?</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <a href="https://www.directferries.com/finland.htm" target="_blank" rel="noopener sponsored"
+              style="flex:1;min-width:90px;display:flex;align-items:center;justify-content:center;gap:5px;background:#0d9488;color:#fff;border-radius:8px;padding:8px 10px;font-size:.78rem;font-weight:700;text-decoration:none;text-align:center;">
+              🚢 Helsinki–Tallinn
+            </a>
+            <a href="https://www.vikingline.com/en/?utm_source=nordicwings" target="_blank" rel="noopener sponsored"
+              style="flex:1;min-width:90px;display:flex;align-items:center;justify-content:center;gap:5px;background:#003580;color:#fff;border-radius:8px;padding:8px 10px;font-size:.78rem;font-weight:700;text-decoration:none;text-align:center;">
+              ⚓ Helsinki–Stockholm
+            </a>
+            <a href="https://www.tallinksilja.com/en?utm_source=nordicwings" target="_blank" rel="noopener sponsored"
+              style="flex:1;min-width:90px;display:flex;align-items:center;justify-content:center;gap:5px;background:#c0392b;color:#fff;border-radius:8px;padding:8px 10px;font-size:.78rem;font-weight:700;text-decoration:none;text-align:center;">
+              🛳️ Turku–Stockholm
+            </a>
+          </div>
+        </div>
+
         <!-- Quick Route Buttons -->
         <div class="quick-routes" style="display:block;">
 
@@ -3355,48 +3374,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           var mbtn = document.createElement('button');
           mbtn.type = 'button';
           mbtn.textContent = shortLabel;
-          mbtn.style.cssText = 'border:1px solid #e2e8f0;border-radius:8px;padding:7px 4px;background:#f8fafc;cursor:pointer;font-size:.78rem;color:#1e293b;';
-          mbtn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); toggleMobileMenu(); }; })(l.code, shortLabel));
-          mob.appendChild(mbtn);
-        }
-      });
-    }
-
-    function nwToggleLang(e) {
-      e.stopPropagation();
-      var dd = document.getElementById('nw-lang-dropdown');
-      dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function nwSetLang(code, label) {
-      document.getElementById('nw-lang-label').textContent = label;
-      var dd = document.getElementById('nw-lang-dropdown');
-      if (dd) dd.style.display = 'none';
-      // Trigger Google Translate
-      var trySet = function(attempts) {
-        var sel = document.querySelector('.goog-te-combo');
-        if (sel) {
-          sel.value = code;
-          sel.dispatchEvent(new Event('change'));
-        } else if (attempts > 0) {
-          setTimeout(function(){ trySet(attempts-1); }, 300);
-        }
-      };
-      trySet(10);
-    }
-
-    document.addEventListener('click', function(e) {
-      var dd = document.getElementById('nw-lang-dropdown');
-      var sel = document.getElementById('nw-lang-selector');
-      if (dd && sel && !sel.contains(e.target)) dd.style.display = 'none';
-    });
-
-    window.addEventListener('DOMContentLoaded', nwBuildLangList);
-
-    function closePolicyModal(e) {
-      if (e && e.target !== document.getElementById('policy-modal-overlay')) return;
-      var overlay = document.getElementById('policy-modal-overlay');
-      if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
-    }
-  </script>
-</html>
+          mbtn.style.cssText = 'border:1px solid #e2e8f0;border
