@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nordicwings-v8';
+const CACHE_NAME = 'nordicwings-v9';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -11,7 +11,11 @@ const STATIC_ASSETS = [
   '/blog/cheapest-flights-helsinki-bangkok.html',
   '/blog/cheapest-time-fly-helsinki-manila.html',
   '/blog/cheapest-european-cities-from-helsinki.html',
-  '/blog/trending-flights-from-helsinki-summer-2026.html'
+  '/blog/trending-flights-from-helsinki-summer-2026.html',
+  '/blog/cheapest-flights-helsinki-singapore.html',
+  '/blog/cheapest-flights-helsinki-tokyo.html',
+  '/blog/cheapest-flights-helsinki-dubai.html',
+  '/blog/cheapest-flights-helsinki-philippines-winter.html'
 ];
 
 // Install: cache static assets
