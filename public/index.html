@@ -2051,10 +2051,25 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
             <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;"><div style="font-size:.75rem;color:#1d4ed8;font-weight:700;margin-bottom:4px;">PAID OUT €</div><div id="cb-admin-paid-eur" style="font-size:1.5rem;font-weight:900;color:#1d4ed8;">€0</div></div>
           </div>
           <div id="cb-admin-loading" style="text-align:center;padding:32px;color:#64748b;">Loading cashback claims…</div>
-          <div id="cb-admin-table-wrap" style="display:none;overflow-x:auto;"></div>
+          <div id="cb-admin-table-wrap" style="display:none;overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:.85rem;">
+              <thead>
+                <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0;">
+                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">USER EMAIL</th>
+                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">TYPE / PARTNER</th>
+                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">BOOKING REF</th>
+                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">BOOKING €</th>
+                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">CASHBACK €</th>
+                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">DATE</th>
+                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">STATUS</th>
+                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="cb-admin-table-body"></tbody>
+            </table>
+          </div>
           <div id="cb-admin-empty" style="display:none;text-align:center;padding:48px;color:#94a3b8;"><p style="font-weight:600;">No cashback claims yet.</p></div>
         </div>
-        id="crm-affiliate-content"></div>
         </div>
 
       </div><!-- /crm-content -->
@@ -3638,46 +3653,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           mbtn.textContent = shortLabel;
           mbtn.style.cssText = 'border:1px solid #e2e8f0;border-radius:8px;padding:7px 4px;background:#f8fafc;cursor:pointer;font-size:.78rem;color:#1e293b;';
           mbtn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); toggleMobileMenu(); }; })(l.code, shortLabel));
-          mob.appendChild(mbtn);
-        }
-      });
-    }
-
-    function nwToggleLang(e) {
-      e.stopPropagation();
-      var dd = document.getElementById('nw-lang-dropdown');
-      dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function nwSetLang(code, label) {
-      document.getElementById('nw-lang-label').textContent = label;
-      var dd = document.getElementById('nw-lang-dropdown');
-      if (dd) dd.style.display = 'none';
-      // Trigger Google Translate
-      var trySet = function(attempts) {
-        var sel = document.querySelector('.goog-te-combo');
-        if (sel) {
-          sel.value = code;
-          sel.dispatchEvent(new Event('change'));
-        } else if (attempts > 0) {
-          setTimeout(function(){ trySet(attempts-1); }, 300);
-        }
-      };
-      trySet(10);
-    }
-
-    document.addEventListener('click', function(e) {
-      var dd = document.getElementById('nw-lang-dropdown');
-      var sel = document.getElementById('nw-lang-selector');
-      if (dd && sel && !sel.contains(e.target)) dd.style.display = 'none';
-    });
-
-    window.addEventListener('DOMContentLoaded', nwBuildLangList);
-
-    function closePolicyModal(e) {
-      if (e && e.target !== document.getElementById('policy-modal-overlay')) return;
-      var overlay = document.getElementById('policy-modal-overlay');
-      if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
-    }
-  </script>
-</html>
+          mob.append
