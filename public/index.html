@@ -1980,7 +1980,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           <button class="crm-tab-btn"        data-tab="customers"  onclick="crmSwitchTab('customers')"  style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">👥 Customers</button>
           <button class="crm-tab-btn"        data-tab="bookings"   onclick="crmSwitchTab('bookings')"   style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">✈️ All Bookings</button>
           <button class="crm-tab-btn"        data-tab="affiliate"  onclick="crmSwitchTab('affiliate')"  style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">💰 Affiliate Earnings</button>
-          <button class="crm-tab-btn"        data-tab="cashback"   onclick="crmSwitchTab('cashback');loadAdminCashbackClaims();" style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">🎁 Cashback Claims</button>
+          <button class="crm-tab-btn" data-tab="cashback" onclick="crmSwitchTab('cashback');loadAdminCashbackClaims();" style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">🎁 Cashback Claims</button>
         </div>
 
         <!-- TAB: OVERVIEW -->
@@ -2043,55 +2043,18 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
 
         <!-- TAB: AFFILIATE EARNINGS -->
         <div id="crm-affiliate" class="crm-tab-pane" style="display:none;padding-top:20px;">
-          <div id="crm-affiliate-content"></div>
-        </div>
-
-        <!-- TAB: CASHBACK CLAIMS -->
-        <div id="crm-cashback" class="crm-tab-pane" style="display:none;padding-top:20px;">
-          <!-- Summary strip -->
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
-            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px;text-align:center;">
-              <div id="cb-admin-pending-count" style="font-size:1.5rem;font-weight:900;color:#b45309;">0</div>
-              <div style="font-size:.75rem;color:#92400e;font-weight:600;">Pending Claims</div>
-            </div>
-            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px;text-align:center;">
-              <div id="cb-admin-pending-eur" style="font-size:1.5rem;font-weight:900;color:#b45309;">€0</div>
-              <div style="font-size:.75rem;color:#92400e;font-weight:600;">Pending Amount</div>
-            </div>
-            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px;text-align:center;">
-              <div id="cb-admin-confirmed-count" style="font-size:1.5rem;font-weight:900;color:#15803d;">0</div>
-              <div style="font-size:.75rem;color:#166534;font-weight:600;">Confirmed</div>
-            </div>
-            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:14px;text-align:center;">
-              <div id="cb-admin-paid-eur" style="font-size:1.5rem;font-weight:900;color:#1d4ed8;">€0</div>
-              <div style="font-size:.75rem;color:#1e40af;font-weight:600;">Total Paid Out</div>
-            </div>
+          <div <div id="crm-cashback" class="crm-tab-pane" style="display:none;padding-top:20px;">
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
+            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;"><div style="font-size:.75rem;color:#92400e;font-weight:700;margin-bottom:4px;">PENDING</div><div id="cb-admin-pending-count" style="font-size:1.5rem;font-weight:900;color:#b45309;">0</div></div>
+            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;"><div style="font-size:.75rem;color:#92400e;font-weight:700;margin-bottom:4px;">PENDING €</div><div id="cb-admin-pending-eur" style="font-size:1.5rem;font-weight:900;color:#b45309;">€0</div></div>
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;"><div style="font-size:.75rem;color:#15803d;font-weight:700;margin-bottom:4px;">APPROVED</div><div id="cb-admin-confirmed-count" style="font-size:1.5rem;font-weight:900;color:#15803d;">0</div></div>
+            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;"><div style="font-size:.75rem;color:#1d4ed8;font-weight:700;margin-bottom:4px;">PAID OUT €</div><div id="cb-admin-paid-eur" style="font-size:1.5rem;font-weight:900;color:#1d4ed8;">€0</div></div>
           </div>
-
           <div id="cb-admin-loading" style="text-align:center;padding:32px;color:#64748b;">Loading cashback claims…</div>
-
-          <!-- Claims table -->
-          <div id="cb-admin-table-wrap" style="display:none;overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:.85rem;">
-              <thead>
-                <tr style="background:#f8fafc;text-align:left;">
-                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">User</th>
-                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Type / Partner</th>
-                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Booking Ref</th>
-                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Amount</th>
-                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Cashback</th>
-                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Date</th>
-                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Status</th>
-                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="cb-admin-table-body"></tbody>
-            </table>
-          </div>
-          <div id="cb-admin-empty" style="display:none;text-align:center;padding:48px;color:#94a3b8;">
-            <div style="font-size:2.5rem;margin-bottom:8px;">🎁</div>
-            <p style="font-weight:600;">No cashback claims yet.</p>
-          </div>
+          <div id="cb-admin-table-wrap" style="display:none;overflow-x:auto;"></div>
+          <div id="cb-admin-empty" style="display:none;text-align:center;padding:48px;color:#94a3b8;"><p style="font-weight:600;">No cashback claims yet.</p></div>
+        </div>
+        id="crm-affiliate-content"></div>
         </div>
 
       </div><!-- /crm-content -->
@@ -3120,9 +3083,138 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     </div>
   </main>
 
+  <!-- AUTH MODAL -->
+  <div id="auth-overlay" class="modal-overlay" onclick="closeAuthModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()" style="max-width:420px;width:95%;border-radius:22px;overflow:hidden;padding:0;">
+
+      <!-- Modal top header -->
+      <div style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);padding:24px 24px 20px;position:relative;">
+        <button onclick="closeAuthModal()" style="position:absolute;right:16px;top:16px;background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+        <div style="font-size:2rem;margin-bottom:6px;">✈</div>
+        <div id="auth-modal-title" style="color:#fff;font-size:1.2rem;font-weight:800;margin-bottom:2px;">Welcome to NordicWings</div>
+        <div id="auth-modal-sub" style="color:#93c5fd;font-size:.85rem;">Sign in to manage your bookings</div>
+        <!-- Tabs -->
+        <div style="display:flex;gap:6px;margin-top:16px;">
+          <button id="tab-login" onclick="switchAuthTab('login')" style="flex:1;padding:8px;border-radius:20px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;background:#fff;color:#1e3a8a;">Sign In</button>
+          <button id="tab-signup" onclick="switchAuthTab('signup')" style="flex:1;padding:8px;border-radius:20px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;background:rgba(255,255,255,.2);color:#fff;">Sign Up Free</button>
+        </div>
+      </div>
+
+      <!-- Login Form -->
+      <div id="form-login" class="auth-form" style="padding:24px;">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Email address</label>
+          <input type="email" id="login-email" placeholder="you@email.com" style="width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
+        </div>
+        <div class="form-group" style="margin-bottom:8px;">
+          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Password</label>
+          <div style="position:relative;">
+            <input type="password" id="login-password" placeholder="Your password" style="width:100%;padding:12px 44px 12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
+            <button type="button" onclick="togglePw('login-password',this)" tabindex="-1"
+              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:4px;color:#94a3b8;font-size:1.1rem;line-height:1;">👁</button>
+          </div>
+        </div>
+        <p class="form-error" id="login-error" style="color:#dc2626;font-size:.82rem;min-height:18px;margin-bottom:6px;"></p>
+        <button class="btn-primary full-width" onclick="signInUser()" style="width:100%;padding:13px;border-radius:11px;font-size:.95rem;font-weight:700;background:linear-gradient(90deg,#1e3a8a,#1d4ed8);border:none;color:#fff;cursor:pointer;margin-bottom:14px;">
+          <span id="login-btn-text">Sign In →</span>
+          <span id="login-btn-spinner" class="spinner" style="display:none;"></span>
+        </button>
+        <div style="background:#f8faff;border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+          <div style="font-size:.78rem;color:#64748b;font-weight:600;margin-bottom:6px;">Why sign in?</div>
+          <div style="font-size:.8rem;color:#475569;display:flex;flex-direction:column;gap:3px;">
+            <span>✅ View and manage your bookings</span>
+            <span>✅ Receive instant booking confirmations</span>
+            <span>✅ Secure access to your travel history</span>
+          </div>
+        </div>
+        <p style="text-align:center;font-size:.83rem;color:#64748b;">No account yet? <a href="javascript:void(0)" onclick="switchAuthTab('signup')" style="color:#1d4ed8;font-weight:600;">Create one free →</a></p>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div id="form-signup" class="auth-form" style="display:none;padding:24px;">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Full name</label>
+          <input type="text" id="signup-name" placeholder="Your full name" style="width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
+        </div>
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Email address</label>
+          <input type="email" id="signup-email" placeholder="you@email.com" style="width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
+        </div>
+        <div class="form-group" style="margin-bottom:8px;">
+          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Password</label>
+          <div style="position:relative;">
+            <input type="password" id="signup-password" placeholder="Min. 6 characters" style="width:100%;padding:12px 44px 12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
+            <button type="button" onclick="togglePw('signup-password',this)" tabindex="-1"
+              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:4px;color:#94a3b8;font-size:1.1rem;line-height:1;">👁</button>
+          </div>
+        </div>
+        <p class="form-error" id="signup-error" style="color:#dc2626;font-size:.82rem;min-height:18px;margin-bottom:6px;"></p>
+        <button class="btn-primary full-width" onclick="signUpUser()" style="width:100%;padding:13px;border-radius:11px;font-size:.95rem;font-weight:700;background:linear-gradient(90deg,#1e3a8a,#1d4ed8);border:none;color:#fff;cursor:pointer;margin-bottom:12px;">
+          <span id="signup-btn-text">Create Free Account →</span>
+          <span id="signup-btn-spinner" class="spinner" style="display:none;"></span>
+        </button>
+        <div style="display:flex;gap:8px;margin-bottom:14px;justify-content:center;flex-wrap:wrap;">
+          <span style="font-size:.75rem;color:#94a3b8;display:flex;align-items:center;gap:4px;">🔒 SSL Secured</span>
+          <span style="font-size:.75rem;color:#94a3b8;display:flex;align-items:center;gap:4px;">🆓 Free forever</span>
+          <span style="font-size:.75rem;color:#94a3b8;display:flex;align-items:center;gap:4px;">✅ Free forever</span>
+        </div>
+        <p style="text-align:center;font-size:.8rem;color:#94a3b8;">By signing up you agree to our <a href="javascript:void(0)" onclick="openPolicyModal('terms')" style="color:#1d4ed8;">Terms</a> &amp; <a href="javascript:void(0)" onclick="openPolicyModal('privacy')" style="color:#1d4ed8;">Privacy Policy</a>.</p>
+        <p style="text-align:center;font-size:.83rem;color:#64748b;margin-top:10px;">Already have an account? <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color:#1d4ed8;font-weight:600;">Sign in →</a></p>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ═══════════════════════════════════════════════════════
-       PAGE: CASHBACK
+       POLICY MODALS (About, Privacy, Terms, Cancellation, Help, Contact)
   ════════════════════════════════════════════════════════ -->
+  <div id="policy-modal-overlay" class="policy-modal-overlay" onclick="closePolicyModal(event)">
+    <div class="policy-modal-card" onclick="event.stopPropagation()">
+      <div class="policy-modal-header">
+        <h2 id="policy-modal-title"></h2>
+        <button class="modal-close" onclick="closePolicyModal()">✕</button>
+      </div>
+      <div class="policy-modal-body" id="policy-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- COOKIE CONSENT BANNER -->
+  <div id="cookie-banner" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;width:calc(100% - 32px);max-width:600px;border-radius:16px;background:#fff;color:#1e293b;box-shadow:0 8px 40px rgba(0,0,0,.18);font-family:inherit;overflow:hidden;">
+    <!-- Top blue stripe -->
+    <div style="background:linear-gradient(90deg,#1e40af,#2563eb);padding:12px 20px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.4rem;">&#127850;</span>
+      <span style="color:#fff;font-weight:700;font-size:.95rem;">NordicWings uses cookies</span>
+    </div>
+    <!-- Content -->
+    <div style="padding:16px 20px;">
+      <p style="font-size:.83rem;color:#475569;line-height:1.6;margin:0 0 14px;">
+        We use cookies to improve your browsing experience and analyse traffic via Google Analytics. This is required by EU/GDPR law. You can choose which cookies to allow.
+        <a href="javascript:void(0)" onclick="openPolicyModal('privacy')" style="color:#2563eb;text-decoration:underline;font-weight:500;">Privacy Policy</a>
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="declineCookies()" style="flex:1;min-width:120px;background:#f1f5f9;border:1px solid #e2e8f0;color:#475569;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.83rem;font-weight:500;font-family:inherit;">&#10006; Essential Only</button>
+        <button onclick="acceptCookies()" style="flex:1;min-width:120px;background:linear-gradient(90deg,#1e40af,#2563eb);border:none;color:#fff;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.83rem;font-weight:700;font-family:inherit;box-shadow:0 2px 8px rgba(37,99,235,.3);">&#10003; Accept All Cookies</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANCEL DIALOG -->
+  <div id="cancel-overlay" class="modal-overlay" style="display:none;" onclick="closeCancelModal(event)">
+    <div class="modal-card small" onclick="event.stopPropagation()">
+      <h3>Cancel Booking?</h3>
+      <p>Are you sure you want to cancel? <strong>This cannot be undone.</strong></p>
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:.83rem;color:#92400e;">
+        ⚠️ <strong>Refund policy:</strong> Refunds depend on the airline's fare rules. Most promotional fares are <strong>non-refundable</strong>. The NordicWings service fee is non-refundable. If eligible, your refund will appear within 5–10 business days.
+      </div>
+      <div id="cancel-result" style="display:none;padding:10px;border-radius:8px;font-size:.85rem;margin-bottom:8px;"></div>
+      <div class="modal-actions">
+        <button class="btn-ghost" id="keep-booking-btn" onclick="closeCancelModal()">Keep Booking</button>
+        <button class="btn-danger" id="confirm-cancel-btn" onclick="confirmCancelBooking()">Yes, Cancel &amp; Refund</button>
+      </div>
+    </div>
+  </div>
+
+
   <main id="page-cashback" class="page">
     <div class="page-inner" style="max-width:1100px;padding:0 16px 64px;">
 
@@ -3337,3 +3429,255 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
         </div>
 
         
+  <!-- Firebase SDK — loaded last so it never blocks the page -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js" defer></script>
+  <script src="script.js" defer></script>
+  <script>
+    function toggleFaq(btn) {
+      var answer = btn.nextElementSibling;
+      if (!answer) return;
+      var isOpen = (answer.style.display === 'block');
+      // Hide all answers first
+      document.querySelectorAll('.faq-answer, .faq-a').forEach(function(a) {
+        a.style.display = 'none';
+        a.classList.remove('open');
+      });
+      document.querySelectorAll('.faq-question, .faq-q').forEach(function(b) {
+        b.classList.remove('open');
+        var ic = b.querySelector('.faq-icon');
+        if (ic) ic.textContent = '+';
+        var ar = b.querySelector('.faq-arrow');
+        if (ar) ar.textContent = '▼';
+      });
+      // If it was closed, open it
+      if (!isOpen) {
+        answer.style.display = 'block';
+        answer.classList.add('open');
+        btn.classList.add('open');
+        var icon = btn.querySelector('.faq-icon');
+        if (icon) icon.textContent = '−';
+        var arrow = btn.querySelector('.faq-arrow');
+        if (arrow) arrow.textContent = '▲';
+      }
+    }
+    /* ── Currency Toggle ── */
+    var currentCurrency = 'eur';
+    function setCurrency(cur) {
+      currentCurrency = cur;
+      document.getElementById('btn-eur').style.background = cur === 'eur' ? '#1e40af' : 'transparent';
+      document.getElementById('btn-eur').style.color = cur === 'eur' ? '#fff' : '#64748b';
+      document.getElementById('btn-php').style.background = cur === 'php' ? '#1e40af' : 'transparent';
+      document.getElementById('btn-php').style.color = cur === 'php' ? '#fff' : '#64748b';
+      document.querySelectorAll('.dest-price').forEach(function(el) {
+        var eur = el.getAttribute('data-eur');
+        var php = el.getAttribute('data-php');
+        if (!eur) return;
+        if (cur === 'php') {
+          el.textContent = 'From \u20B1' + Number(php).toLocaleString();
+        } else {
+          el.textContent = 'From \u20AC' + eur;
+        }
+      });
+    }
+
+    function quickSearch(from, to) {
+      document.getElementById('origin-input').value = from;
+      document.getElementById('origin-input').dataset.code = from;
+      document.getElementById('dest-input').value = to;
+      document.getElementById('dest-input').dataset.code = to;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function quickFill(fromCode, fromName, toCode, toName) {
+      var o = document.getElementById('origin-input');
+      var d = document.getElementById('dest-input');
+      o.value = fromCode + ' \u2014 ' + fromName;
+      o.dataset.code = fromCode; o.dataset.entityId = '';
+      d.value = toCode + ' \u2014 ' + toName;
+      d.dataset.code = toCode; d.dataset.entityId = '';
+      var dt = new Date(); dt.setDate(dt.getDate() + 14);
+      document.getElementById('depart-input').value = dt.toISOString().split('T')[0];
+      document.querySelector('.search-card').scrollIntoView({ behavior: 'smooth' });
+    }
+    function toggleMobileMenu() {
+      var menu = document.getElementById('mobile-menu');
+      var btn  = document.getElementById('hamburger-btn');
+      var isOpen = menu.classList.toggle('open');
+      if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      // iOS Safari: force repaint so sticky menu shows correctly
+      menu.style.display = 'none';
+      menu.offsetHeight; // trigger reflow
+      menu.style.display = '';
+    }
+
+    // Wire hamburger button — works on both tap (iOS Safari) and click (other browsers)
+    (function() {
+      function initHamburger() {
+        var btn = document.getElementById('hamburger-btn');
+        if (!btn) return;
+        var fired = false;
+        btn.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          fired = true;
+          toggleMobileMenu();
+        }, { passive: false });
+        btn.addEventListener('click', function(e) {
+          if (fired) { fired = false; return; }
+          toggleMobileMenu();
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHamburger);
+      } else {
+        initHamburger();
+      }
+    })();
+
+
+    /* POLICY MODALS */
+    var POLICY_CONTENT = {
+      about: {
+        title: '\u2708 About NordicWings',
+        html: '<p><strong>NordicWings</strong> is an online flight search and booking platform built to make international travel simple, affordable, and accessible for everyone &mdash; no matter where in the world you are flying from or to.</p><h3>Our Story</h3><p>NordicWings was founded with one clear goal: to make booking real flights as easy and transparent as possible. We saw how complicated and expensive booking international flights can be, especially for travelers connecting between Europe, Asia, and the Philippines. We built NordicWings to bridge that gap &mdash; giving you access to real fares from 500+ airlines, all in one place, with secure payment and instant confirmation.</p><h3>Our Mission</h3><p>We believe everyone deserves to travel without stress. Whether you are booking a family trip from Manila to Helsinki, a quick domestic hop from Manila to Cebu, or a European adventure from Helsinki to Barcelona &mdash; NordicWings is here to find you the best real price and make the booking process feel effortless.</p><h3>Why Trust Us?</h3><ul><li>&#9989; <strong>Real flight data</strong> &mdash; live prices from 500+ airlines updated every minute via Duffel</li><li>&#9989; <strong>Secure payments</strong> &mdash; all transactions protected by Stripe, the world\'s leading payment platform</li><li>&#9989; <strong>Your card details are never stored</strong> on our servers</li><li>&#9989; <strong>SSL encryption</strong> protects all data in transit</li><li>&#9989; Fully <strong>GDPR compliant</strong></li><li>&#9989; Supports Visa, Mastercard, Klarna, Google Pay &amp; more</li></ul><h3>Get in Touch</h3><div class=\'policy-contact-box\'><p>&#128231; <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p><p style="margin-top:6px;font-size:.85rem;color:#374151;">We respond within 24 hours, Monday&ndash;Friday. We are happy to help with any questions about your booking.</p></div>'
+      },
+      howitworks: {
+        title: '✈️ How NordicWings Works',
+        html: '<p>Finding and booking cheap flights with NordicWings is free and simple. Here is exactly how it works:</p><h3>Step 1 — Search Flights</h3><p>Enter your <strong>departure city</strong>, <strong>destination</strong>, and <strong>travel date</strong>. NordicWings instantly searches hundreds of airlines and booking sites to find the best prices.</p><h3>Step 2 — Compare Results</h3><p>Browse real-time prices, flight durations, airlines, and number of stops. Sort by <strong>cheapest</strong> or <strong>fastest</strong>. Filter for <strong>nonstop only</strong> if you prefer.</p><h3>Step 3 — Choose Your Best Deal</h3><p>Pick the flight that suits you best. NordicWings shows you prices from trusted partners like <strong>Kiwi.com</strong>, <strong>Trip.com</strong>, <strong>Jetradar</strong>, and <strong>Expedia</strong>.</p><h3>Step 4 — Book on the Partner Site</h3><p>Click your chosen flight and you will be taken directly to the partner booking site. <strong>All payment is made securely on their website</strong> — NordicWings never charges you directly.</p><h3>Step 5 — Get Your Confirmation</h3><p>After booking, you receive an instant confirmation from the partner site by email with your ticket and booking reference.</p><h3>Step 6 — Manage Your Trip</h3><p>Log in to your NordicWings account anytime to view your saved searches and bookings history in <strong>My Bookings</strong>.</p><div class=\'policy-contact-box\'><p>📧 Need help? <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
+      },
+      destinations: {
+        title: '&#9992; Popular Destinations',
+        html: '<p>NordicWings helps you find cheap flights from Helsinki and Finland to top destinations worldwide.</p><h3>Europe</h3><p>Helsinki to Madrid, Barcelona, Rome, Paris, London, Amsterdam, Lisbon, Berlin, Prague, Budapest, Vienna, Athens, Dubrovnik, Warsaw, Tallinn.</p><h3>Asia</h3><p>Helsinki to Bangkok, Singapore, Tokyo, Seoul, Kuala Lumpur, Bali, Ho Chi Minh City, Hong Kong.</p><h3>Philippines</h3><p>Helsinki to Manila, Cebu, Davao.</p><div class=\'policy-contact-box\'><p>📧 <a href="mailto:support@nordicwings.net">support@nordicwings.net</a></p></div>'
+      },
+      contact: {
+        title: '📧 Contact Us',
+        html: '<div class=\'policy-contact-box\'><p>📧 <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p><p>Response time: within 24 hours, Monday–Friday.</p></div>'
+      },
+      help: {
+        title: '❓ Help Center',
+        html: '<p>For help with bookings email <a href="mailto:support@nordicwings.net">support@nordicwings.net</a>.</p>'
+      },
+      cancellation: {
+        title: '❌ Cancellation Policy',
+        html: '<p>All bookings are made via our partner sites. To cancel, contact the partner in your confirmation email. NordicWings does not process refunds directly.</p>'
+      },
+      privacy: {
+        title: '🔒 Privacy Policy',
+        html: '<p>We collect only what is needed to run NordicWings. We do not sell your data. Full policy: <a href="/privacy">nordicwings.net/privacy</a>.</p>'
+      },
+      terms: {
+        title: '📋 Terms & Conditions',
+        html: '<p>NordicWings is a comparison service. All bookings are made on partner sites. Contact <a href="mailto:support@nordicwings.net">support@nordicwings.net</a> for questions.</p>'
+      },
+      bookwithus: {
+        title: '✈️ Search Flights',
+        html: '<p>Search is free — enter your route and date above to get started.</p>'
+      },
+      createaccount: {
+        title: '🆕 Create Account',
+        html: '<p>Click <strong>Sign Up Free</strong> in the top menu. It is free and takes under a minute.</p>'
+      },
+      signin: {
+        title: '🔑 Sign In',
+        html: '<p>Click <strong>Sign In</strong> in the top menu to access your account.</p>'
+      },
+      mybookings: {
+        title: '📁 My Bookings',
+        html: '<p>Sign in and click <strong>My Bookings</strong> in the navigation to view your saved searches and bookings.</p>'
+      }
+    };
+
+    function openPolicyModal(key) {
+      var content = POLICY_CONTENT[key];
+      if (!content) return;
+      document.getElementById('policy-modal-title').textContent = content.title;
+      document.getElementById('policy-modal-body').innerHTML = content.html;
+      var overlay = document.getElementById('policy-modal-overlay');
+      if (overlay) { overlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    }
+
+    /* ── LANGUAGE SELECTOR ─────────────────────────────────── */
+    var NW_LANGS = [
+      {code:'en',  flag:'🇬🇧', name:'English'},
+      {code:'fi',  flag:'🇫🇮', name:'Suomi (Finnish)'},
+      {code:'tl',  flag:'🇵🇭', name:'Filipino'},
+      {code:'sv',  flag:'🇸🇪', name:'Svenska'},
+      {code:'de',  flag:'🇩🇪', name:'Deutsch'},
+      {code:'es',  flag:'🇪🇸', name:'Español'},
+      {code:'fr',  flag:'🇫🇷', name:'Français'},
+      {code:'ja',  flag:'🇯🇵', name:'日本語'},
+      {code:'th',  flag:'🇹🇭', name:'ภาษาไทย'},
+      {code:'ko',  flag:'🇰🇷', name:'한국어'},
+      {code:'zh-CN',flag:'🇨🇳',name:'中文'},
+      {code:'ar',  flag:'🇸🇦', name:'العربية'},
+      {code:'ru',  flag:'🇷🇺', name:'Русский'},
+      {code:'pt',  flag:'🇵🇹', name:'Português'}
+    ];
+
+    function nwBuildLangList() {
+      var list = document.getElementById('nw-lang-list');
+      var mob  = document.getElementById('nw-lang-list-mobile');
+      if (!list) return;
+      NW_LANGS.forEach(function(l) {
+        var shortLabel = l.flag + ' ' + l.name.split(' ')[0];
+
+        /* Desktop dropdown button */
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = l.flag + ' ' + l.name;
+        btn.style.cssText = 'display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:9px 14px;cursor:pointer;font-size:.88rem;color:#1e293b;text-align:left;transition:background .15s;';
+        btn.addEventListener('mouseover', function(){ btn.style.background = '#f1f5f9'; });
+        btn.addEventListener('mouseout',  function(){ btn.style.background = 'none'; });
+        btn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); }; })(l.code, shortLabel));
+        list.appendChild(btn);
+
+        /* Mobile menu button */
+        if (mob) {
+          var mbtn = document.createElement('button');
+          mbtn.type = 'button';
+          mbtn.textContent = shortLabel;
+          mbtn.style.cssText = 'border:1px solid #e2e8f0;border-radius:8px;padding:7px 4px;background:#f8fafc;cursor:pointer;font-size:.78rem;color:#1e293b;';
+          mbtn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); toggleMobileMenu(); }; })(l.code, shortLabel));
+          mob.appendChild(mbtn);
+        }
+      });
+    }
+
+    function nwToggleLang(e) {
+      e.stopPropagation();
+      var dd = document.getElementById('nw-lang-dropdown');
+      dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function nwSetLang(code, label) {
+      document.getElementById('nw-lang-label').textContent = label;
+      var dd = document.getElementById('nw-lang-dropdown');
+      if (dd) dd.style.display = 'none';
+      // Trigger Google Translate
+      var trySet = function(attempts) {
+        var sel = document.querySelector('.goog-te-combo');
+        if (sel) {
+          sel.value = code;
+          sel.dispatchEvent(new Event('change'));
+        } else if (attempts > 0) {
+          setTimeout(function(){ trySet(attempts-1); }, 300);
+        }
+      };
+      trySet(10);
+    }
+
+    document.addEventListener('click', function(e) {
+      var dd = document.getElementById('nw-lang-dropdown');
+      var sel = document.getElementById('nw-lang-selector');
+      if (dd && sel && !sel.contains(e.target)) dd.style.display = 'none';
+    });
+
+    window.addEventListener('DOMContentLoaded', nwBuildLangList);
+
+    function closePolicyModal(e) {
+      if (e && e.target !== document.getElementById('policy-modal-overlay')) return;
+      var overlay = document.getElementById('policy-modal-overlay');
+      if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
+    }
+  </script>
+</html>

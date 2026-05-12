@@ -122,9 +122,9 @@ img { max-width: 100%; display: block; }
   font-size: .82rem;
   font-weight: 500;
   padding: 6px 8px;
+  white-space: nowrap;
   border-radius: var(--radius-sm);
   transition: all .15s;
-  white-space: nowrap;
 }
 .nav-link:hover { color: var(--blue); background: var(--blue-light); text-decoration: none; }
 
@@ -1681,4 +1681,5 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 600px) {
   .tp-reviews-section { padding: 28px 0; }
-  .tp-fallbac
+  .tp-fallback { flex-direction: column; gap: 6px; }
+}
