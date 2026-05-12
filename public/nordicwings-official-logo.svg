@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <!-- Background -->
+  <rect width="500" height="500" fill="#1a1f35" rx="12"/>
+
+  <!-- Paper airplane (centered, top area) -->
+  <g transform="translate(250, 170) rotate(-15)">
+    <!-- Main body -->
+    <polygon points="0,-45 38,20 0,8" fill="#c8d4e8" opacity="0.95"/>
+    <!-- Left wing -->
+    <polygon points="0,-45 -38,20 0,8" fill="#dde6f2" opacity="0.85"/>
+    <!-- Bottom fold line -->
+    <polygon points="-38,20 0,8 38,20 0,32" fill="#b0bfd4" opacity="0.9"/>
+    <!-- Center crease line -->
+    <line x1="0" y1="-45" x2="0" y2="32" stroke="#a0b0cc" stroke-width="0.8" opacity="0.6"/>
+  </g>
+
+  <!-- NORDICWINGS text -->
+  <text
+    x="250" y="265"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="36"
+    font-weight="400"
+    letter-spacing="14"
+    fill="white"
+    opacity="0.95">NORDICWINGS</text>
+
+  <!-- Thin divider lines -->
+  <line x1="95" y1="282" x2="175" y2="282" stroke="white" stroke-width="0.6" opacity="0.4"/>
+  <line x1="325" y1="282" x2="405" y2="282" stroke="white" stroke-width="0.6" opacity="0.4"/>
+
+  <!-- TRAVEL AGENCY text -->
+  <text
+    x="250" y="308"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="13"
+    font-weight="400"
+    letter-spacing="8"
+    fill="white"
+    opacity="0.65">TRAVEL AGENCY</text>
+</svg>

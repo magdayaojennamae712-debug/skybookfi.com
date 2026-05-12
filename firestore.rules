@@ -1,0 +1,85 @@
+// ============================================================
+// SkyBook — Firestore Security Rules
+// These rules ensure:
+// - Users can only read/write their OWN data
+// - Nobody can read other users' data
+// - Admin (owner email) can read and manage all cashback data
+// ============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: is the current user the site owner/admin?
+    function isAdmin() {
+      return request.auth != null
+          && request.auth.token.email == 'magdayaojennamae712@gmail.com';
+    }
+
+    // BOOKINGS collection
+    match /bookings/{bookingId} {
+
+      // ✅ Users can READ their own bookings only
+      allow read: if request.auth != null
+                  && request.auth.uid == resource.data.userId;
+
+      // ✅ Users can CREATE a booking for themselves only
+      allow create: if request.auth != null
+                    && request.auth.uid == request.resource.data.userId
+                    && request.resource.data.userId is string
+                    && request.resource.data.bookingRef is string
+                    && request.resource.data.totalPrice is string;
+
+      // ✅ Users can UPDATE only the status field of their OWN booking
+      // (for cancellations)
+      allow update: if request.auth != null
+                    && request.auth.uid == resource.data.userId
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                       .hasOnly(['status'])
+                    && request.resource.data.status in ['confirmed', 'cancelled'];
+
+      // ❌ Nobody can delete bookings
+      allow delete: if false;
+    }
+
+    // CASHBACK CLICKS — track which affiliate links users click
+    match /cashback_clicks/{docId} {
+      // ✅ Any logged-in user can record a click
+      allow create: if request.auth != null;
+      // ✅ Admin can read all click data
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // CASHBACK CLAIMS — users submit proof-of-purchase for cashback
+    match /cashback_claims/{docId} {
+      // ✅ Logged-in users can submit a claim for themselves
+      allow create: if request.auth != null
+                    && request.auth.uid == request.resource.data.userId;
+      // ✅ Users can read their own claims; admin can read all
+      allow read: if request.auth != null
+                  && (request.auth.uid == resource.data.userId || isAdmin());
+      // ✅ Admin can update status (approve/reject)
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // CASHBACK PAYOUTS — users request PayPal payout once they hit €10
+    match /cashback_payouts/{docId} {
+      // ✅ Logged-in users can create a payout request for themselves
+      allow create: if request.auth != null
+                    && request.auth.uid == request.resource.data.userId;
+      // ✅ Users can read their own payouts; admin can read all
+      allow read: if request.auth != null
+                  && (request.auth.uid == resource.data.userId || isAdmin());
+      // ✅ Admin can update payout status (mark as paid)
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // Block all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

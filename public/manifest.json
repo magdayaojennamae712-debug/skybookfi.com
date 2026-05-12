@@ -1,0 +1,106 @@
+{
+  "name": "NordicWings — Find & Book Flights",
+  "short_name": "NordicWings",
+  "description": "Search and book cheap flights from Finland to Philippines, Asia, Europe and worldwide.",
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "browser"
+  ],
+  "background_color": "#1a2040",
+  "theme_color": "#1a2b4a",
+  "orientation": "portrait-primary",
+  "iarc_rating_id": "",
+  "scope": "/",
+  "id": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "travel",
+    "lifestyle"
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=net.nordicwings.app",
+      "id": "net.nordicwings.app"
+    }
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Search flights",
+      "short_name": "Search",
+      "description": "Search for cheap flights",
+      "url": "/?action=search",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Philippines flights",
+      "short_name": "Philippines",
+      "description": "Flights from Finland to Philippines",
+      "url": "/?origin=HEL&dest=MNL",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/nordicwings-banner.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "NordicWings flight search"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "NordicWings mobile search"
+    }
+  ]
+}
