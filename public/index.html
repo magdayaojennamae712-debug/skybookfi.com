@@ -325,14 +325,14 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       <nav class="header-nav">
         <a href="javascript:void(0)" class="nav-link" onclick="showPage('home')">Home</a>
         <a href="javascript:void(0)" class="nav-link" onclick="showPage('hotels')" style="color:#0ea5e9;font-weight:700;">🏨 Hotels</a>
-        <a href="#destinations" class="nav-link">Destinations</a>
         <a href="/blog/" class="nav-link">Blog</a>
         <a href="javascript:void(0)" class="nav-link" onclick="showPage('book')" style="color:#0369a1;font-weight:700;">⚓ Sea Travel</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('cashback')" style="background:#dcfce7;color:#15803d;font-weight:700;border-radius:20px;padding:6px 12px;">💰 Cashback</a>
         <a href="javascript:void(0)" class="nav-link" onclick="showPage('support')">Support</a>
-        <button class="btn-ghost" id="nav-dashboard" onclick="showPage('dashboard')" style="display:none;">My Bookings</button>
-        <button class="btn-ghost" id="nav-admin" onclick="showPage('admin')" style="display:none;background:#fef3c7;color:#92400e;border-color:#fde68a;">📊 Business</button>
-        <button class="btn-ghost" id="nav-login" onclick="openAuthModal('login')">Sign In</button>
-        <button class="btn-primary" id="nav-signup" onclick="openAuthModal('signup')">Sign Up Free</button>
+        <button class="btn-ghost" id="nav-dashboard" onclick="showPage('dashboard')" style="display:none;font-size:.82rem;padding:6px 10px;">My Bookings</button>
+        <button class="btn-ghost" id="nav-admin" onclick="showPage('admin')" style="display:none;background:#fef3c7;color:#92400e;border-color:#fde68a;font-size:.82rem;padding:6px 10px;">📊 Business</button>
+        <button class="btn-ghost" id="nav-login" onclick="openAuthModal('login')" style="font-size:.82rem;padding:6px 10px;">Sign In</button>
+        <button class="btn-primary" id="nav-signup" onclick="openAuthModal('signup')" style="font-size:.82rem;padding:6px 12px;">Sign Up Free</button>
         <div id="nav-user" style="display:none;" class="user-chip">
           <span id="nav-username"></span>
           <button class="btn-ghost small" onclick="signOutUser()">Sign Out</button>
@@ -372,6 +372,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     <a href="javascript:void(0)" onclick="showPage('home');setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu()">✈ Destinations</a>
     <a href="/blog/" onclick="toggleMobileMenu()">📝 Blog</a>
     <a href="javascript:void(0)" onclick="showPage('book');toggleMobileMenu()" style="color:#0369a1;font-weight:700;">⚓ Sea Travel</a>
+    <a href="javascript:void(0)" onclick="showPage('cashback');toggleMobileMenu()" style="color:#15803d;font-weight:700;background:#dcfce7;border-radius:10px;">💰 Cashback — Earn Money!</a>
     <a href="javascript:void(0)" onclick="showPage('support');toggleMobileMenu()">❓ Support</a>
     <button onclick="openAuthModal('login');toggleMobileMenu()">Sign In</button>
     <button onclick="openAuthModal('signup');toggleMobileMenu()">Sign Up Free</button>
@@ -1979,6 +1980,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           <button class="crm-tab-btn"        data-tab="customers"  onclick="crmSwitchTab('customers')"  style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">👥 Customers</button>
           <button class="crm-tab-btn"        data-tab="bookings"   onclick="crmSwitchTab('bookings')"   style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">✈️ All Bookings</button>
           <button class="crm-tab-btn"        data-tab="affiliate"  onclick="crmSwitchTab('affiliate')"  style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">💰 Affiliate Earnings</button>
+          <button class="crm-tab-btn"        data-tab="cashback"   onclick="crmSwitchTab('cashback');loadAdminCashbackClaims();" style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">🎁 Cashback Claims</button>
         </div>
 
         <!-- TAB: OVERVIEW -->
@@ -2042,6 +2044,54 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
         <!-- TAB: AFFILIATE EARNINGS -->
         <div id="crm-affiliate" class="crm-tab-pane" style="display:none;padding-top:20px;">
           <div id="crm-affiliate-content"></div>
+        </div>
+
+        <!-- TAB: CASHBACK CLAIMS -->
+        <div id="crm-cashback" class="crm-tab-pane" style="display:none;padding-top:20px;">
+          <!-- Summary strip -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px;text-align:center;">
+              <div id="cb-admin-pending-count" style="font-size:1.5rem;font-weight:900;color:#b45309;">0</div>
+              <div style="font-size:.75rem;color:#92400e;font-weight:600;">Pending Claims</div>
+            </div>
+            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px;text-align:center;">
+              <div id="cb-admin-pending-eur" style="font-size:1.5rem;font-weight:900;color:#b45309;">€0</div>
+              <div style="font-size:.75rem;color:#92400e;font-weight:600;">Pending Amount</div>
+            </div>
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px;text-align:center;">
+              <div id="cb-admin-confirmed-count" style="font-size:1.5rem;font-weight:900;color:#15803d;">0</div>
+              <div style="font-size:.75rem;color:#166534;font-weight:600;">Confirmed</div>
+            </div>
+            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:14px;text-align:center;">
+              <div id="cb-admin-paid-eur" style="font-size:1.5rem;font-weight:900;color:#1d4ed8;">€0</div>
+              <div style="font-size:.75rem;color:#1e40af;font-weight:600;">Total Paid Out</div>
+            </div>
+          </div>
+
+          <div id="cb-admin-loading" style="text-align:center;padding:32px;color:#64748b;">Loading cashback claims…</div>
+
+          <!-- Claims table -->
+          <div id="cb-admin-table-wrap" style="display:none;overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:.85rem;">
+              <thead>
+                <tr style="background:#f8fafc;text-align:left;">
+                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">User</th>
+                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Type / Partner</th>
+                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Booking Ref</th>
+                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Amount</th>
+                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Cashback</th>
+                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Date</th>
+                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Status</th>
+                  <th style="padding:10px 12px;color:#64748b;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #e2e8f0;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="cb-admin-table-body"></tbody>
+            </table>
+          </div>
+          <div id="cb-admin-empty" style="display:none;text-align:center;padding:48px;color:#94a3b8;">
+            <div style="font-size:2.5rem;margin-bottom:8px;">🎁</div>
+            <p style="font-weight:600;">No cashback claims yet.</p>
+          </div>
         </div>
 
       </div><!-- /crm-content -->
@@ -3070,386 +3120,220 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     </div>
   </main>
 
-  <!-- AUTH MODAL -->
-  <div id="auth-overlay" class="modal-overlay" onclick="closeAuthModal(event)">
-    <div class="modal-card" onclick="event.stopPropagation()" style="max-width:420px;width:95%;border-radius:22px;overflow:hidden;padding:0;">
-
-      <!-- Modal top header -->
-      <div style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);padding:24px 24px 20px;position:relative;">
-        <button onclick="closeAuthModal()" style="position:absolute;right:16px;top:16px;background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-        <div style="font-size:2rem;margin-bottom:6px;">✈</div>
-        <div id="auth-modal-title" style="color:#fff;font-size:1.2rem;font-weight:800;margin-bottom:2px;">Welcome to NordicWings</div>
-        <div id="auth-modal-sub" style="color:#93c5fd;font-size:.85rem;">Sign in to manage your bookings</div>
-        <!-- Tabs -->
-        <div style="display:flex;gap:6px;margin-top:16px;">
-          <button id="tab-login" onclick="switchAuthTab('login')" style="flex:1;padding:8px;border-radius:20px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;background:#fff;color:#1e3a8a;">Sign In</button>
-          <button id="tab-signup" onclick="switchAuthTab('signup')" style="flex:1;padding:8px;border-radius:20px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;background:rgba(255,255,255,.2);color:#fff;">Sign Up Free</button>
-        </div>
-      </div>
-
-      <!-- Login Form -->
-      <div id="form-login" class="auth-form" style="padding:24px;">
-        <div class="form-group" style="margin-bottom:14px;">
-          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Email address</label>
-          <input type="email" id="login-email" placeholder="you@email.com" style="width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
-        </div>
-        <div class="form-group" style="margin-bottom:8px;">
-          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Password</label>
-          <div style="position:relative;">
-            <input type="password" id="login-password" placeholder="Your password" style="width:100%;padding:12px 44px 12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
-            <button type="button" onclick="togglePw('login-password',this)" tabindex="-1"
-              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:4px;color:#94a3b8;font-size:1.1rem;line-height:1;">👁</button>
-          </div>
-        </div>
-        <p class="form-error" id="login-error" style="color:#dc2626;font-size:.82rem;min-height:18px;margin-bottom:6px;"></p>
-        <button class="btn-primary full-width" onclick="signInUser()" style="width:100%;padding:13px;border-radius:11px;font-size:.95rem;font-weight:700;background:linear-gradient(90deg,#1e3a8a,#1d4ed8);border:none;color:#fff;cursor:pointer;margin-bottom:14px;">
-          <span id="login-btn-text">Sign In →</span>
-          <span id="login-btn-spinner" class="spinner" style="display:none;"></span>
-        </button>
-        <div style="background:#f8faff;border-radius:10px;padding:12px 14px;margin-bottom:14px;">
-          <div style="font-size:.78rem;color:#64748b;font-weight:600;margin-bottom:6px;">Why sign in?</div>
-          <div style="font-size:.8rem;color:#475569;display:flex;flex-direction:column;gap:3px;">
-            <span>✅ View and manage your bookings</span>
-            <span>✅ Receive instant booking confirmations</span>
-            <span>✅ Secure access to your travel history</span>
-          </div>
-        </div>
-        <p style="text-align:center;font-size:.83rem;color:#64748b;">No account yet? <a href="javascript:void(0)" onclick="switchAuthTab('signup')" style="color:#1d4ed8;font-weight:600;">Create one free →</a></p>
-      </div>
-
-      <!-- Sign Up Form -->
-      <div id="form-signup" class="auth-form" style="display:none;padding:24px;">
-        <div class="form-group" style="margin-bottom:14px;">
-          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Full name</label>
-          <input type="text" id="signup-name" placeholder="Your full name" style="width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
-        </div>
-        <div class="form-group" style="margin-bottom:14px;">
-          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Email address</label>
-          <input type="email" id="signup-email" placeholder="you@email.com" style="width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
-        </div>
-        <div class="form-group" style="margin-bottom:8px;">
-          <label style="font-size:.8rem;font-weight:700;color:#475569;display:block;margin-bottom:5px;">Password</label>
-          <div style="position:relative;">
-            <input type="password" id="signup-password" placeholder="Min. 6 characters" style="width:100%;padding:12px 44px 12px 14px;border:1.5px solid #e2e8f0;border-radius:11px;font-size:.95rem;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e2e8f0'"/>
-            <button type="button" onclick="togglePw('signup-password',this)" tabindex="-1"
-              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:4px;color:#94a3b8;font-size:1.1rem;line-height:1;">👁</button>
-          </div>
-        </div>
-        <p class="form-error" id="signup-error" style="color:#dc2626;font-size:.82rem;min-height:18px;margin-bottom:6px;"></p>
-        <button class="btn-primary full-width" onclick="signUpUser()" style="width:100%;padding:13px;border-radius:11px;font-size:.95rem;font-weight:700;background:linear-gradient(90deg,#1e3a8a,#1d4ed8);border:none;color:#fff;cursor:pointer;margin-bottom:12px;">
-          <span id="signup-btn-text">Create Free Account →</span>
-          <span id="signup-btn-spinner" class="spinner" style="display:none;"></span>
-        </button>
-        <div style="display:flex;gap:8px;margin-bottom:14px;justify-content:center;flex-wrap:wrap;">
-          <span style="font-size:.75rem;color:#94a3b8;display:flex;align-items:center;gap:4px;">🔒 SSL Secured</span>
-          <span style="font-size:.75rem;color:#94a3b8;display:flex;align-items:center;gap:4px;">🆓 Free forever</span>
-          <span style="font-size:.75rem;color:#94a3b8;display:flex;align-items:center;gap:4px;">✅ Free forever</span>
-        </div>
-        <p style="text-align:center;font-size:.8rem;color:#94a3b8;">By signing up you agree to our <a href="javascript:void(0)" onclick="openPolicyModal('terms')" style="color:#1d4ed8;">Terms</a> &amp; <a href="javascript:void(0)" onclick="openPolicyModal('privacy')" style="color:#1d4ed8;">Privacy Policy</a>.</p>
-        <p style="text-align:center;font-size:.83rem;color:#64748b;margin-top:10px;">Already have an account? <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color:#1d4ed8;font-weight:600;">Sign in →</a></p>
-      </div>
-
-    </div>
-  </div>
-
   <!-- ═══════════════════════════════════════════════════════
-       POLICY MODALS (About, Privacy, Terms, Cancellation, Help, Contact)
+       PAGE: CASHBACK
   ════════════════════════════════════════════════════════ -->
-  <div id="policy-modal-overlay" class="policy-modal-overlay" onclick="closePolicyModal(event)">
-    <div class="policy-modal-card" onclick="event.stopPropagation()">
-      <div class="policy-modal-header">
-        <h2 id="policy-modal-title"></h2>
-        <button class="modal-close" onclick="closePolicyModal()">✕</button>
+  <main id="page-cashback" class="page">
+    <div class="page-inner" style="max-width:1100px;padding:0 16px 64px;">
+
+      <!-- Back button -->
+      <button class="back-btn" onclick="showPage('home')" style="margin:20px 0 10px;">← Back to Home</button>
+
+      <!-- HERO -->
+      <div style="background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#0369a1 100%);border-radius:20px;padding:44px 32px;text-align:center;margin-bottom:32px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:rgba(255,255,255,.04);border-radius:50%;"></div>
+        <div style="position:absolute;bottom:-60px;left:-30px;width:280px;height:280px;background:rgba(255,255,255,.03);border-radius:50%;"></div>
+        <div style="display:inline-block;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:700;letter-spacing:1px;padding:5px 18px;border-radius:20px;text-transform:uppercase;margin-bottom:16px;">💰 NordicWings Cashback</div>
+        <h1 style="color:#fff;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;margin:0 0 14px;line-height:1.15;">Earn Real Cash Back<br><span style="color:#7dd3fc;">Every Time You Travel</span></h1>
+        <p style="color:#bfdbfe;font-size:1.05rem;max-width:560px;margin:0 auto 28px;line-height:1.65;">Book flights, hotels, tours and ferries through NordicWings — we share <strong style="color:#fff;">50% of our commission</strong> straight back to your account. No credit card needed. No subscriptions.</p>
+        <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+          <button onclick="openAuthModal('signup')" style="background:#3b82f6;color:#fff;border:none;padding:14px 32px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Create Free Account →</button>
+          <button onclick="document.getElementById('cb-how-it-works').scrollIntoView({behavior:'smooth'})" style="background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.3);padding:14px 28px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;">How it works ↓</button>
+        </div>
       </div>
-      <div class="policy-modal-body" id="policy-modal-body"></div>
-    </div>
-  </div>
 
-  <!-- COOKIE CONSENT BANNER -->
-  <div id="cookie-banner" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;width:calc(100% - 32px);max-width:600px;border-radius:16px;background:#fff;color:#1e293b;box-shadow:0 8px 40px rgba(0,0,0,.18);font-family:inherit;overflow:hidden;">
-    <!-- Top blue stripe -->
-    <div style="background:linear-gradient(90deg,#1e40af,#2563eb);padding:12px 20px;display:flex;align-items:center;gap:10px;">
-      <span style="font-size:1.4rem;">&#127850;</span>
-      <span style="color:#fff;font-weight:700;font-size:.95rem;">NordicWings uses cookies</span>
-    </div>
-    <!-- Content -->
-    <div style="padding:16px 20px;">
-      <p style="font-size:.83rem;color:#475569;line-height:1.6;margin:0 0 14px;">
-        We use cookies to improve your browsing experience and analyse traffic via Google Analytics. This is required by EU/GDPR law. You can choose which cookies to allow.
-        <a href="javascript:void(0)" onclick="openPolicyModal('privacy')" style="color:#2563eb;text-decoration:underline;font-weight:500;">Privacy Policy</a>
-      </p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button onclick="declineCookies()" style="flex:1;min-width:120px;background:#f1f5f9;border:1px solid #e2e8f0;color:#475569;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.83rem;font-weight:500;font-family:inherit;">&#10006; Essential Only</button>
-        <button onclick="acceptCookies()" style="flex:1;min-width:120px;background:linear-gradient(90deg,#1e40af,#2563eb);border:none;color:#fff;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.83rem;font-weight:700;font-family:inherit;box-shadow:0 2px 8px rgba(37,99,235,.3);">&#10003; Accept All Cookies</button>
+      <!-- STATS STRIP -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;">
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:16px;text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;color:#15803d;">Up to 3%</div>
+          <div style="font-size:.78rem;color:#166534;font-weight:600;margin-top:2px;">Cash back on tours</div>
+        </div>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:14px;padding:16px;text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;color:#1d4ed8;">2%</div>
+          <div style="font-size:.78rem;color:#1e40af;font-weight:600;margin-top:2px;">Cash back on hotels</div>
+        </div>
+        <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:14px;padding:16px;text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;color:#7e22ce;">1.5%</div>
+          <div style="font-size:.78rem;color:#6b21a8;font-weight:600;margin-top:2px;">Cash back on flights</div>
+        </div>
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:16px;text-align:center;">
+          <div style="font-size:1.6rem;font-weight:900;color:#c2410c;">1.5%</div>
+          <div style="font-size:.78rem;color:#9a3412;font-weight:600;margin-top:2px;">Cash back on ferries</div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- CANCEL DIALOG -->
-  <div id="cancel-overlay" class="modal-overlay" style="display:none;" onclick="closeCancelModal(event)">
-    <div class="modal-card small" onclick="event.stopPropagation()">
-      <h3>Cancel Booking?</h3>
-      <p>Are you sure you want to cancel? <strong>This cannot be undone.</strong></p>
-      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:.83rem;color:#92400e;">
-        ⚠️ <strong>Refund policy:</strong> Refunds depend on the airline's fare rules. Most promotional fares are <strong>non-refundable</strong>. The NordicWings service fee is non-refundable. If eligible, your refund will appear within 5–10 business days.
+      <!-- HOW IT WORKS -->
+      <div id="cb-how-it-works" style="margin-bottom:36px;">
+        <h2 style="font-size:1.5rem;font-weight:800;color:#0f172a;margin:0 0 20px;text-align:center;">How It Works</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.05);">
+            <div style="width:52px;height:52px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.5rem;">1️⃣</div>
+            <h3 style="font-size:1rem;font-weight:700;color:#0f172a;margin:0 0 8px;">Click & Book</h3>
+            <p style="font-size:.88rem;color:#64748b;line-height:1.6;margin:0;">Use the affiliate links on this page to search and book your flight, hotel, tour or ferry. Make sure you start from NordicWings!</p>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.05);">
+            <div style="width:52px;height:52px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.5rem;">2️⃣</div>
+            <h3 style="font-size:1rem;font-weight:700;color:#0f172a;margin:0 0 8px;">Submit Your Booking</h3>
+            <p style="font-size:.88rem;color:#64748b;line-height:1.6;margin:0;">After booking, come back here and fill in your confirmation number. We verify the booking with our affiliate partner.</p>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.05);">
+            <div style="width:52px;height:52px;background:#fef9c3;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.5rem;">3️⃣</div>
+            <h3 style="font-size:1rem;font-weight:700;color:#0f172a;margin:0 0 8px;">Get Paid</h3>
+            <p style="font-size:.88rem;color:#64748b;line-height:1.6;margin:0;">Once verified (usually within 30 days), your cashback is credited. Request a payout to PayPal or bank when you reach €10.</p>
+          </div>
+        </div>
       </div>
-      <div id="cancel-result" style="display:none;padding:10px;border-radius:8px;font-size:.85rem;margin-bottom:8px;"></div>
-      <div class="modal-actions">
-        <button class="btn-ghost" id="keep-booking-btn" onclick="closeCancelModal()">Keep Booking</button>
-        <button class="btn-danger" id="confirm-cancel-btn" onclick="confirmCancelBooking()">Yes, Cancel &amp; Refund</button>
+
+      <!-- PARTNER CARDS -->
+      <h2 style="font-size:1.5rem;font-weight:800;color:#0f172a;margin:0 0 20px;text-align:center;">Book Through Our Partners & Earn Cash Back</h2>
+
+      <!-- FLIGHTS -->
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="background:#eff6ff;padding:6px 16px;border-radius:20px;font-size:.82rem;font-weight:700;color:#1d4ed8;">✈ FLIGHTS — 1.5% cashback</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#e8f4fd;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🥝</div>
+              <div><div style="font-weight:800;font-size:.95rem;color:#0f172a;">Kiwi.com</div><div style="font-size:.75rem;color:#64748b;">Best for connections & combos</div></div>
+            </div>
+            <p style="font-size:.82rem;color:#64748b;margin:0 0 14px;line-height:1.5;">Mix airlines to find the cheapest routes. Great for Helsinki → Manila, Bangkok, Tokyo and more.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="background:#eff6ff;color:#1d4ed8;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;">You earn ~1.5%</span>
+              <a href="https://www.kiwi.com/deep?affilid=nordicwingscom&currency=EUR" target="_blank" rel="noopener" onclick="trackCashbackClick('kiwi','flights')" style="background:#2563eb;color:#fff;padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">Search →</a>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#fef3c7;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">✈</div>
+              <div><div style="font-weight:800;font-size:.95rem;color:#0f172a;">Jetradar</div><div style="font-size:.75rem;color:#64748b;">Compare 100+ airlines</div></div>
+            </div>
+            <p style="font-size:.82rem;color:#64748b;margin:0 0 14px;line-height:1.5;">Powerful metasearch comparing Finnair, Emirates, Qatar, Turkish Airlines and many more.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="background:#eff6ff;color:#1d4ed8;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;">You earn ~1.5%</span>
+              <a href="https://www.jetradar.com/?marker=719573" target="_blank" rel="noopener" onclick="trackCashbackClick('jetradar','flights')" style="background:#2563eb;color:#fff;padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">Search →</a>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#fce7f3;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🌐</div>
+              <div><div style="font-weight:800;font-size:.95rem;color:#0f172a;">Trip.com</div><div style="font-size:.75rem;color:#64748b;">Flights + hotels in one</div></div>
+            </div>
+            <p style="font-size:.82rem;color:#64748b;margin:0 0 14px;line-height:1.5;">Book flights and hotels together and save more. Good rates for Asia and Middle East routes.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="background:#eff6ff;color:#1d4ed8;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;">You earn ~1.5%</span>
+              <a href="https://tp.media/click?shmarker=719573&promo_id=4114&source_type=banner&type=click&campaign_id=121&trs=242282" target="_blank" rel="noopener" onclick="trackCashbackClick('trip','flights')" style="background:#2563eb;color:#fff;padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">Search →</a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Firebase SDK — loaded last so it never blocks the page -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js" defer></script>
-  <script src="script.js" defer></script>
-  <script>
-    function toggleFaq(btn) {
-      var answer = btn.nextElementSibling;
-      if (!answer) return;
-      var isOpen = (answer.style.display === 'block');
-      // Hide all answers first
-      document.querySelectorAll('.faq-answer, .faq-a').forEach(function(a) {
-        a.style.display = 'none';
-        a.classList.remove('open');
-      });
-      document.querySelectorAll('.faq-question, .faq-q').forEach(function(b) {
-        b.classList.remove('open');
-        var ic = b.querySelector('.faq-icon');
-        if (ic) ic.textContent = '+';
-        var ar = b.querySelector('.faq-arrow');
-        if (ar) ar.textContent = '▼';
-      });
-      // If it was closed, open it
-      if (!isOpen) {
-        answer.style.display = 'block';
-        answer.classList.add('open');
-        btn.classList.add('open');
-        var icon = btn.querySelector('.faq-icon');
-        if (icon) icon.textContent = '−';
-        var arrow = btn.querySelector('.faq-arrow');
-        if (arrow) arrow.textContent = '▲';
-      }
-    }
-    /* ── Currency Toggle ── */
-    var currentCurrency = 'eur';
-    function setCurrency(cur) {
-      currentCurrency = cur;
-      document.getElementById('btn-eur').style.background = cur === 'eur' ? '#1e40af' : 'transparent';
-      document.getElementById('btn-eur').style.color = cur === 'eur' ? '#fff' : '#64748b';
-      document.getElementById('btn-php').style.background = cur === 'php' ? '#1e40af' : 'transparent';
-      document.getElementById('btn-php').style.color = cur === 'php' ? '#fff' : '#64748b';
-      document.querySelectorAll('.dest-price').forEach(function(el) {
-        var eur = el.getAttribute('data-eur');
-        var php = el.getAttribute('data-php');
-        if (!eur) return;
-        if (cur === 'php') {
-          el.textContent = 'From \u20B1' + Number(php).toLocaleString();
-        } else {
-          el.textContent = 'From \u20AC' + eur;
-        }
-      });
-    }
+      <!-- HOTELS -->
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="background:#f0fdf4;padding:6px 16px;border-radius:20px;font-size:.82rem;font-weight:700;color:#15803d;">🏨 HOTELS — 2% cashback</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#fef2f2;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🔵</div>
+              <div><div style="font-weight:800;font-size:.95rem;color:#0f172a;">Booking.com</div><div style="font-size:.75rem;color:#64748b;">World's biggest hotel site</div></div>
+            </div>
+            <p style="font-size:.82rem;color:#64748b;margin:0 0 14px;line-height:1.5;">Over 28 million listings worldwide. Best for Europe, Asia and Philippines hotels at all budgets.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="background:#f0fdf4;color:#15803d;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;">You earn ~2%</span>
+              <a href="https://www.booking.com/?aid=2485048" target="_blank" rel="noopener" onclick="trackCashbackClick('booking','hotels')" style="background:#003580;color:#fff;padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">Search →</a>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#fff7ed;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🏘</div>
+              <div><div style="font-weight:800;font-size:.95rem;color:#0f172a;">Hotels.com</div><div style="font-size:.75rem;color:#64748b;">Earn free nights too</div></div>
+            </div>
+            <p style="font-size:.82rem;color:#64748b;margin:0 0 14px;line-height:1.5;">Book 10 nights, get 1 free. Great loyalty rewards on top of NordicWings cashback.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="background:#f0fdf4;color:#15803d;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;">You earn ~2%</span>
+              <a href="https://tp.media/click?shmarker=719573&promo_id=4114&source_type=banner&type=click&campaign_id=130&trs=242282" target="_blank" rel="noopener" onclick="trackCashbackClick('hotelscom','hotels')" style="background:#e8512b;color:#fff;padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">Search →</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    function quickSearch(from, to) {
-      document.getElementById('origin-input').value = from;
-      document.getElementById('origin-input').dataset.code = from;
-      document.getElementById('dest-input').value = to;
-      document.getElementById('dest-input').dataset.code = to;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    function quickFill(fromCode, fromName, toCode, toName) {
-      var o = document.getElementById('origin-input');
-      var d = document.getElementById('dest-input');
-      o.value = fromCode + ' \u2014 ' + fromName;
-      o.dataset.code = fromCode; o.dataset.entityId = '';
-      d.value = toCode + ' \u2014 ' + toName;
-      d.dataset.code = toCode; d.dataset.entityId = '';
-      var dt = new Date(); dt.setDate(dt.getDate() + 14);
-      document.getElementById('depart-input').value = dt.toISOString().split('T')[0];
-      document.querySelector('.search-card').scrollIntoView({ behavior: 'smooth' });
-    }
-    function toggleMobileMenu() {
-      var menu = document.getElementById('mobile-menu');
-      var btn  = document.getElementById('hamburger-btn');
-      var isOpen = menu.classList.toggle('open');
-      if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      // iOS Safari: force repaint so sticky menu shows correctly
-      menu.style.display = 'none';
-      menu.offsetHeight; // trigger reflow
-      menu.style.display = '';
-    }
+      <!-- TOURS & ACTIVITIES -->
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="background:#faf5ff;padding:6px 16px;border-radius:20px;font-size:.82rem;font-weight:700;color:#7e22ce;">🎡 TOURS & ACTIVITIES — 3% cashback</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#f0fdf4;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🎫</div>
+              <div><div style="font-weight:800;font-size:.95rem;color:#0f172a;">Klook</div><div style="font-size:.75rem;color:#64748b;">Best tours in Asia</div></div>
+            </div>
+            <p style="font-size:.82rem;color:#64748b;margin:0 0 14px;line-height:1.5;">Day tours, theme parks, transfers and experiences across Asia. Perfect for Philippines, Bangkok, Bali, Tokyo.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="background:#faf5ff;color:#7e22ce;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;">You earn ~3%</span>
+              <a href="https://www.klook.com/en-US/?aid=nordicwings" target="_blank" rel="noopener" onclick="trackCashbackClick('klook','tours')" style="background:#f06142;color:#fff;padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">Explore →</a>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#eff6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🗺</div>
+              <div><div style="font-weight:800;font-size:.95rem;color:#0f172a;">GetYourGuide</div><div style="font-size:.75rem;color:#64748b;">Tours across Europe & world</div></div>
+            </div>
+            <p style="font-size:.82rem;color:#64748b;margin:0 0 14px;line-height:1.5;">Walking tours, museum tickets, day trips and experiences in 150+ countries. Great for European travel.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="background:#faf5ff;color:#7e22ce;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;">You earn ~3%</span>
+              <a href="https://www.getyourguide.com/?partner_id=nordicwings" target="_blank" rel="noopener" onclick="trackCashbackClick('getyourguide','tours')" style="background:#ff5c5c;color:#fff;padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">Explore →</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    // Wire hamburger button — works on both tap (iOS Safari) and click (other browsers)
-    (function() {
-      function initHamburger() {
-        var btn = document.getElementById('hamburger-btn');
-        if (!btn) return;
-        var fired = false;
-        btn.addEventListener('touchend', function(e) {
-          e.preventDefault();
-          fired = true;
-          toggleMobileMenu();
-        }, { passive: false });
-        btn.addEventListener('click', function(e) {
-          if (fired) { fired = false; return; }
-          toggleMobileMenu();
-        });
-      }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHamburger);
-      } else {
-        initHamburger();
-      }
-    })();
+      <!-- FERRIES & TRANSPORT -->
+      <div style="margin-bottom:36px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="background:#fff7ed;padding:6px 16px;border-radius:20px;font-size:.82rem;font-weight:700;color:#c2410c;">⚓ FERRIES & TRANSPORT — 1.5% cashback</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#f0f9ff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🚢</div>
+              <div><div style="font-weight:800;font-size:.95rem;color:#0f172a;">Tallink / Viking Line</div><div style="font-size:.75rem;color:#64748b;">Helsinki–Tallinn–Stockholm</div></div>
+            </div>
+            <p style="font-size:.82rem;color:#64748b;margin:0 0 14px;line-height:1.5;">Baltic Sea ferries: Helsinki→Tallinn, Helsinki→Stockholm, Turku→Stockholm. Fast and scenic.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="background:#fff7ed;color:#c2410c;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;">You earn ~1.5%</span>
+              <a href="https://tp.media/click?shmarker=719573&promo_id=4114&source_type=banner&type=click&campaign_id=170&trs=242282" target="_blank" rel="noopener" onclick="trackCashbackClick('ferry','ferries')" style="background:#0369a1;color:#fff;padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">Search →</a>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#fef3c7;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🚌</div>
+              <div><div style="font-weight:800;font-size:.95rem;color:#0f172a;">12Go Asia</div><div style="font-size:.75rem;color:#64748b;">Buses, trains, ferries in Asia</div></div>
+            </div>
+            <p style="font-size:.82rem;color:#64748b;margin:0 0 14px;line-height:1.5;">Book trains, buses and ferries across Southeast Asia — Philippines, Thailand, Vietnam and beyond.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="background:#fff7ed;color:#c2410c;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;">You earn ~1.5%</span>
+              <a href="https://12go.asia/en?z=6458132" target="_blank" rel="noopener" onclick="trackCashbackClick('12go','ferries')" style="background:#f59e0b;color:#fff;padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">Search →</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- SUBMIT CLAIM FORM -->
+      <div id="cb-claim-section" style="background:linear-gradient(135deg,#f8fafc,#f0f9ff);border:2px solid #bfdbfe;border-radius:20px;padding:32px;margin-bottom:32px;">
+        <div style="text-align:center;margin-bottom:24px;">
+          <h2 style="font-size:1.4rem;font-weight:800;color:#0f172a;margin:0 0 8px;">📋 Already Booked? Claim Your Cashback</h2>
+          <p style="color:#64748b;margin:0;font-size:.9rem;">Enter your booking details below. We'll verify and credit your account within 30 days.</p>
+        </div>
 
-    /* POLICY MODALS */
-    var POLICY_CONTENT = {
-      about: {
-        title: '\u2708 About NordicWings',
-        html: '<p><strong>NordicWings</strong> is an online flight search and booking platform built to make international travel simple, affordable, and accessible for everyone &mdash; no matter where in the world you are flying from or to.</p><h3>Our Story</h3><p>NordicWings was founded with one clear goal: to make booking real flights as easy and transparent as possible. We saw how complicated and expensive booking international flights can be, especially for travelers connecting between Europe, Asia, and the Philippines. We built NordicWings to bridge that gap &mdash; giving you access to real fares from 500+ airlines, all in one place, with secure payment and instant confirmation.</p><h3>Our Mission</h3><p>We believe everyone deserves to travel without stress. Whether you are booking a family trip from Manila to Helsinki, a quick domestic hop from Manila to Cebu, or a European adventure from Helsinki to Barcelona &mdash; NordicWings is here to find you the best real price and make the booking process feel effortless.</p><h3>Why Trust Us?</h3><ul><li>&#9989; <strong>Real flight data</strong> &mdash; live prices from 500+ airlines updated every minute via Duffel</li><li>&#9989; <strong>Secure payments</strong> &mdash; all transactions protected by Stripe, the world\'s leading payment platform</li><li>&#9989; <strong>Your card details are never stored</strong> on our servers</li><li>&#9989; <strong>SSL encryption</strong> protects all data in transit</li><li>&#9989; Fully <strong>GDPR compliant</strong></li><li>&#9989; Supports Visa, Mastercard, Klarna, Google Pay &amp; more</li></ul><h3>Get in Touch</h3><div class=\'policy-contact-box\'><p>&#128231; <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p><p style="margin-top:6px;font-size:.85rem;color:#374151;">We respond within 24 hours, Monday&ndash;Friday. We are happy to help with any questions about your booking.</p></div>'
-      },
-      howitworks: {
-        title: '✈️ How NordicWings Works',
-        html: '<p>Finding and booking cheap flights with NordicWings is free and simple. Here is exactly how it works:</p><h3>Step 1 — Search Flights</h3><p>Enter your <strong>departure city</strong>, <strong>destination</strong>, and <strong>travel date</strong>. NordicWings instantly searches hundreds of airlines and booking sites to find the best prices.</p><h3>Step 2 — Compare Results</h3><p>Browse real-time prices, flight durations, airlines, and number of stops. Sort by <strong>cheapest</strong> or <strong>fastest</strong>. Filter for <strong>nonstop only</strong> if you prefer.</p><h3>Step 3 — Choose Your Best Deal</h3><p>Pick the flight that suits you best. NordicWings shows you prices from trusted partners like <strong>Kiwi.com</strong>, <strong>Trip.com</strong>, <strong>Jetradar</strong>, and <strong>Expedia</strong>.</p><h3>Step 4 — Book on the Partner Site</h3><p>Click your chosen flight and you will be taken directly to the partner booking site. <strong>All payment is made securely on their website</strong> — NordicWings never charges you directly.</p><h3>Step 5 — Get Your Confirmation</h3><p>After booking, you receive an instant confirmation from the partner site by email with your ticket and booking reference.</p><h3>Step 6 — Manage Your Trip</h3><p>Log in to your NordicWings account anytime to view your saved searches and bookings history in <strong>My Bookings</strong>.</p><div class=\'policy-contact-box\'><p>📧 Need help? <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p></div>'
-      },
-      destinations: {
-        title: '&#9992; Popular Destinations',
-        html: '<p>NordicWings helps you find cheap flights from Helsinki and Finland to top destinations worldwide.</p><h3>Europe</h3><p>Helsinki to Madrid, Barcelona, Rome, Paris, London, Amsterdam, Lisbon, Berlin, Prague, Budapest, Vienna, Athens, Dubrovnik, Warsaw, Tallinn.</p><h3>Asia</h3><p>Helsinki to Bangkok, Singapore, Tokyo, Seoul, Kuala Lumpur, Bali, Ho Chi Minh City, Hong Kong.</p><h3>Philippines</h3><p>Helsinki to Manila, Cebu, Davao.</p><div class=\'policy-contact-box\'><p>📧 <a href="mailto:support@nordicwings.net">support@nordicwings.net</a></p></div>'
-      },
-      contact: {
-        title: '📧 Contact Us',
-        html: '<div class=\'policy-contact-box\'><p>📧 <a href="mailto:support@nordicwings.net"><strong>support@nordicwings.net</strong></a></p><p>Response time: within 24 hours, Monday–Friday.</p></div>'
-      },
-      help: {
-        title: '❓ Help Center',
-        html: '<p>For help with bookings email <a href="mailto:support@nordicwings.net">support@nordicwings.net</a>.</p>'
-      },
-      cancellation: {
-        title: '❌ Cancellation Policy',
-        html: '<p>All bookings are made via our partner sites. To cancel, contact the partner in your confirmation email. NordicWings does not process refunds directly.</p>'
-      },
-      privacy: {
-        title: '🔒 Privacy Policy',
-        html: '<p>We collect only what is needed to run NordicWings. We do not sell your data. Full policy: <a href="/privacy">nordicwings.net/privacy</a>.</p>'
-      },
-      terms: {
-        title: '📋 Terms & Conditions',
-        html: '<p>NordicWings is a comparison service. All bookings are made on partner sites. Contact <a href="mailto:support@nordicwings.net">support@nordicwings.net</a> for questions.</p>'
-      },
-      bookwithus: {
-        title: '✈️ Search Flights',
-        html: '<p>Search is free — enter your route and date above to get started.</p>'
-      },
-      createaccount: {
-        title: '🆕 Create Account',
-        html: '<p>Click <strong>Sign Up Free</strong> in the top menu. It is free and takes under a minute.</p>'
-      },
-      signin: {
-        title: '🔑 Sign In',
-        html: '<p>Click <strong>Sign In</strong> in the top menu to access your account.</p>'
-      },
-      mybookings: {
-        title: '📁 My Bookings',
-        html: '<p>Sign in and click <strong>My Bookings</strong> in the navigation to view your saved searches and bookings.</p>'
-      }
-    };
+        <!-- Not logged in notice -->
+        <div id="cb-login-notice" style="display:none;text-align:center;padding:20px;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;">
+          <p style="color:#92400e;font-weight:600;margin:0 0 12px;">You must be signed in to claim cashback.</p>
+          <button onclick="openAuthModal('signup')" style="background:#2563eb;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;">Create Free Account</button>
+          <button onclick="openAuthModal('login')" style="background:#fff;color:#2563eb;border:2px solid #2563eb;padding:10px 24px;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;margin-left:8px;">Sign In</button>
+        </div>
 
-    function openPolicyModal(key) {
-      var content = POLICY_CONTENT[key];
-      if (!content) return;
-      document.getElementById('policy-modal-title').textContent = content.title;
-      document.getElementById('policy-modal-body').innerHTML = content.html;
-      var overlay = document.getElementById('policy-modal-overlay');
-      if (overlay) { overlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-    }
-
-    /* ── LANGUAGE SELECTOR ─────────────────────────────────── */
-    var NW_LANGS = [
-      {code:'en',  flag:'🇬🇧', name:'English'},
-      {code:'fi',  flag:'🇫🇮', name:'Suomi (Finnish)'},
-      {code:'tl',  flag:'🇵🇭', name:'Filipino'},
-      {code:'sv',  flag:'🇸🇪', name:'Svenska'},
-      {code:'de',  flag:'🇩🇪', name:'Deutsch'},
-      {code:'es',  flag:'🇪🇸', name:'Español'},
-      {code:'fr',  flag:'🇫🇷', name:'Français'},
-      {code:'ja',  flag:'🇯🇵', name:'日本語'},
-      {code:'th',  flag:'🇹🇭', name:'ภาษาไทย'},
-      {code:'ko',  flag:'🇰🇷', name:'한국어'},
-      {code:'zh-CN',flag:'🇨🇳',name:'中文'},
-      {code:'ar',  flag:'🇸🇦', name:'العربية'},
-      {code:'ru',  flag:'🇷🇺', name:'Русский'},
-      {code:'pt',  flag:'🇵🇹', name:'Português'}
-    ];
-
-    function nwBuildLangList() {
-      var list = document.getElementById('nw-lang-list');
-      var mob  = document.getElementById('nw-lang-list-mobile');
-      if (!list) return;
-      NW_LANGS.forEach(function(l) {
-        var shortLabel = l.flag + ' ' + l.name.split(' ')[0];
-
-        /* Desktop dropdown button */
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = l.flag + ' ' + l.name;
-        btn.style.cssText = 'display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;padding:9px 14px;cursor:pointer;font-size:.88rem;color:#1e293b;text-align:left;transition:background .15s;';
-        btn.addEventListener('mouseover', function(){ btn.style.background = '#f1f5f9'; });
-        btn.addEventListener('mouseout',  function(){ btn.style.background = 'none'; });
-        btn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); }; })(l.code, shortLabel));
-        list.appendChild(btn);
-
-        /* Mobile menu button */
-        if (mob) {
-          var mbtn = document.createElement('button');
-          mbtn.type = 'button';
-          mbtn.textContent = shortLabel;
-          mbtn.style.cssText = 'border:1px solid #e2e8f0;border-radius:8px;padding:7px 4px;background:#f8fafc;cursor:pointer;font-size:.78rem;color:#1e293b;';
-          mbtn.addEventListener('click', (function(code, lbl){ return function(){ nwSetLang(code, lbl); toggleMobileMenu(); }; })(l.code, shortLabel));
-          mob.appendChild(mbtn);
-        }
-      });
-    }
-
-    function nwToggleLang(e) {
-      e.stopPropagation();
-      var dd = document.getElementById('nw-lang-dropdown');
-      dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function nwSetLang(code, label) {
-      document.getElementById('nw-lang-label').textContent = label;
-      var dd = document.getElementById('nw-lang-dropdown');
-      if (dd) dd.style.display = 'none';
-      // Trigger Google Translate
-      var trySet = function(attempts) {
-        var sel = document.querySelector('.goog-te-combo');
-        if (sel) {
-          sel.value = code;
-          sel.dispatchEvent(new Event('change'));
-        } else if (attempts > 0) {
-          setTimeout(function(){ trySet(attempts-1); }, 300);
-        }
-      };
-      trySet(10);
-    }
-
-    document.addEventListener('click', function(e) {
-      var dd = document.getElementById('nw-lang-dropdown');
-      var sel = document.getElementById('nw-lang-selector');
-      if (dd && sel && !sel.contains(e.target)) dd.style.display = 'none';
-    });
-
-    window.addEventListener('DOMContentLoaded', nwBuildLangList);
-
-    function closePolicyModal(e) {
-      if (e && e.target !== document.getElementById('policy-modal-overlay')) return;
-      var overlay = document.getElementById('policy-modal-overlay');
-      if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
-    }
-  </script>
-</html>
+        

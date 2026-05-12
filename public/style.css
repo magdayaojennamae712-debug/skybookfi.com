@@ -116,14 +116,15 @@ img { max-width: 100%; display: block; }
 .logo:hover { text-decoration: none; }
 .logo-icon { color: var(--blue); }
 
-.header-nav { display: flex; align-items: center; gap: 8px; }
+.header-nav { display: flex; align-items: center; gap: 2px; flex-wrap: nowrap; }
 .nav-link {
   color: var(--text-muted);
-  font-size: .9rem;
+  font-size: .82rem;
   font-weight: 500;
-  padding: 6px 12px;
+  padding: 6px 8px;
   border-radius: var(--radius-sm);
   transition: all .15s;
+  white-space: nowrap;
 }
 .nav-link:hover { color: var(--blue); background: var(--blue-light); text-decoration: none; }
 
@@ -1680,5 +1681,4 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 600px) {
   .tp-reviews-section { padding: 28px 0; }
-  .tp-fallback { flex-direction: column; gap: 6px; }
-}
+  .tp-fallbac

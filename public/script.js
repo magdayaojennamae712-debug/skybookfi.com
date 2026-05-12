@@ -3473,3 +3473,309 @@ function renderAdminTable(bookings) {
     </tr>
   `).join('');
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// CASHBACK PLATFORM
+// ═══════════════════════════════════════════════════════════════════
+
+const CASHBACK_RATES = {
+  flights: 0.015,
+  hotels:  0.02,
+  tours:   0.03,
+  ferries: 0.015
+};
+
+// Track a click on a cashback affiliate link (anonymous or logged-in)
+function trackCashbackClick(partner, category) {
+  try {
+    const uid = (typeof currentUser !== 'undefined' && currentUser) ? currentUser.uid : 'anon';
+    db.collection('cashback_clicks').add({
+      partner:   partner,
+      category:  category,
+      userId:    uid,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) { /* silent */ }
+}
+
+// Called when cashback page loads — shows balance if logged in
+function loadCashbackPage() {
+  const form      = document.getElementById('cb-claim-form');
+  const notice    = document.getElementById('cb-login-notice');
+  const balSec    = document.getElementById('cb-balance-section');
+  if (!form) return;
+
+  // Live cashback estimate from amount input
+  const amountEl = document.getElementById('cb-amount');
+  const typeEl   = document.getElementById('cb-type');
+  if (amountEl) {
+    amountEl.addEventListener('input',  updateCashbackEstimate);
+    typeEl   && typeEl.addEventListener('change', updateCashbackEstimate);
+  }
+
+  if (typeof currentUser !== 'undefined' && currentUser) {
+    if (notice) notice.style.display = 'none';
+    if (form)   form.style.display   = 'block';
+    loadUserCashbackBalance();
+  } else {
+    if (notice) notice.style.display = 'block';
+    if (form)   form.style.display   = 'none';
+    if (balSec) balSec.style.display = 'none';
+    // Wait for auth state to resolve
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        if (notice) notice.style.display = 'none';
+        if (form)   form.style.display   = 'block';
+        loadUserCashbackBalance();
+      }
+    });
+  }
+}
+
+function updateCashbackEstimate() {
+  const amt     = parseFloat(document.getElementById('cb-amount').value) || 0;
+  const type    = (document.getElementById('cb-type').value) || '';
+  const rate    = CASHBACK_RATES[type] || 0;
+  const est     = document.getElementById('cb-estimate');
+  if (!est) return;
+  if (!amt || !type) {
+    est.textContent = 'Fill in the category and amount above to see your estimated cashback.';
+  } else {
+    const cashback = (amt * rate).toFixed(2);
+    est.innerHTML = `Based on a €${amt.toFixed(2)} ${type} booking → <strong style="color:#15803d;">you earn €${cashback} cashback</strong> (${(rate*100)}% of booking value).`;
+  }
+}
+
+function submitCashbackClaim() {
+  const user = (typeof currentUser !== 'undefined') ? currentUser : firebase.auth().currentUser;
+  if (!user) { openAuthModal('login'); return; }
+
+  const type    = document.getElementById('cb-type').value;
+  const partner = document.getElementById('cb-partner').value;
+  const ref     = document.getElementById('cb-ref').value.trim();
+  const amount  = parseFloat(document.getElementById('cb-amount').value);
+  const date    = document.getElementById('cb-date').value;
+  const notes   = document.getElementById('cb-notes').value.trim();
+  const msg     = document.getElementById('cb-submit-msg');
+
+  if (!type || !partner || !ref || !amount || !date) {
+    showCashbackMsg(msg, '⚠️ Please fill in all required fields.', '#fef3c7', '#92400e');
+    return;
+  }
+  if (amount < 1) {
+    showCashbackMsg(msg, '⚠️ Booking amount must be at least €1.', '#fef3c7', '#92400e');
+    return;
+  }
+
+  const rate     = CASHBACK_RATES[type] || 0;
+  const cashback = parseFloat((amount * rate).toFixed(2));
+
+  const btn = document.querySelector('#cb-claim-section button[onclick="submitCashbackClaim()"]');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+
+  db.collection('cashback_claims').add({
+    userId:          user.uid,
+    userEmail:       user.email,
+    type:            type,
+    partner:         partner,
+    bookingRef:      ref,
+    bookingAmount:   amount,
+    cashbackRate:    rate,
+    cashbackAmount:  cashback,
+    bookingDate:     date,
+    notes:           notes,
+    status:          'pending',
+    submittedAt:     firebase.firestore.FieldValue.serverTimestamp()
+  }).then(function() {
+    showCashbackMsg(msg,
+      '✅ Claim submitted! We\'ll verify your booking and credit €' + cashback.toFixed(2) + ' within 30 days.',
+      '#f0fdf4', '#15803d'
+    );
+    // Clear form
+    ['cb-type','cb-partner','cb-ref','cb-amount','cb-date','cb-notes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('cb-estimate').textContent = 'Fill in the category and amount above to see your estimated cashback.';
+    loadUserCashbackBalance();
+  }).catch(function(err) {
+    showCashbackMsg(msg, '❌ Error submitting claim: ' + err.message, '#fef2f2', '#991b1b');
+  }).finally(function() {
+    if (btn) { btn.disabled = false; btn.textContent = 'Submit Cashback Claim 💰'; }
+  });
+}
+
+function showCashbackMsg(el, text, bg, color) {
+  if (!el) return;
+  el.style.display    = 'block';
+  el.style.background = bg;
+  el.style.color      = color;
+  el.style.padding    = '12px 16px';
+  el.style.borderRadius = '10px';
+  el.style.marginTop  = '12px';
+  el.style.fontWeight = '600';
+  el.style.fontSize   = '.88rem';
+  el.textContent      = text;
+}
+
+function loadUserCashbackBalance() {
+  const user = (typeof currentUser !== 'undefined') ? currentUser : firebase.auth().currentUser;
+  if (!user) return;
+  const balSec = document.getElementById('cb-balance-section');
+  if (!balSec) return;
+  balSec.style.display = 'block';
+
+  db.collection('cashback_claims')
+    .where('userId', '==', user.uid)
+    .orderBy('submittedAt', 'desc')
+    .get()
+    .then(function(snap) {
+      let pending   = 0;
+      let confirmed = 0;
+      let paid      = 0;
+      const claims  = [];
+
+      snap.forEach(function(doc) {
+        const d = doc.data();
+        claims.push(d);
+        if (d.status === 'pending')   pending   += d.cashbackAmount || 0;
+        if (d.status === 'confirmed') confirmed += d.cashbackAmount || 0;
+        if (d.status === 'paid')      paid      += d.cashbackAmount || 0;
+      });
+
+      document.getElementById('cb-bal-pending').textContent   = '€' + pending.toFixed(2);
+      document.getElementById('cb-bal-confirmed').textContent = '€' + confirmed.toFixed(2);
+      document.getElementById('cb-bal-paid').textContent      = '€' + paid.toFixed(2);
+
+      // Show payout button if confirmed ≥ €10
+      const payBtn = document.getElementById('cb-payout-btn');
+      if (payBtn) payBtn.style.display = confirmed >= 10 ? 'inline-block' : 'none';
+
+      // Render recent claims list
+      const listEl = document.getElementById('cb-claims-list');
+      if (listEl) {
+        if (!claims.length) {
+          listEl.innerHTML = '<p style="color:#94a3b8;font-size:.85rem;text-align:center;margin:0 0 8px;">No cashback claims yet. Book through our partners above and submit your first claim!</p>';
+        } else {
+          listEl.innerHTML = '<div style="font-size:.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;">Recent Claims</div>' +
+            claims.slice(0, 8).map(function(d) {
+              const statusColor = d.status === 'confirmed' ? '#34d399' : d.status === 'paid' ? '#60a5fa' : '#fbbf24';
+              const dt = d.bookingDate || '';
+              return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);">' +
+                '<div>' +
+                  '<div style="font-size:.85rem;font-weight:600;color:#f8fafc;">' + (d.partner || '') + ' — ' + (d.type || '') + '</div>' +
+                  '<div style="font-size:.75rem;color:#94a3b8;">' + d.bookingRef + (dt ? ' · ' + dt : '') + '</div>' +
+                '</div>' +
+                '<div style="text-align:right;">' +
+                  '<div style="font-size:.95rem;font-weight:800;color:#34d399;">+€' + (d.cashbackAmount||0).toFixed(2) + '</div>' +
+                  '<div style="font-size:.7rem;font-weight:700;color:' + statusColor + ';text-transform:uppercase;">' + (d.status||'pending') + '</div>' +
+                '</div>' +
+              '</div>';
+            }).join('');
+        }
+      }
+    })
+    .catch(function(err) { console.warn('Cashback balance error:', err); });
+}
+
+function requestCashbackPayout() {
+  const user = (typeof currentUser !== 'undefined') ? currentUser : firebase.auth().currentUser;
+  if (!user) return;
+  const confirmed = parseFloat(document.getElementById('cb-bal-confirmed').textContent.replace('€','')) || 0;
+  if (confirmed < 10) { alert('You need at least €10 in confirmed cashback to request a payout.'); return; }
+
+  if (!confirm('Request a payout of €' + confirmed.toFixed(2) + ' to the email ' + user.email + '?\n\nWe will contact you within 5 business days to arrange payment (PayPal or SEPA bank transfer).')) return;
+
+  db.collection('cashback_payouts').add({
+    userId:    user.uid,
+    userEmail: user.email,
+    amount:    confirmed,
+    status:    'requested',
+    requestedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(function() {
+    alert('✅ Payout request submitted! We will contact you at ' + user.email + ' within 5 business days.');
+    document.getElementById('cb-payout-btn').style.display = 'none';
+  }).catch(function(err) {
+    alert('Error requesting payout: ' + err.message);
+  });
+}
+
+// Hook into showPage to load cashback data when navigating there
+const _origShowPage = showPage;
+showPage = function(pageId) {
+  _origShowPage(pageId);
+  if (pageId === 'cashback') loadCashbackPage();
+};
+
+// ── Admin: load & manage cashback claims ─────────────────────────
+function loadAdminCashbackClaims() {
+  var loading   = document.getElementById('cb-admin-loading');
+  var tableWrap = document.getElementById('cb-admin-table-wrap');
+  var empty     = document.getElementById('cb-admin-empty');
+  var tbody     = document.getElementById('cb-admin-table-body');
+  if (!loading) return;
+  loading.style.display = 'block';
+  if (tableWrap) tableWrap.style.display = 'none';
+  if (empty)     empty.style.display     = 'none';
+
+  db.collection('cashback_claims').orderBy('submittedAt','desc').limit(200).get()
+    .then(function(snap) {
+      loading.style.display = 'none';
+      var pendingCount=0, pendingEur=0, confirmedCount=0, paidEur=0, rows=[];
+      snap.forEach(function(doc) {
+        var d=doc.data(); d._id=doc.id;
+        if (d.status==='pending')   { pendingCount++;   pendingEur   +=d.cashbackAmount||0; }
+        if (d.status==='confirmed') { confirmedCount++; }
+        if (d.status==='paid')      { paidEur +=d.cashbackAmount||0; }
+        rows.push(d);
+      });
+      var el; 
+      if ((el=document.getElementById('cb-admin-pending-count')))   el.textContent = pendingCount;
+      if ((el=document.getElementById('cb-admin-pending-eur')))     el.textContent = '€'+pendingEur.toFixed(2);
+      if ((el=document.getElementById('cb-admin-confirmed-count'))) el.textContent = confirmedCount;
+      if ((el=document.getElementById('cb-admin-paid-eur')))        el.textContent = '€'+paidEur.toFixed(2);
+
+      if (!rows.length) { if (empty) empty.style.display='block'; return; }
+      if (tableWrap) tableWrap.style.display='block';
+      if (tbody) {
+        tbody.innerHTML = rows.map(function(d) {
+          var sc  = d.status==='confirmed'?'#15803d':d.status==='paid'?'#1d4ed8':'#b45309';
+          var sbg = d.status==='confirmed'?'#f0fdf4':d.status==='paid'?'#eff6ff':'#fffbeb';
+          var acts = (d.status==='pending')
+            ? '<button onclick="approveCashbackClaim(\''+d._id+'\',this)" style="background:#15803d;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:.75rem;cursor:pointer;margin-right:4px;">✔ Approve</button>'
+            + '<button onclick="rejectCashbackClaim(\''+d._id+'\',this)"  style="background:#dc2626;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:.75rem;cursor:pointer;">✗ Reject</button>'
+            : '—';
+          return '<tr>'
+            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.8rem;color:#64748b;">'+(d.userEmail||'—')+'</td>'
+            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;"><strong>'+(d.type||'—')+'</strong><br><span style="font-size:.75rem;color:#64748b;">'+(d.partner||'—')+'</span></td>'
+            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-family:monospace;font-size:.82rem;">'+(d.bookingRef||'—')+'</td>'
+            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;">€'+(d.bookingAmount||0).toFixed(2)+'</td>'
+            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-weight:800;color:#15803d;">€'+(d.cashbackAmount||0).toFixed(2)+'</td>'
+            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.8rem;">'+(d.bookingDate||'—')+'</td>'
+            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;"><span style="background:'+sbg+';color:'+sc+';font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;">'+(d.status||'pending')+'</span></td>'
+            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;">'+acts+'</td>'
+            +'</tr>';
+        }).join('');
+      }
+    }).catch(function(err) {
+      if (loading) { loading.style.display='block'; loading.textContent='Error: '+err.message; }
+    });
+}
+
+function approveCashbackClaim(docId, btn) {
+  if (!confirm('Approve this cashback claim?')) return;
+  if (btn) { btn.disabled=true; btn.textContent='Saving…'; }
+  db.collection('cashback_claims').doc(docId)
+    .update({status:'confirmed', reviewedAt: firebase.firestore.FieldValue.serverTimestamp()})
+    .then(function() { loadAdminCashbackClaims(); })
+    .catch(function(e) { alert('Error: '+e.message); if (btn) { btn.disabled=false; btn.textContent='✔ Approve'; } });
+}
+
+function rejectCashbackClaim(docId, btn) {
+  if (!confirm('Reject this claim?')) return;
+  if (btn) { btn.disabled=true; btn.textContent='Saving…'; }
+  db.collection('cashback_claims').doc(docId)
+    .update({status:'rejected', reviewedAt: firebase.firestore.FieldValue.serverTimestamp()})
+    .then(function() { loadAdminCashbackClaims(); })
+    .catch(function(e) { alert('Error: '+e.message); if (btn) { btn.disabled=false; btn.textContent='✗ Reject'; } });
+}
