@@ -3542,7 +3542,7 @@ function updateCashbackEstimate() {
     est.textContent = 'Fill in the category and amount above to see your estimated cashback.';
   } else {
     const cashback = (amt * rate).toFixed(2);
-    est.innerHTML = `Based on a €${amt.toFixed(2)} ${type} booking → <strong style="color:#15803d;">you earn €${cashback} cashback</strong> (${(rate*100)}% of booking value).`;
+    est.innerHTML = `Based on a €${amt.toFixed(2)} ${type} booking → <strong style="color:#15803d;">you may earn approximately €${cashback} cashback</strong>. Final amount confirmed after verification.`;
   }
 }
 
