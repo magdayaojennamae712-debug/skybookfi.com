@@ -3479,10 +3479,10 @@ function renderAdminTable(bookings) {
 // ═══════════════════════════════════════════════════════════════════
 
 const CASHBACK_RATES = {
-  flights: 0.015,
-  hotels:  0.02,
-  tours:   0.03,
-  ferries: 0.015
+  flights: 0.008,
+  hotels:  0.015,
+  tours:   0.02,
+  ferries: 0.008
 };
 
 // Track a click on a cashback affiliate link (anonymous or logged-in)
