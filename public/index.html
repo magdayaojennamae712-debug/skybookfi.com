@@ -1916,11 +1916,19 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
        PAGE: ADMIN BUSINESS DASHBOARD (owner only)
   ════════════════════════════════════════════════════════ -->
   <main id="page-admin" class="page">
-    <div class="page-inner">
-      <div class="results-header">
-        <button class="back-btn" onclick="showPage('home')">← Home</button>
-        <h2>📊 NordicWings CRM</h2>
-        <button class="btn-primary" onclick="loadAdminDashboard()" style="margin-left:auto;font-size:.82rem;padding:7px 14px;">🔄 Refresh</button>
+    <div class="page-inner" style="max-width:1100px;">
+
+      <!-- Dashboard Header -->
+      <div style="background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);border-radius:16px;padding:28px 32px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <button onclick="showPage('home')" style="background:rgba(255,255,255,.12);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.78rem;font-weight:600;">← Back</button>
+            <span style="background:#3b82f6;color:#fff;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.05em;">ADMIN</span>
+          </div>
+          <h1 style="color:#fff;font-size:1.5rem;font-weight:900;margin:0 0 4px;">NordicWings Business</h1>
+          <p style="color:#93c5fd;font-size:.83rem;margin:0;">Your affiliate & cashback management dashboard</p>
+        </div>
+        <button onclick="loadAdminDashboard()" style="background:#3b82f6;border:none;color:#fff;padding:10px 20px;border-radius:10px;cursor:pointer;font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:6px;">🔄 Refresh Data</button>
       </div>
 
       <!-- Loading state -->
@@ -1930,147 +1938,215 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
 
       <div id="crm-content" style="display:none;">
 
-        <!-- KPI Stats Row -->
-        <div class="admin-stats-row" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));">
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">✈️</div>
-            <div class="admin-stat-value" id="stat-total-bookings">—</div>
-            <div class="admin-stat-label">Total Bookings</div>
+        <!-- KPI Stats Grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px;">
+
+          <div style="background:#fff;border-radius:14px;padding:20px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #3b82f6;">
+            <div style="font-size:.7rem;font-weight:700;color:#64748b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">Total Bookings</div>
+            <div id="stat-total-bookings" style="font-size:2rem;font-weight:900;color:#0f172a;line-height:1;">—</div>
+            <div style="font-size:.72rem;color:#94a3b8;margin-top:4px;">All time</div>
           </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">💳</div>
-            <div class="admin-stat-value" id="stat-total-revenue">—</div>
-            <div class="admin-stat-label">Total Revenue</div>
+
+          <div style="background:#fff;border-radius:14px;padding:20px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #6366f1;">
+            <div style="font-size:.7rem;font-weight:700;color:#64748b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">Total Revenue</div>
+            <div id="stat-total-revenue" style="font-size:2rem;font-weight:900;color:#0f172a;line-height:1;">—</div>
+            <div style="font-size:.72rem;color:#94a3b8;margin-top:4px;">All time</div>
           </div>
-          <div class="admin-stat-card" style="border-color:#86efac;background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
-            <div class="admin-stat-icon">💰</div>
-            <div class="admin-stat-value" id="stat-profit" style="color:#15803d;">—</div>
-            <div class="admin-stat-label">Your Profit</div>
+
+          <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:14px;padding:20px;border:1px solid #86efac;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #16a34a;">
+            <div style="font-size:.7rem;font-weight:700;color:#15803d;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">Your Profit</div>
+            <div id="stat-profit" style="font-size:2rem;font-weight:900;color:#15803d;line-height:1;">—</div>
+            <div style="font-size:.72rem;color:#4ade80;margin-top:4px;">All time</div>
           </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">👥</div>
-            <div class="admin-stat-value" id="stat-total-customers">—</div>
-            <div class="admin-stat-label">Customers</div>
+
+          <div style="background:#fff;border-radius:14px;padding:20px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #f59e0b;">
+            <div style="font-size:.7rem;font-weight:700;color:#64748b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">Customers</div>
+            <div id="stat-total-customers" style="font-size:2rem;font-weight:900;color:#0f172a;line-height:1;">—</div>
+            <div style="font-size:.72rem;color:#94a3b8;margin-top:4px;">Unique users</div>
           </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">✅</div>
-            <div class="admin-stat-value" id="stat-confirmed">—</div>
-            <div class="admin-stat-label">Confirmed</div>
+
+          <div style="background:#fff;border-radius:14px;padding:20px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #10b981;">
+            <div style="font-size:.7rem;font-weight:700;color:#64748b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">Confirmed</div>
+            <div id="stat-confirmed" style="font-size:2rem;font-weight:900;color:#0f172a;line-height:1;">—</div>
+            <div style="font-size:.72rem;color:#94a3b8;margin-top:4px;">Successful bookings</div>
           </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">📅</div>
-            <div class="admin-stat-value" id="stat-month-revenue">—</div>
-            <div class="admin-stat-label">This Month Revenue</div>
+
+          <div style="background:#fff;border-radius:14px;padding:20px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #8b5cf6;">
+            <div style="font-size:.7rem;font-weight:700;color:#64748b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">This Month Revenue</div>
+            <div id="stat-month-revenue" style="font-size:2rem;font-weight:900;color:#0f172a;line-height:1;">—</div>
+            <div style="font-size:.72rem;color:#94a3b8;margin-top:4px;">Current month</div>
           </div>
-          <div class="admin-stat-card" style="border-color:#86efac;background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
-            <div class="admin-stat-icon">🌱</div>
-            <div class="admin-stat-value" id="stat-month-profit" style="color:#15803d;">—</div>
-            <div class="admin-stat-label">This Month Profit</div>
+
+          <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:14px;padding:20px;border:1px solid #86efac;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #16a34a;">
+            <div style="font-size:.7rem;font-weight:700;color:#15803d;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">This Month Profit</div>
+            <div id="stat-month-profit" style="font-size:2rem;font-weight:900;color:#15803d;line-height:1;">—</div>
+            <div style="font-size:.72rem;color:#4ade80;margin-top:4px;">Current month</div>
           </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">📊</div>
-            <div class="admin-stat-value" id="stat-avg-order">—</div>
-            <div class="admin-stat-label">Avg Order Value</div>
+
+          <div style="background:#fff;border-radius:14px;padding:20px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #ec4899;">
+            <div style="font-size:.7rem;font-weight:700;color:#64748b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">Avg Order Value</div>
+            <div id="stat-avg-order" style="font-size:2rem;font-weight:900;color:#0f172a;line-height:1;">—</div>
+            <div style="font-size:.72rem;color:#94a3b8;margin-top:4px;">Per booking</div>
           </div>
+
         </div>
 
         <!-- CRM Tabs -->
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin:20px 0 0;border-bottom:2px solid #e2e8f0;padding-bottom:0;">
-          <button class="crm-tab-btn active" data-tab="overview"   onclick="crmSwitchTab('overview')"   style="padding:10px 18px;border:none;background:none;font-weight:700;color:#1e3a8a;cursor:pointer;border-bottom:3px solid #1e3a8a;font-size:.88rem;">📊 Overview</button>
-          <button class="crm-tab-btn"        data-tab="customers"  onclick="crmSwitchTab('customers')"  style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">👥 Customers</button>
-          <button class="crm-tab-btn"        data-tab="bookings"   onclick="crmSwitchTab('bookings')"   style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">✈️ All Bookings</button>
-          <button class="crm-tab-btn"        data-tab="affiliate"  onclick="crmSwitchTab('affiliate')"  style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">💰 Affiliate Earnings</button>
-          <button class="crm-tab-btn" data-tab="cashback" onclick="crmSwitchTab('cashback');loadAdminCashbackClaims();" style="padding:10px 18px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.88rem;">🎁 Cashback Claims</button>
-        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;margin-bottom:4px;">
+          <div style="display:flex;gap:0;border-bottom:2px solid #f1f5f9;overflow-x:auto;">
+            <button class="crm-tab-btn active" data-tab="overview" onclick="crmSwitchTab('overview')" style="padding:14px 22px;border:none;background:none;font-weight:700;color:#1e3a8a;cursor:pointer;border-bottom:3px solid #1e3a8a;font-size:.85rem;white-space:nowrap;margin-bottom:-2px;">📊 Overview</button>
+            <button class="crm-tab-btn" data-tab="customers" onclick="crmSwitchTab('customers')" style="padding:14px 22px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.85rem;white-space:nowrap;margin-bottom:-2px;">👥 Customers</button>
+            <button class="crm-tab-btn" data-tab="bookings" onclick="crmSwitchTab('bookings')" style="padding:14px 22px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.85rem;white-space:nowrap;margin-bottom:-2px;">✈️ All Bookings</button>
+            <button class="crm-tab-btn" data-tab="affiliate" onclick="crmSwitchTab('affiliate')" style="padding:14px 22px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.85rem;white-space:nowrap;margin-bottom:-2px;">💰 Affiliate Earnings</button>
+            <button class="crm-tab-btn" data-tab="cashback" onclick="crmSwitchTab('cashback');loadAdminCashbackClaims();" style="padding:14px 22px;border:none;background:none;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;font-size:.85rem;white-space:nowrap;margin-bottom:-2px;">🎁 Cashback Claims</button>
+          </div>
 
-        <!-- TAB: OVERVIEW -->
-        <div id="crm-overview" class="crm-tab-pane" style="display:block;padding-top:20px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-            <!-- Revenue Chart -->
-            <div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:16px;">
-              <div style="font-weight:800;color:#1e293b;margin-bottom:4px;">📈 Revenue last 6 months</div>
-              <div style="font-size:.73rem;color:#64748b;margin-bottom:12px;">Blue = total revenue · Green = your profit</div>
-              <div id="crm-revenue-chart" style="display:flex;align-items:flex-end;gap:6px;height:110px;border-bottom:2px solid #e2e8f0;padding-bottom:4px;"></div>
+          <!-- TAB: OVERVIEW -->
+          <div id="crm-overview" class="crm-tab-pane" style="display:block;padding:24px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+              <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;">
+                <div style="font-weight:800;color:#0f172a;font-size:.95rem;margin-bottom:4px;">📈 Revenue last 6 months</div>
+                <div style="font-size:.73rem;color:#64748b;margin-bottom:16px;">Blue = total revenue · Green = your profit</div>
+                <div id="crm-revenue-chart" style="display:flex;align-items:flex-end;gap:6px;height:110px;border-bottom:2px solid #e2e8f0;padding-bottom:4px;"></div>
+              </div>
+              <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;">
+                <div style="font-weight:800;color:#0f172a;font-size:.95rem;margin-bottom:16px;">🗺️ Top Routes</div>
+                <div id="crm-top-routes"></div>
+              </div>
             </div>
-            <!-- Top Routes -->
-            <div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:16px;">
-              <div style="font-weight:800;color:#1e293b;margin-bottom:12px;">🗺️ Top Routes</div>
-              <div id="crm-top-routes"></div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;">
+              <div style="font-weight:800;color:#0f172a;font-size:.95rem;margin-bottom:16px;">🕐 Recent Bookings</div>
+              <div id="crm-recent-bookings"></div>
             </div>
           </div>
-          <!-- Recent Bookings -->
-          <div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:16px;">
-            <div style="font-weight:800;color:#1e293b;margin-bottom:12px;">🕐 Recent Bookings</div>
-            <div id="crm-recent-bookings"></div>
-          </div>
-        </div>
 
-        <!-- TAB: CUSTOMERS -->
-        <div id="crm-customers" class="crm-tab-pane" style="display:none;padding-top:20px;">
-          <div style="margin-bottom:12px;">
-            <input type="text" placeholder="🔍 Search customers..." oninput="renderCRMCustomers(_allAdminBookings.filter(b=>JSON.stringify(b).toLowerCase().includes(this.value.toLowerCase())))"
-              style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:.88rem;box-sizing:border-box;">
+          <!-- TAB: CUSTOMERS -->
+          <div id="crm-customers" class="crm-tab-pane" style="display:none;padding:24px;">
+            <input type="text" placeholder="🔍 Search customers by name or email..." oninput="renderCRMCustomers(_allAdminBookings.filter(b=>JSON.stringify(b).toLowerCase().includes(this.value.toLowerCase())))"
+              style="width:100%;padding:11px 16px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:.88rem;box-sizing:border-box;margin-bottom:16px;">
+            <div id="crm-customers-list"></div>
           </div>
-          <div id="crm-customers-list"></div>
-        </div>
 
-        <!-- TAB: ALL BOOKINGS -->
-        <div id="crm-bookings" class="crm-tab-pane" style="display:none;padding-top:20px;">
-          <div class="admin-toolbar">
-            <input type="text" id="admin-search" placeholder="🔍 Search name, route, ref..." class="admin-search-input" oninput="renderAdminTable(_allAdminBookings)" />
-            <select id="admin-filter" class="admin-filter-select" onchange="renderAdminTable(_allAdminBookings)">
-              <option value="all">All Bookings</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-            <button class="btn-primary" onclick="exportBookingsCSV()" style="white-space:nowrap;">⬇ Export CSV</button>
-          </div>
-          <div class="admin-table-wrap">
-            <div id="admin-empty" class="empty-state" style="display:none;">
-              <div class="empty-icon">📋</div><h3>No bookings found</h3>
+          <!-- TAB: ALL BOOKINGS -->
+          <div id="crm-bookings" class="crm-tab-pane" style="display:none;padding:24px;">
+            <div class="admin-toolbar">
+              <input type="text" id="admin-search" placeholder="🔍 Search name, route, ref..." class="admin-search-input" oninput="renderAdminTable(_allAdminBookings)" />
+              <select id="admin-filter" class="admin-filter-select" onchange="renderAdminTable(_allAdminBookings)">
+                <option value="all">All Bookings</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <button class="btn-primary" onclick="exportBookingsCSV()" style="white-space:nowrap;">⬇ Export CSV</button>
             </div>
-            <table class="admin-table" id="admin-table" style="display:none;">
-              <thead>
-                <tr>
-                  <th>Ref</th><th>Customer</th><th>Route</th><th>Flight Date</th>
-                  <th>Pax</th><th>Revenue / Profit</th><th>Status</th><th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="admin-table-body"></tbody>
-            </table>
+            <div class="admin-table-wrap">
+              <div id="admin-empty" class="empty-state" style="display:none;">
+                <div class="empty-icon">📋</div><h3>No bookings found</h3>
+              </div>
+              <table class="admin-table" id="admin-table" style="display:none;">
+                <thead>
+                  <tr>
+                    <th>Ref</th><th>Customer</th><th>Route</th><th>Flight Date</th>
+                    <th>Pax</th><th>Revenue / Profit</th><th>Status</th><th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-table-body"></tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        <!-- TAB: AFFILIATE EARNINGS -->
-        <div id="crm-affiliate" class="crm-tab-pane" style="display:none;padding-top:20px;">
-          <div id="crm-cashback" class="crm-tab-pane" style="display:none;padding-top:20px;">
-          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
-            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;"><div style="font-size:.75rem;color:#92400e;font-weight:700;margin-bottom:4px;">PENDING</div><div id="cb-admin-pending-count" style="font-size:1.5rem;font-weight:900;color:#b45309;">0</div></div>
-            <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;"><div style="font-size:.75rem;color:#92400e;font-weight:700;margin-bottom:4px;">PENDING €</div><div id="cb-admin-pending-eur" style="font-size:1.5rem;font-weight:900;color:#b45309;">€0</div></div>
-            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;"><div style="font-size:.75rem;color:#15803d;font-weight:700;margin-bottom:4px;">APPROVED</div><div id="cb-admin-confirmed-count" style="font-size:1.5rem;font-weight:900;color:#15803d;">0</div></div>
-            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;"><div style="font-size:.75rem;color:#1d4ed8;font-weight:700;margin-bottom:4px;">PAID OUT €</div><div id="cb-admin-paid-eur" style="font-size:1.5rem;font-weight:900;color:#1d4ed8;">€0</div></div>
+          <!-- TAB: AFFILIATE EARNINGS -->
+          <div id="crm-affiliate" class="crm-tab-pane" style="display:none;padding:24px;">
+            <div style="margin-bottom:20px;">
+              <h3 style="font-size:1rem;font-weight:800;color:#0f172a;margin:0 0 6px;">Your Affiliate Dashboards</h3>
+              <p style="font-size:.83rem;color:#64748b;margin:0;">Log in to each platform below to check your commissions and earnings.</p>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;">
+              <a href="https://partners.travelpayouts.com" target="_blank" style="text-decoration:none;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow='none'">
+                <div style="background:#eff6ff;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">✈️</div>
+                <div>
+                  <div style="font-weight:700;color:#0f172a;font-size:.88rem;">Travelpayouts</div>
+                  <div style="font-size:.75rem;color:#64748b;margin-top:2px;">Flights · Hotels · Ferries</div>
+                  <div style="font-size:.72rem;color:#3b82f6;margin-top:4px;font-weight:600;">partners.travelpayouts.com →</div>
+                </div>
+              </a>
+              <a href="https://affiliate.klook.com" target="_blank" style="text-decoration:none;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow='none'">
+                <div style="background:#fff7ed;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🎭</div>
+                <div>
+                  <div style="font-weight:700;color:#0f172a;font-size:.88rem;">Klook Affiliate</div>
+                  <div style="font-size:.75rem;color:#64748b;margin-top:2px;">Tours · Activities</div>
+                  <div style="font-size:.72rem;color:#3b82f6;margin-top:4px;font-weight:600;">affiliate.klook.com →</div>
+                </div>
+              </a>
+              <a href="https://www.getyourguide.com/partner" target="_blank" style="text-decoration:none;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow='none'">
+                <div style="background:#f0fdf4;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🗺️</div>
+                <div>
+                  <div style="font-weight:700;color:#0f172a;font-size:.88rem;">GetYourGuide</div>
+                  <div style="font-size:.75rem;color:#64748b;margin-top:2px;">Tours · Experiences</div>
+                  <div style="font-size:.72rem;color:#3b82f6;margin-top:4px;font-weight:600;">getyourguide.com/partner →</div>
+                </div>
+              </a>
+              <a href="https://www.booking.com/affiliate-program" target="_blank" style="text-decoration:none;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow='none'">
+                <div style="background:#eff6ff;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🏨</div>
+                <div>
+                  <div style="font-weight:700;color:#0f172a;font-size:.88rem;">Booking.com</div>
+                  <div style="font-size:.75rem;color:#64748b;margin-top:2px;">Hotels · Stays</div>
+                  <div style="font-size:.72rem;color:#3b82f6;margin-top:4px;font-weight:600;">booking.com affiliate →</div>
+                </div>
+              </a>
+            </div>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin-top:20px;">
+              <div style="font-weight:700;color:#0f172a;font-size:.85rem;margin-bottom:6px;">💡 Your Travelpayouts Marker ID</div>
+              <div style="font-family:monospace;font-size:1.1rem;font-weight:900;color:#1e3a8a;background:#eff6ff;display:inline-block;padding:6px 14px;border-radius:8px;letter-spacing:.05em;">719573</div>
+              <div style="font-size:.75rem;color:#64748b;margin-top:8px;">Use this ID when setting up new affiliate tools on Travelpayouts.</div>
+            </div>
           </div>
-          <div id="cb-admin-loading" style="text-align:center;padding:32px;color:#64748b;">Loading cashback claims…</div>
-          <div id="cb-admin-table-wrap" style="display:none;overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:.85rem;">
-              <thead>
-                <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0;">
-                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">USER EMAIL</th>
-                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">TYPE / PARTNER</th>
-                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">BOOKING REF</th>
-                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">BOOKING €</th>
-                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">CASHBACK €</th>
-                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">DATE</th>
-                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">STATUS</th>
-                  <th style="padding:10px 12px;text-align:left;font-size:.75rem;color:#64748b;font-weight:700;white-space:nowrap;">ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody id="cb-admin-table-body"></tbody>
-            </table>
+
+          <!-- TAB: CASHBACK CLAIMS -->
+          <div id="crm-cashback" class="crm-tab-pane" style="display:none;padding:24px;">
+            <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px;">
+              <div style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;">
+                <div style="font-size:.68rem;color:#92400e;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Pending</div>
+                <div id="cb-admin-pending-count" style="font-size:1.8rem;font-weight:900;color:#b45309;">0</div>
+              </div>
+              <div style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;">
+                <div style="font-size:.68rem;color:#92400e;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Pending €</div>
+                <div id="cb-admin-pending-eur" style="font-size:1.8rem;font-weight:900;color:#b45309;">€0</div>
+              </div>
+              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;">
+                <div style="font-size:.68rem;color:#15803d;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Approved</div>
+                <div id="cb-admin-confirmed-count" style="font-size:1.8rem;font-weight:900;color:#15803d;">0</div>
+              </div>
+              <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;">
+                <div style="font-size:.68rem;color:#1d4ed8;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Paid Out €</div>
+                <div id="cb-admin-paid-eur" style="font-size:1.8rem;font-weight:900;color:#1d4ed8;">€0</div>
+              </div>
+            </div>
+            <div id="cb-admin-loading" style="text-align:center;padding:32px;color:#64748b;font-size:.9rem;">Loading cashback claims…</div>
+            <div id="cb-admin-table-wrap" style="display:none;overflow-x:auto;border-radius:10px;border:1px solid #e2e8f0;">
+              <table style="width:100%;border-collapse:collapse;font-size:.85rem;">
+                <thead>
+                  <tr style="background:#0f172a;">
+                    <th style="padding:11px 14px;text-align:left;font-size:.7rem;color:#94a3b8;font-weight:700;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;">User Email</th>
+                    <th style="padding:11px 14px;text-align:left;font-size:.7rem;color:#94a3b8;font-weight:700;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;">Type / Partner</th>
+                    <th style="padding:11px 14px;text-align:left;font-size:.7rem;color:#94a3b8;font-weight:700;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;">Booking Ref</th>
+                    <th style="padding:11px 14px;text-align:left;font-size:.7rem;color:#94a3b8;font-weight:700;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;">Booking €</th>
+                    <th style="padding:11px 14px;text-align:left;font-size:.7rem;color:#94a3b8;font-weight:700;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;">Cashback €</th>
+                    <th style="padding:11px 14px;text-align:left;font-size:.7rem;color:#94a3b8;font-weight:700;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;">Date</th>
+                    <th style="padding:11px 14px;text-align:left;font-size:.7rem;color:#94a3b8;font-weight:700;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;">Status</th>
+                    <th style="padding:11px 14px;text-align:left;font-size:.7rem;color:#94a3b8;font-weight:700;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="cb-admin-table-body"></tbody>
+              </table>
+            </div>
+            <div id="cb-admin-empty" style="display:none;text-align:center;padding:48px;color:#94a3b8;">
+              <div style="font-size:2.5rem;margin-bottom:12px;">🎁</div>
+              <p style="font-weight:700;color:#64748b;margin:0;">No cashback claims yet.</p>
+              <p style="font-size:.8rem;color:#94a3b8;margin-top:4px;">Claims will appear here when users submit them.</p>
+            </div>
           </div>
-          <div id="cb-admin-empty" style="display:none;text-align:center;padding:48px;color:#94a3b8;"><p style="font-weight:600;">No cashback claims yet.</p></div>
-        </div>
-        </div>
+
+        </div><!-- /tab container -->
 
       </div><!-- /crm-content -->
     </div>
