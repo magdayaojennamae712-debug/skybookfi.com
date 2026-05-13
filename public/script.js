@@ -3014,9 +3014,13 @@ async function signInWithGoogle() {
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
-    await auth.signInWithPopup(provider);
-    // Reload page so Firebase auth state loads fresh
-    window.location.reload();
+    const result = await auth.signInWithPopup(provider);
+    if (result && result.user) {
+      // Close auth modal without reloading — stay on current page
+      var overlay = document.getElementById('auth-overlay');
+      if (overlay) overlay.style.display = 'none';
+      if (selectedFlight) showAgencyPage();
+    }
   } catch (err) {
     if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') return;
     const errorEl = document.getElementById('login-error') || document.getElementById('signup-error');
