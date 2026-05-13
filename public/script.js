@@ -39,6 +39,18 @@ function initFirebaseSafe() {
       currentUser = user;
       if (typeof updateNavForAuth === 'function') updateNavForAuth(user);
     });
+    // Handle redirect result from Google Sign-In
+    auth.getRedirectResult().then(function(result) {
+      if (result && result.user) {
+        // Successfully signed in via Google redirect — close modal if open
+        var overlay = document.getElementById('auth-overlay');
+        if (overlay) overlay.style.display = 'none';
+      }
+    }).catch(function(err) {
+      if (err.code && err.code !== 'auth/no-current-user') {
+        console.warn('Google redirect sign-in error:', err.code, err.message);
+      }
+    });
   } catch(e) {
     console.warn('Firebase init skipped:', e.message);
   }
@@ -3009,17 +3021,13 @@ function switchAuthTab(tab) {
 }
 
 // Sign In
-async function signInWithGoogle() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  const errorEl  = document.getElementById('login-error');
+function signInWithGoogle() {
   try {
-    await auth.signInWithPopup(provider);
-    document.getElementById('auth-overlay').style.display = 'none';
-    if (selectedFlight) showAgencyPage();
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithRedirect(provider);
   } catch (err) {
-    if (err.code !== 'auth/popup-closed-by-user') {
-      setError(errorEl, friendlyAuthError(err.code) || err.message);
-    }
+    const errorEl = document.getElementById('login-error');
+    setError(errorEl, err.message || 'Google Sign-In failed. Please try again.');
   }
 }
 
