@@ -3009,6 +3009,20 @@ function switchAuthTab(tab) {
 }
 
 // Sign In
+async function signInWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  const errorEl  = document.getElementById('login-error');
+  try {
+    await auth.signInWithPopup(provider);
+    document.getElementById('auth-overlay').style.display = 'none';
+    if (selectedFlight) showAgencyPage();
+  } catch (err) {
+    if (err.code !== 'auth/popup-closed-by-user') {
+      setError(errorEl, friendlyAuthError(err.code) || err.message);
+    }
+  }
+}
+
 async function signInUser() {
   const email    = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
