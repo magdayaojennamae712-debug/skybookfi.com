@@ -39,6 +39,19 @@ function initFirebaseSafe() {
       currentUser = user;
       if (typeof updateNavForAuth === 'function') updateNavForAuth(user);
     });
+    // Handle redirect sign-in result (mobile fallback when popups are blocked)
+    auth.getRedirectResult().then(function(result) {
+      if (result && result.user) {
+        var overlay = document.getElementById('auth-overlay');
+        if (overlay) overlay.style.display = 'none';
+        var returnPage = localStorage.getItem('pendingAuthPage') || 'home';
+        localStorage.removeItem('pendingAuthPage');
+        if (returnPage !== 'home') showPage(returnPage);
+        else if (selectedFlight) showAgencyPage();
+      }
+    }).catch(function(e) {
+      console.warn('getRedirectResult error:', e.message);
+    });
   } catch(e) {
     console.warn('Firebase init skipped:', e.message);
   }
@@ -2979,6 +2992,11 @@ async function confirmCancelBooking() {
 // AUTH MODAL
 // ─────────────────────────────────────────────────────────────
 function openAuthModal(tab) {
+  // Remember which page is active so we can return after sign-in
+  var activePage = document.querySelector('.page.active');
+  var returnPageId = activePage ? activePage.id.replace('page-', '') : 'home';
+  localStorage.setItem('pendingAuthPage', returnPageId);
+
   document.getElementById('auth-overlay').style.display = 'flex';
   document.getElementById('auth-overlay').classList.add('open');
   switchAuthTab(tab || 'login');
@@ -3011,15 +3029,38 @@ function switchAuthTab(tab) {
 // Sign In
 async function signInWithGoogle() {
   if (!auth) { alert('Please refresh the page and try again.'); return; }
+
+  // Remember which page opened the sign-in modal so we can return there
+  var returnPageId = localStorage.getItem('pendingAuthPage') || 'home';
+
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
-    const result = await auth.signInWithPopup(provider);
+
+    let result;
+    try {
+      // Try popup first (desktop + modern mobile)
+      result = await auth.signInWithPopup(provider);
+    } catch (popupErr) {
+      // If popup is blocked on mobile, fall back to redirect
+      if (popupErr.code === 'auth/popup-blocked' ||
+          popupErr.code === 'auth/operation-not-supported-in-this-environment') {
+        await auth.signInWithRedirect(provider);
+        return; // Page will reload; getRedirectResult() in initFirebaseSafe handles the rest
+      }
+      throw popupErr;
+    }
+
     if (result && result.user) {
-      // Close auth modal without reloading — stay on current page
       var overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.style.display = 'none';
-      if (selectedFlight) showAgencyPage();
+      localStorage.removeItem('pendingAuthPage');
+      // Return to the page where sign-in was triggered
+      if (returnPageId && returnPageId !== 'home') {
+        showPage(returnPageId);
+      } else if (selectedFlight) {
+        showAgencyPage();
+      }
     }
   } catch (err) {
     if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') return;
@@ -3043,8 +3084,12 @@ async function signInUser() {
     await auth.signInWithEmailAndPassword(email, password);
     document.getElementById('auth-overlay').style.display = 'none';
 
-    // If they were on the agencies page, go back there
-    if (selectedFlight) {
+    // Return to the page that opened the modal
+    var returnPage = localStorage.getItem('pendingAuthPage');
+    localStorage.removeItem('pendingAuthPage');
+    if (returnPage && returnPage !== 'home') {
+      showPage(returnPage);
+    } else if (selectedFlight) {
       showAgencyPage();
     }
   } catch (err) {
@@ -3094,7 +3139,12 @@ async function signUpUser() {
       });
     } catch(e) { /* non-critical, ignore */ }
 
-    if (selectedFlight) {
+    // Return to the page that opened the modal
+    var returnPage = localStorage.getItem('pendingAuthPage');
+    localStorage.removeItem('pendingAuthPage');
+    if (returnPage && returnPage !== 'home') {
+      showPage(returnPage);
+    } else if (selectedFlight) {
       showAgencyPage();
     }
   } catch (err) {
