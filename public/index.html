@@ -3338,7 +3338,8 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
         <h1 style="color:#fff;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;margin:0 0 14px;line-height:1.15;">Earn Real Cash Back<br><span style="color:#7dd3fc;">Every Time You Travel</span></h1>
         <p style="color:#bfdbfe;font-size:1.05rem;max-width:560px;margin:0 auto 28px;line-height:1.65;">Book flights, hotels, tours and ferries through NordicWings — <strong style="color:#fff;">earn cashback on every booking</strong>, paid straight to your PayPal. No credit card needed. No subscriptions.</p>
         <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
-          <button onclick="openAuthModal('signup')" style="background:#3b82f6;color:#fff;border:none;padding:14px 32px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Create Free Account →</button>
+          <button id="cb-hero-signup-btn" onclick="openAuthModal('signup')" style="background:#3b82f6;color:#fff;border:none;padding:14px 32px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Create Free Account →</button>
+          <button id="cb-hero-claim-btn" onclick="document.getElementById('cb-claim-form').scrollIntoView({behavior:'smooth'})" style="display:none;background:#22c55e;color:#fff;border:none;padding:14px 32px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#16a34a'" onmouseout="this.style.background='#22c55e'">💰 Claim Your Cashback →</button>
           <button onclick="document.getElementById('cb-how-it-works').scrollIntoView({behavior:'smooth'})" style="background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.3);padding:14px 28px;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;">How it works ↓</button>
         </div>
       </div>
@@ -3717,50 +3718,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       { code: 'en', label: '\ud83c\uddec\ud83c\udde7 English' },
       { code: 'fi', label: '\ud83c\uddeb\ud83c\uddee Finnish' },
       { code: 'tl', label: '\ud83c\uddf5\ud83c\udded Filipino' },
-      { code: 'de', label: '\ud83c\udde9\ud83c\uddea German' },
-      { code: 'fr', label: '\ud83c\uddeb\ud83c\uddf7 French' },
-      { code: 'es', label: '\ud83c\uddea\ud83c\uddf8 Spanish' },
-      { code: 'sv', label: '\ud83c\uddf8\ud83c\uddea Swedish' }
-    ];
-
-    function nwToggleLang(event) {
-      event.stopPropagation();
-      var dd = document.getElementById('lang-dropdown');
-      if (!dd) return;
-      dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function nwSetLang(code) {
-      var dd = document.getElementById('lang-dropdown');
-      if (dd) dd.style.display = 'none';
-      var btn = document.getElementById('lang-btn-label');
-      var found = NW_LANGS.find(function(l){ return l.code === code; });
-      if (btn && found) btn.textContent = found.label;
-    }
-
-    function nwBuildLangList() {
-      var list = document.getElementById('lang-list');
-      if (!list) return;
-      list.innerHTML = '';
-      NW_LANGS.forEach(function(l) {
-        var li = document.createElement('li');
-        li.textContent = l.label;
-        li.style.cssText = 'padding:8px 16px;cursor:pointer;white-space:nowrap;';
-        li.addEventListener('mouseenter', function(){ li.style.background='#f1f5f9'; });
-        li.addEventListener('mouseleave', function(){ li.style.background=''; });
-        li.addEventListener('click', function(){ nwSetLang(l.code); });
-        list.appendChild(li);
-      });
-    }
-
-    document.addEventListener('click', function(e) {
-      var dd = document.getElementById('lang-dropdown');
-      var btn = document.getElementById('lang-btn');
-      if (dd && btn && !btn.contains(e.target)) {
-        dd.style.display = 'none';
-      }
-    });
-
-    window.addEventListener('DOMContentLoaded', nwBuildLangList);
-  </script>
-</html>
+      { code: 'de', lab

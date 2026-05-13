@@ -3584,21 +3584,33 @@ function loadCashbackPage() {
     typeEl   && typeEl.addEventListener('change', updateCashbackEstimate);
   }
 
+  function applyAuthState(user) {
+    var heroSignup = document.getElementById('cb-hero-signup-btn');
+    var heroClaim  = document.getElementById('cb-hero-claim-btn');
+    if (user) {
+      // Signed in — show claim form, hide guest prompts
+      if (notice)     notice.style.display     = 'none';
+      if (form)       form.style.display       = 'block';
+      if (heroSignup) heroSignup.style.display = 'none';
+      if (heroClaim)  heroClaim.style.display  = 'inline-block';
+      loadUserCashbackBalance();
+    } else {
+      // Guest — show sign-in prompts, hide claim form
+      if (notice)     notice.style.display     = 'block';
+      if (form)       form.style.display       = 'none';
+      if (balSec)     balSec.style.display     = 'none';
+      if (heroSignup) heroSignup.style.display = 'inline-block';
+      if (heroClaim)  heroClaim.style.display  = 'none';
+    }
+  }
+
   if (typeof currentUser !== 'undefined' && currentUser) {
-    if (notice) notice.style.display = 'none';
-    if (form)   form.style.display   = 'block';
-    loadUserCashbackBalance();
+    applyAuthState(currentUser);
   } else {
-    if (notice) notice.style.display = 'block';
-    if (form)   form.style.display   = 'none';
-    if (balSec) balSec.style.display = 'none';
-    // Wait for auth state to resolve
+    applyAuthState(null);
+    // Wait for Firebase auth to resolve (first page load)
     firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        if (notice) notice.style.display = 'none';
-        if (form)   form.style.display   = 'block';
-        loadUserCashbackBalance();
-      }
+      applyAuthState(user);
     });
   }
 }
