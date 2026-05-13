@@ -3565,7 +3565,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
             <div>
               <label style="display:block;font-size:.82rem;font-weight:700;color:#374151;margin-bottom:6px;">Booking Type *</label>
-              <select id="cb-type" style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.9rem;background:#fff;color:#0f172a;">
+              <select id="cb-type" style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.9rem;background:#fff;color:#0f172a;box-sizing:border-box;">
                 <option value="">Select type…</option>
                 <option value="flights">✈️ Flights (0.8%)</option>
                 <option value="hotels">🏨 Hotels (1.5%)</option>
@@ -3577,13 +3577,22 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
               <label style="display:block;font-size:.82rem;font-weight:700;color:#374151;margin-bottom:6px;">Booking Partner *</label>
               <select id="cb-partner" style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.9rem;background:#fff;color:#0f172a;">
                 <option value="">Select partner…</option>
-                <option value="Kiwi.com">Kiwi.com</option>
-                <option value="Trip.com">Trip.com</option>
-                <option value="Booking.com">Booking.com</option>
-                <option value="GetYourGuide">GetYourGuide</option>
-                <option value="Viator">Viator</option>
-                <option value="TalixoTransfer">Talixo Transfer</option>
-                <option value="12Go Asia">12Go Asia</option>
+                <optgroup label="✈️ Flights">
+                  <option value="Kiwi.com">Kiwi.com</option>
+                  <option value="JetRadar">JetRadar (Travelpayouts)</option>
+                  <option value="Trip.com">Trip.com</option>
+                </optgroup>
+                <optgroup label="🏨 Hotels">
+                  <option value="Hotels.com">Hotels.com</option>
+                </optgroup>
+                <optgroup label="🗺️ Tours &amp; Activities">
+                  <option value="Klook">Klook</option>
+                  <option value="GetYourGuide">GetYourGuide</option>
+                </optgroup>
+                <optgroup label="⛴️ Ferries &amp; Trains">
+                  <option value="Ferry (Travelpayouts)">Ferry via Travelpayouts</option>
+                  <option value="12Go Asia">12Go Asia</option>
+                </optgroup>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -3687,28 +3696,37 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     function toggleMobileMenu() {
       var menu = document.getElementById('mobile-menu');
       var btn  = document.getElementById('hamburger-btn');
+      if (!menu) return;
       var isOpen = menu.classList.toggle('open');
       if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      // iOS Safari: force repaint so sticky menu shows correctly
-      menu.style.display = 'none';
-      menu.offsetHeight; // trigger reflow
-      menu.style.display = '';
     }
 
-    // Wire hamburger button — works on both tap (iOS Safari) and click (other browsers)
+    // Close mobile menu when a link/button inside it is tapped
     (function() {
       function initHamburger() {
-        var btn = document.getElementById('hamburger-btn');
-        if (!btn) return;
-        var fired = false;
-        btn.addEventListener('touchend', function(e) {
-          e.preventDefault();
-          fired = true;
-          toggleMobileMenu();
-        }, { passive: false });
+        var btn  = document.getElementById('hamburger-btn');
+        var menu = document.getElementById('mobile-menu');
+        if (!btn || !menu) return;
+
+        // Single unified click handler — no touchend/click double-fire
         btn.addEventListener('click', function(e) {
-          if (fired) { fired = false; return; }
+          e.stopPropagation();
           toggleMobileMenu();
+        });
+
+        // Close menu when tapping any item inside it
+        menu.addEventListener('click', function() {
+          menu.classList.remove('open');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
+
+        // Close menu when tapping outside
+        document.addEventListener('click', function(e) {
+          if (menu.classList.contains('open') &&
+              !menu.contains(e.target) && e.target !== btn) {
+            menu.classList.remove('open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
         });
       }
       if (document.readyState === 'loading') {
