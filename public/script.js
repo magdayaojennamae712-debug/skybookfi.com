@@ -3010,21 +3010,17 @@ function switchAuthTab(tab) {
 
 // Sign In
 async function signInWithGoogle() {
-  if (!auth) { alert('Auth not ready, please refresh and try again.'); return; }
+  if (!auth) { alert('Please refresh the page and try again.'); return; }
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
-    const result = await auth.signInWithPopup(provider);
-    if (result && result.user) {
-      var overlay = document.getElementById('auth-overlay');
-      if (overlay) overlay.style.display = 'none';
-      if (selectedFlight) showAgencyPage();
-    }
+    await auth.signInWithPopup(provider);
+    // Reload page so Firebase auth state loads fresh
+    window.location.reload();
   } catch (err) {
     if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') return;
-    // Show error visibly so we can debug
-    const msg = (err.code || '') + ': ' + (err.message || 'Unknown error');
     const errorEl = document.getElementById('login-error') || document.getElementById('signup-error');
+    const msg = (err.code || '') + ': ' + (err.message || 'Unknown error');
     if (errorEl) { errorEl.textContent = msg; errorEl.style.display = 'block'; }
     else alert('Google Sign-In error: ' + msg);
   }
