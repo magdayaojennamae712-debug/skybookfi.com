@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nordicwings-v17';
+const CACHE_NAME = 'nordicwings-v18';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -40,6 +40,7 @@ self.addEventListener('activate', event => {
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
     )
   );
+  self.skipWaiting();
   self.clients.claim();
 });
 
@@ -51,9 +52,11 @@ self.addEventListener('fetch', event => {
   if (url.origin !== location.origin) return;
 
   const isHTML = event.request.headers.get('accept')?.includes('text/html');
+  // Also use network-first for JS and CSS so updates deploy immediately
+  const isScript = url.pathname.endsWith('.js') || url.pathname.endsWith('.css');
 
-  if (isHTML) {
-    // Network first for pages
+  if (isHTML || isScript) {
+    // Network first — always get fresh code
     event.respondWith(
       fetch(event.request)
         .then(res => {
@@ -64,7 +67,7 @@ self.addEventListener('fetch', event => {
         .catch(() => caches.match(event.request))
     );
   } else {
-    // Cache first for assets
+    // Cache first for images and other static assets
     event.respondWith(
       caches.match(event.request).then(cached => cached || fetch(event.request))
     );

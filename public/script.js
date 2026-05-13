@@ -3576,12 +3576,13 @@ function loadCashbackPage() {
   const balSec    = document.getElementById('cb-balance-section');
   if (!form) return;
 
-  // Live cashback estimate from amount input
+  // Live cashback estimate — add listeners once only
   const amountEl = document.getElementById('cb-amount');
   const typeEl   = document.getElementById('cb-type');
-  if (amountEl) {
+  if (amountEl && !amountEl.dataset.listenerAdded) {
     amountEl.addEventListener('input',  updateCashbackEstimate);
     typeEl   && typeEl.addEventListener('change', updateCashbackEstimate);
+    amountEl.dataset.listenerAdded = '1';
   }
 
   function applyAuthState(user) {
