@@ -3154,6 +3154,58 @@ async function signUpUser() {
   }
 }
 
+// ─────────────────────────────────────────────────────────────
+// NEWSLETTER SUBSCRIPTION
+// ─────────────────────────────────────────────────────────────
+async function subscribeNewsletter() {
+  const input = document.getElementById('newsletter-email');
+  const msg   = document.getElementById('newsletter-msg');
+  if (!input || !msg) return;
+
+  const email = input.value.trim().toLowerCase();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    msg.textContent = 'Please enter a valid email address.';
+    msg.style.background = '#fee2e2';
+    msg.style.color = '#dc2626';
+    msg.style.display = 'block';
+    return;
+  }
+
+  if (!db) { alert('Please refresh and try again.'); return; }
+
+  try {
+    // Check if already subscribed
+    const existing = await db.collection('newsletter_subscribers')
+      .where('email', '==', email).limit(1).get();
+    if (!existing.empty) {
+      msg.textContent = "✅ You're already subscribed — we'll keep you posted!";
+      msg.style.background = '#f0fdf4';
+      msg.style.color = '#15803d';
+      msg.style.display = 'block';
+      return;
+    }
+
+    await db.collection('newsletter_subscribers').add({
+      email:       email,
+      source:      'homepage',
+      subscribedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      status:      'active'
+    });
+
+    input.value = '';
+    msg.textContent = "🎉 You're subscribed! Expect great deals in your inbox soon.";
+    msg.style.background = '#f0fdf4';
+    msg.style.color = '#15803d';
+    msg.style.display = 'block';
+  } catch(e) {
+    msg.textContent = 'Something went wrong. Please try again.';
+    msg.style.background = '#fee2e2';
+    msg.style.color = '#dc2626';
+    msg.style.display = 'block';
+  }
+}
+
 // Sign Out
 async function signOutUser() {
   await auth.signOut();
@@ -3191,6 +3243,7 @@ function crmSwitchTab(tab) {
   if (tab === 'customers')  renderCRMCustomers(_allAdminBookings);
   if (tab === 'bookings')   renderAdminTable(_allAdminBookings);
   if (tab === 'affiliate')  renderAffiliateTab();
+  if (tab === 'newsletter') loadAdminNewsletter();
 }
 
 async function loadAdminDashboard() {
@@ -3843,6 +3896,50 @@ function loadAdminCashbackClaims() {
       }
     }).catch(function(err) {
       if (loading) { loading.style.display='block'; loading.textContent='Error: '+err.message; }
+    });
+}
+
+
+// ── Admin: load newsletter subscribers ───────────────────────
+function loadAdminNewsletter() {
+  var loading  = document.getElementById('nl-admin-loading');
+  var tableWrap= document.getElementById('nl-admin-table-wrap');
+  var empty    = document.getElementById('nl-admin-empty');
+  var tbody    = document.getElementById('nl-admin-table-body');
+  var countEl  = document.getElementById('nl-admin-count');
+  if (!loading) return;
+  loading.style.display = 'block';
+  if (tableWrap) tableWrap.style.display = 'none';
+  if (empty) empty.style.display = 'none';
+
+  db.collection('newsletter_subscribers').orderBy('subscribedAt','desc').get()
+    .then(function(snap) {
+      loading.style.display = 'none';
+      var rows = [];
+      snap.forEach(function(doc) {
+        var d = doc.data(); d._id = doc.id;
+        rows.push(d);
+      });
+      if (countEl) countEl.textContent = rows.length + ' subscriber' + (rows.length !== 1 ? 's' : '');
+      if (!rows.length) { if (empty) empty.style.display = 'block'; return; }
+      if (tableWrap) tableWrap.style.display = 'block';
+      if (tbody) {
+        tbody.innerHTML = rows.map(function(d) {
+          var date = d.subscribedAt && d.subscribedAt.toDate
+            ? d.subscribedAt.toDate().toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})
+            : '—';
+          var sc  = d.status === 'active' ? '#15803d' : '#dc2626';
+          var sbg = d.status === 'active' ? '#f0fdf4' : '#fee2e2';
+          return '<tr>'
+            + '<td style="padding:10px 14px;border-bottom:1px solid #f1f5f9;font-weight:600;">' + (d.email||'—') + '</td>'
+            + '<td style="padding:10px 14px;border-bottom:1px solid #f1f5f9;font-size:.8rem;color:#64748b;">' + (d.source||'homepage') + '</td>'
+            + '<td style="padding:10px 14px;border-bottom:1px solid #f1f5f9;font-size:.82rem;">' + date + '</td>'
+            + '<td style="padding:10px 14px;border-bottom:1px solid #f1f5f9;"><span style="background:'+sbg+';color:'+sc+';font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;">' + (d.status||'active') + '</span></td>'
+            + '</tr>';
+        }).join('');
+      }
+    }).catch(function(err) {
+      if (loading) { loading.style.display = 'block'; loading.textContent = 'Error: ' + err.message; }
     });
 }
 
