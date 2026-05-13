@@ -3606,7 +3606,8 @@ const CASHBACK_RATES = {
   flights: 0.008,
   hotels:  0.015,
   tours:   0.02,
-  ferries: 0.008
+  ferries: 0.008,
+  events:  0.08   // TicketNetwork: up to 8% avg of 6–12.5% range
 };
 
 // Track a click on a cashback affiliate link (anonymous or logged-in)
