@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nordicwings-v20';
+const CACHE_NAME = 'nordicwings-v21';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -27,6 +27,7 @@ const STATIC_ASSETS = [
 
 // Install: cache static assets
 self.addEventListener('install', event => {
+  self.skipWaiting(); // activate new SW immediately without waiting for tabs to close
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
@@ -40,7 +41,6 @@ self.addEventListener('activate', event => {
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
     )
   );
-  self.skipWaiting();
   self.clients.claim();
 });
 
