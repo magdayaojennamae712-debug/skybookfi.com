@@ -39,18 +39,6 @@ function initFirebaseSafe() {
       currentUser = user;
       if (typeof updateNavForAuth === 'function') updateNavForAuth(user);
     });
-    // Handle redirect result from Google Sign-In
-    auth.getRedirectResult().then(function(result) {
-      if (result && result.user) {
-        // Successfully signed in via Google redirect — close modal if open
-        var overlay = document.getElementById('auth-overlay');
-        if (overlay) overlay.style.display = 'none';
-      }
-    }).catch(function(err) {
-      if (err.code && err.code !== 'auth/no-current-user') {
-        console.warn('Google redirect sign-in error:', err.code, err.message);
-      }
-    });
   } catch(e) {
     console.warn('Firebase init skipped:', e.message);
   }
@@ -3021,13 +3009,24 @@ function switchAuthTab(tab) {
 }
 
 // Sign In
-function signInWithGoogle() {
+async function signInWithGoogle() {
+  if (!auth) { alert('Auth not ready, please refresh and try again.'); return; }
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithRedirect(provider);
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const result = await auth.signInWithPopup(provider);
+    if (result && result.user) {
+      var overlay = document.getElementById('auth-overlay');
+      if (overlay) overlay.style.display = 'none';
+      if (selectedFlight) showAgencyPage();
+    }
   } catch (err) {
-    const errorEl = document.getElementById('login-error');
-    setError(errorEl, err.message || 'Google Sign-In failed. Please try again.');
+    if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') return;
+    // Show error visibly so we can debug
+    const msg = (err.code || '') + ': ' + (err.message || 'Unknown error');
+    const errorEl = document.getElementById('login-error') || document.getElementById('signup-error');
+    if (errorEl) { errorEl.textContent = msg; errorEl.style.display = 'block'; }
+    else alert('Google Sign-In error: ' + msg);
   }
 }
 
