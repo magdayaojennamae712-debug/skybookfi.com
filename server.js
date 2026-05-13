@@ -102,6 +102,21 @@ app.use(compression());
 // ── Middleware ───────────────────────────────────────────────
 app.use(express.json({ limit: '10kb' })); // Limit body size to prevent attacks
 
+// ── Firebase Auth proxy ──────────────────────────────────────
+// Routes /__/auth/* to Firebase so Google Sign-In works on nordicwings.net
+const https = require('https');
+app.use('/__/auth', (req, res) => {
+  const target = 'https://skybook-30c99.firebaseapp.com/__/auth' + req.url;
+  const proxyReq = https.request(target, { method: req.method, headers: { host: 'skybook-30c99.firebaseapp.com' } }, (fbRes) => {
+    const headers = Object.assign({}, fbRes.headers);
+    delete headers['x-frame-options'];
+    res.writeHead(fbRes.statusCode, headers);
+    fbRes.pipe(res, { end: true });
+  });
+  proxyReq.on('error', () => res.status(502).end());
+  req.pipe(proxyReq, { end: true });
+});
+
 // Static files with Cache-Control headers
 app.use(express.static('public', {
   etag: true,

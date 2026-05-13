@@ -9,7 +9,7 @@
 // Firebase Console → Project Settings → Your apps → Web app
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyBC6ocYFDsFMxbx8eccxfeUzooG4HitugQ",
-  authDomain:        "skybook-30c99.firebaseapp.com",
+  authDomain:        "nordicwings.net",
   projectId:         "skybook-30c99",
   storageBucket:     "skybook-30c99.firebasestorage.app",
   messagingSenderId: "696427827576",
