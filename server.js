@@ -102,20 +102,6 @@ app.use(compression());
 // ── Middleware ───────────────────────────────────────────────
 app.use(express.json({ limit: '10kb' })); // Limit body size to prevent attacks
 
-// ── Firebase Auth handler proxy ──────────────────────────────
-// Firebase Google Sign-In requires /__/auth/handler at the authDomain.
-// Since we're on Railway (not Firebase Hosting), we proxy it here.
-const https = require('https');
-app.get('/__/auth/*', (req, res) => {
-  const target = 'https://skybook-30c99.firebaseapp.com' + req.url;
-  https.get(target, (fbRes) => {
-    res.writeHead(fbRes.statusCode, fbRes.headers);
-    fbRes.pipe(res);
-  }).on('error', (err) => {
-    res.status(502).send('Auth proxy error');
-  });
-});
-
 // Static files with Cache-Control headers
 app.use(express.static('public', {
   etag: true,
