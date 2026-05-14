@@ -38,15 +38,28 @@ function initFirebaseSafe() {
     auth.onAuthStateChanged(function(user) {
       currentUser = user;
       if (typeof updateNavForAuth === 'function') updateNavForAuth(user);
+
+      // If user just signed in (via redirect) and the auth overlay is still showing, close it
+      if (user) {
+        var overlay = document.getElementById('auth-overlay');
+        if (overlay && overlay.style.display === 'flex') {
+          overlay.style.display = 'none';
+          var returnPage = localStorage.getItem('pendingAuthPage') || 'home';
+          localStorage.removeItem('pendingAuthPage');
+          if (returnPage && returnPage !== 'home') {
+            showPage(returnPage);
+          }
+        }
+      }
     });
-    // Handle redirect sign-in result (mobile fallback when popups are blocked)
+    // Handle redirect sign-in result (mobile — completes after Google redirect)
     auth.getRedirectResult().then(function(result) {
       if (result && result.user) {
         var overlay = document.getElementById('auth-overlay');
         if (overlay) overlay.style.display = 'none';
         var returnPage = localStorage.getItem('pendingAuthPage') || 'home';
         localStorage.removeItem('pendingAuthPage');
-        if (returnPage !== 'home') showPage(returnPage);
+        if (returnPage && returnPage !== 'home') showPage(returnPage);
         else if (selectedFlight) showAgencyPage();
       }
     }).catch(function(e) {
