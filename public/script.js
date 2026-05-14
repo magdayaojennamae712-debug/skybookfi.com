@@ -37,22 +37,30 @@ function initFirebaseSafe() {
     db   = firebase.firestore();
     auth.onAuthStateChanged(function(user) {
       currentUser = user;
-      if (typeof updateNavForAuth === 'function') updateNavForAuth(user);
 
       if (user) {
-        var pendingPage = localStorage.getItem('pendingAuthPage');
-
-        // Always fully close the auth overlay (handles popup sign-in on desktop)
+        // Signed in — always update nav and close modal
+        if (typeof updateNavForAuth === 'function') updateNavForAuth(user);
         if (typeof _closeAuthOverlay === 'function') _closeAuthOverlay();
 
-        // pendingAuthPage present = sign-in was started (redirect or popup flow)
-        // Handles iOS Safari where getRedirectResult() returns null
+        var pendingPage = localStorage.getItem('pendingAuthPage');
         if (pendingPage !== null) {
           localStorage.removeItem('pendingAuthPage');
+          // Navigate back to where they were (except home — already there after reload)
           if (pendingPage && pendingPage !== 'home') {
             showPage(pendingPage);
           }
         }
+
+      } else {
+        // Signed out — BUT if pendingAuthPage exists, we just came back from Google
+        // redirect and Firebase is still loading the user. Don't flash "Sign In" yet.
+        var pendingPage = localStorage.getItem('pendingAuthPage');
+        if (!pendingPage) {
+          // Genuinely signed out — update nav to show Sign In
+          if (typeof updateNavForAuth === 'function') updateNavForAuth(null);
+        }
+        // If pendingPage exists: stay silent — user will arrive in next firing
       }
     });
 
