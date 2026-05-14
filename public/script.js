@@ -272,21 +272,24 @@ function updateNavForAuth(user) {
   const mobileSignup   = document.getElementById('mobile-nav-signup');
   const mobileUser     = document.getElementById('mobile-nav-user');
   const mobileUsername = document.getElementById('mobile-nav-username');
+  const mobileAdmin    = document.getElementById('mobile-nav-admin');
 
   if (user) {
     const displayName = user.displayName || user.email.split('@')[0];
+    const isOwner = user.email === OWNER_EMAIL;
     // Desktop nav
     if (navLogin)    navLogin.style.display    = 'none';
     if (navSignup)   navSignup.style.display   = 'none';
     if (navUser)     navUser.style.display     = 'flex';
     if (navDash)     navDash.style.display     = 'inline-flex';
     if (navUsername) navUsername.textContent   = displayName;
-    if (navAdmin)    navAdmin.style.display    = user.email === OWNER_EMAIL ? 'inline-flex' : 'none';
+    if (navAdmin)    navAdmin.style.display    = isOwner ? 'inline-flex' : 'none';
     // Mobile menu
     if (mobileLogin)    mobileLogin.style.display    = 'none';
     if (mobileSignup)   mobileSignup.style.display   = 'none';
     if (mobileUser)     mobileUser.style.display     = 'block';
     if (mobileUsername) mobileUsername.textContent   = '👋 ' + displayName;
+    if (mobileAdmin)    mobileAdmin.style.display    = isOwner ? 'inline-block' : 'none';
   } else {
     // Desktop nav
     if (navLogin)  navLogin.style.display  = 'inline-flex';
@@ -298,6 +301,7 @@ function updateNavForAuth(user) {
     if (mobileLogin)  mobileLogin.style.display  = 'block';
     if (mobileSignup) mobileSignup.style.display = 'block';
     if (mobileUser)   mobileUser.style.display   = 'none';
+    if (mobileAdmin)  mobileAdmin.style.display  = 'none';
   }
 }
 

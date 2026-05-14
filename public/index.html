@@ -378,8 +378,9 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     <button id="mobile-nav-signup" onclick="openAuthModal('signup');toggleMobileMenu()">Sign Up Free</button>
     <div id="mobile-nav-user" style="display:none;padding:8px 0;border-top:1px solid #f1f5f9;margin-top:4px;">
       <span id="mobile-nav-username" style="font-weight:700;color:#1e3a8a;font-size:.95rem;"></span>
-      <div style="display:flex;gap:8px;margin-top:6px;">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
         <button onclick="showPage('dashboard');toggleMobileMenu()" style="background:#1e3a8a;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;">📁 My Bookings</button>
+        <button id="mobile-nav-admin" onclick="showPage('admin');toggleMobileMenu()" style="display:none;background:#fef3c7;color:#92400e;border:none;padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;">📊 Business</button>
         <button onclick="firebase.auth().signOut();toggleMobileMenu()" style="background:#f1f5f9;color:#64748b;border:none;padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;">Sign Out</button>
       </div>
     </div>
