@@ -3033,20 +3033,35 @@ async function signInWithGoogle() {
   // Remember which page opened the sign-in modal so we can return there
   var returnPageId = localStorage.getItem('pendingAuthPage') || 'home';
 
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
+  // Detect mobile — always use redirect on mobile (popups are unreliable on phones)
+  var isMobile = /Android|iPhone|iPad|iPod|Mobile|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+
+  if (isMobile) {
+    // Mobile: go straight to redirect — reliable on all mobile browsers
+    try {
+      await auth.signInWithRedirect(provider);
+      // Page will reload; getRedirectResult() in initFirebaseSafe handles the rest
+    } catch (err) {
+      const errorEl = document.getElementById('login-error') || document.getElementById('signup-error');
+      if (errorEl) { errorEl.textContent = 'Sign-in failed. Please try again.'; errorEl.style.display = 'block'; }
+    }
+    return;
+  }
+
+  // Desktop: try popup first, fall back to redirect
+  try {
     let result;
     try {
-      // Try popup first (desktop + modern mobile)
       result = await auth.signInWithPopup(provider);
     } catch (popupErr) {
-      // If popup is blocked on mobile, fall back to redirect
       if (popupErr.code === 'auth/popup-blocked' ||
-          popupErr.code === 'auth/operation-not-supported-in-this-environment') {
+          popupErr.code === 'auth/operation-not-supported-in-this-environment' ||
+          popupErr.code === 'auth/internal-error') {
         await auth.signInWithRedirect(provider);
-        return; // Page will reload; getRedirectResult() in initFirebaseSafe handles the rest
+        return;
       }
       throw popupErr;
     }
@@ -3055,7 +3070,6 @@ async function signInWithGoogle() {
       var overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.style.display = 'none';
       localStorage.removeItem('pendingAuthPage');
-      // Return to the page where sign-in was triggered
       if (returnPageId && returnPageId !== 'home') {
         showPage(returnPageId);
       } else if (selectedFlight) {
