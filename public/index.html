@@ -367,20 +367,20 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
     </div>
   </header>
   <!-- Mobile menu OUTSIDE header — fixes iOS Safari sticky touch bug -->
-  <div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu" id="mobile-menu" style="z-index:99999!important;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #f1f5f9;">
       <span style="font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;">Menu</span>
-      <button onclick="toggleMobileMenu()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#64748b;padding:4px 8px;line-height:1;">&#10005;</button>
+      <button ontouchend="this.ontouchend=null;toggleMobileMenu();return false;" onclick="toggleMobileMenu()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#64748b;padding:12px 16px;line-height:1;touch-action:manipulation;-webkit-tap-highlight-color:transparent;">&#10005;</button>
     </div>
-    <a href="javascript:void(0)" onclick="try{showPage('home')}catch(e){};toggleMobileMenu()">🏠 Home</a>
-    <a href="javascript:void(0)" onclick="try{showPage('hotels')}catch(e){};toggleMobileMenu()" style="color:#0ea5e9;font-weight:700;">🏨 Hotels</a>
-    <a href="javascript:void(0)" onclick="try{showPage('home')}catch(e){};setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu()">✈ Destinations</a>
-    <a href="/blog/" onclick="toggleMobileMenu()">📝 Blog</a>
-    <a href="javascript:void(0)" onclick="try{showPage('book')}catch(e){};toggleMobileMenu()" style="color:#0369a1;font-weight:700;">⚓ Sea Travel</a>
-    <a href="javascript:void(0)" onclick="try{showPage('cashback')}catch(e){};toggleMobileMenu()" style="color:#15803d;font-weight:700;background:#dcfce7;border-radius:10px;">💰 Cashback — Earn Money!</a>
-    <a href="javascript:void(0)" onclick="try{showPage('support')}catch(e){};toggleMobileMenu()">❓ Support</a>
-    <button id="mobile-nav-login" onclick="try{openAuthModal('login')}catch(e){};toggleMobileMenu()">Sign In</button>
-    <button id="mobile-nav-signup" onclick="try{openAuthModal('signup')}catch(e){};toggleMobileMenu()">Sign Up Free</button>
+    <button class="mob-nav-btn" ontouchend="this.ontouchend=null;try{showPage('home')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('home')}catch(e){};toggleMobileMenu()">🏠 Home</button>
+    <button class="mob-nav-btn" style="color:#0ea5e9;font-weight:700;" ontouchend="this.ontouchend=null;try{showPage('hotels')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('hotels')}catch(e){};toggleMobileMenu()">🏨 Hotels</button>
+    <button class="mob-nav-btn" ontouchend="this.ontouchend=null;try{showPage('home')}catch(e){};setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu();return false;" onclick="try{showPage('home')}catch(e){};setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu()">✈ Destinations</button>
+    <a href="/blog/" ontouchend="toggleMobileMenu()" onclick="toggleMobileMenu()" style="display:block;padding:14px 0;color:var(--text);font-size:1rem;font-weight:500;text-decoration:none;touch-action:manipulation;">📝 Blog</a>
+    <button class="mob-nav-btn" style="color:#0369a1;font-weight:700;" ontouchend="this.ontouchend=null;try{showPage('book')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('book')}catch(e){};toggleMobileMenu()">⚓ Sea Travel</button>
+    <button class="mob-nav-btn" style="color:#15803d;font-weight:700;background:#dcfce7;border-radius:10px;" ontouchend="this.ontouchend=null;try{showPage('cashback')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('cashback')}catch(e){};toggleMobileMenu()">💰 Cashback — Earn Money!</button>
+    <button class="mob-nav-btn" ontouchend="this.ontouchend=null;try{showPage('support')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('support')}catch(e){};toggleMobileMenu()">❓ Support</button>
+    <button id="mobile-nav-login" ontouchend="this.ontouchend=null;try{openAuthModal('login')}catch(e){};toggleMobileMenu();return false;" onclick="try{openAuthModal('login')}catch(e){};toggleMobileMenu()">Sign In</button>
+    <button id="mobile-nav-signup" ontouchend="this.ontouchend=null;try{openAuthModal('signup')}catch(e){};toggleMobileMenu();return false;" onclick="try{openAuthModal('signup')}catch(e){};toggleMobileMenu()">Sign Up Free</button>
     <div id="mobile-nav-user" style="display:none;padding:8px 0;border-top:1px solid #f1f5f9;margin-top:4px;">
       <span id="mobile-nav-username" style="font-weight:700;color:#1e3a8a;font-size:.95rem;"></span>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
@@ -3816,13 +3816,19 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       document.getElementById('depart-input').value = dt.toISOString().split('T')[0];
       document.querySelector('.search-card').scrollIntoView({ behavior: 'smooth' });
     }
-    function toggleMobileMenu() {
+    window.toggleMobileMenu = function() {
       var menu = document.getElementById('mobile-menu');
       var btn  = document.getElementById('hamburger-btn');
       if (!menu) return;
       var isOpen = menu.classList.toggle('open');
       if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    }
+      if (isOpen) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    };
+    var toggleMobileMenu = window.toggleMobileMenu;
 
     // Hamburger button — single click handler only
     (function() {
@@ -3928,37 +3934,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
     }
 
-    function nwSetLang(code) {
-      var dd = document.getElementById('lang-dropdown');
-      if (dd) dd.style.display = 'none';
-      var btn = document.getElementById('lang-btn-label');
-      var found = NW_LANGS.find(function(l){ return l.code === code; });
-      if (btn && found) btn.textContent = found.label;
-    }
-
-    function nwBuildLangList() {
-      var list = document.getElementById('lang-list');
-      if (!list) return;
-      list.innerHTML = '';
-      NW_LANGS.forEach(function(l) {
-        var li = document.createElement('li');
-        li.textContent = l.label;
-        li.style.cssText = 'padding:8px 16px;cursor:pointer;white-space:nowrap;';
-        li.addEventListener('mouseenter', function(){ li.style.background='#f1f5f9'; });
-        li.addEventListener('mouseleave', function(){ li.style.background=''; });
-        li.addEventListener('click', function(){ nwSetLang(l.code); });
-        list.appendChild(li);
-      });
-    }
-
-    document.addEventListener('click', function(e) {
-      var dd = document.getElementById('lang-dropdown');
-      var btn = document.getElementById('lang-btn');
-      if (dd && btn && !btn.contains(e.target)) {
-        dd.style.display = 'none';
-      }
-    });
-
-    window.addEventListener('DOMContentLoaded', nwBuildLangList);
-  </script>
-</html>
+    functio
