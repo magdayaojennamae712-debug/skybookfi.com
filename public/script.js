@@ -4080,6 +4080,66 @@ function sendNewsletter() {
   if (!body.trim())    { alert('Please write a message.'); return; }
   if (!token.trim())   { alert('Please enter your admin token.'); return; }
 
-  // Convert plain text to simple HTML paragraphs
   var bodyHtml = body.trim().split(/\n\n+/).map(function(p) {
-    return '<p style="color:#1e293b;font-size:.95rem;line-height:1.
+    return '<p style="color:#1e293b;font-size:.95rem;line-height:1.7;margin:0 0 16px;">'
+      + p.replace(/\n/g, '<br>') + '</p>';
+  }).join('');
+
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Sending…'; }
+  if (result) { result.style.display = 'none'; }
+
+  fetch('/api/send-newsletter', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ subject: subject, bodyHtml: bodyHtml, bodyText: body, senderToken: token })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (btn) { btn.disabled = false; btn.innerHTML = '📨 Send to All Subscribers'; }
+    if (result) {
+      result.style.display = 'block';
+      if (data.ok) {
+        result.style.background = '#f0fdf4';
+        result.style.color = '#15803d';
+        result.style.border = '1.5px solid #86efac';
+        result.textContent = '✅ Sent to ' + data.sent + ' subscriber' + (data.sent !== 1 ? 's' : '')
+          + (data.failed ? ' (' + data.failed + ' failed)' : '') + '!';
+        document.getElementById('nl-compose-subject').value = '';
+        document.getElementById('nl-compose-body').value = '';
+      } else {
+        result.style.background = '#fef2f2';
+        result.style.color = '#dc2626';
+        result.style.border = '1.5px solid #fca5a5';
+        result.textContent = '❌ Error: ' + (data.error || 'Something went wrong');
+      }
+    }
+  })
+  .catch(function(err) {
+    if (btn) { btn.disabled = false; btn.innerHTML = '📨 Send to All Subscribers'; }
+    if (result) {
+      result.style.display = 'block';
+      result.style.background = '#fef2f2';
+      result.style.color = '#dc2626';
+      result.style.border = '1.5px solid #fca5a5';
+      result.textContent = '❌ Network error: ' + err.message;
+    }
+  });
+}
+
+function approveCashbackClaim(docId, btn) {
+  if (!confirm('Approve this cashback claim?')) return;
+  if (btn) { btn.disabled=true; btn.textContent='Saving…'; }
+  db.collection('cashback_claims').doc(docId)
+    .update({status:'confirmed', reviewedAt: firebase.firestore.FieldValue.serverTimestamp()})
+    .then(function() { loadAdminCashbackClaims(); })
+    .catch(function(e) { alert('Error: '+e.message); if (btn) { btn.disabled=false; btn.textContent='✔ Approve'; } });
+}
+
+function rejectCashbackClaim(docId, btn) {
+  if (!confirm('Reject this claim?')) return;
+  if (btn) { btn.disabled=true; btn.textContent='Saving…'; }
+  db.collection('cashback_claims').doc(docId)
+    .update({status:'rejected', reviewedAt: firebase.firestore.FieldValue.serverTimestamp()})
+    .then(function() { loadAdminCashbackClaims(); })
+    .catch(function(e) { alert('Error: '+e.message); if (btn) { btn.disabled=false; btn.textContent='✗ Reject'; } });
+}
