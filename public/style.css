@@ -14,8 +14,7 @@ a, button, input, select, textarea, label, [onclick], [role="button"] {
 /* ── Mobile: smoother scrolling ── */
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
-  width: 100%;
+  overflow-x: clip;
 }
 /* ── Hide Google Translate bar — prevents dark line / layout shift on mobile ── */
 .goog-te-banner-frame,
@@ -65,9 +64,7 @@ body {
   background: var(--bg);
   line-height: 1.6;
   min-height: 100vh;
-  overflow-x: hidden;
-  width: 100%;
-  max-width: 100vw;
+  overflow-x: clip;
 }
 
 a { color: var(--blue); text-decoration: none; }
@@ -1673,4 +1670,5 @@ img { max-width: 100%; display: block; }
   margin: 0;
 }
 .tp-fallback {
- 
+  background: rgba(255,255,255,.06);
+  border: 1px soli
