@@ -3047,6 +3047,14 @@ function openAuthModal(tab) {
   switchAuthTab(tab || 'login');
 }
 
+// Helper: closes the auth overlay by removing both inline style AND 'open' class
+function _closeAuthOverlay() {
+  var ov = document.getElementById('auth-overlay');
+  if (ov) { ov.style.display = 'none'; ov.classList.remove('open'); }
+  // Also clear pendingAuthPage so null-flash guard doesn't block nav update
+  localStorage.removeItem('pendingAuthPage');
+}
+
 function closeAuthModal(e) {
   if (e && e.target !== document.getElementById('auth-overlay')) return;
   _closeAuthOverlay();
@@ -4014,9 +4022,4 @@ function approveCashbackClaim(docId, btn) {
 
 function rejectCashbackClaim(docId, btn) {
   if (!confirm('Reject this claim?')) return;
-  if (btn) { btn.disabled=true; btn.textContent='Saving…'; }
-  db.collection('cashback_claims').doc(docId)
-    .update({status:'rejected', reviewedAt: firebase.firestore.FieldValue.serverTimestamp()})
-    .then(function() { loadAdminCashbackClaims(); })
-    .catch(function(e) { alert('Error: '+e.message); if (btn) { btn.disabled=false; btn.textContent='✗ Reject'; } });
-}
+  if (btn) { btn.
