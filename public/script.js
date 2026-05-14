@@ -40,19 +40,15 @@ function initFirebaseSafe() {
       if (typeof updateNavForAuth === 'function') updateNavForAuth(user);
 
       if (user) {
-        var overlay = document.getElementById('auth-overlay');
         var pendingPage = localStorage.getItem('pendingAuthPage');
 
-        // Always close overlay if open (popup sign-in on desktop)
-        if (overlay && overlay.style.display === 'flex') {
-          overlay.style.display = 'none';
-        }
+        // Always fully close the auth overlay (handles popup sign-in on desktop)
+        if (typeof _closeAuthOverlay === 'function') _closeAuthOverlay();
 
-        // pendingAuthPage in storage = sign-in flow started but page reloaded (redirect sign-in)
-        // This catches iOS Safari where getRedirectResult() returns null due to cookie restrictions
+        // pendingAuthPage present = sign-in was started (redirect or popup flow)
+        // Handles iOS Safari where getRedirectResult() returns null
         if (pendingPage !== null) {
           localStorage.removeItem('pendingAuthPage');
-          if (overlay) overlay.style.display = 'none';
           if (pendingPage && pendingPage !== 'home') {
             showPage(pendingPage);
           }
@@ -63,8 +59,7 @@ function initFirebaseSafe() {
     // Handle redirect sign-in result (fires after Google redirect on mobile/desktop)
     auth.getRedirectResult().then(function(result) {
       if (result && result.user) {
-        var overlay = document.getElementById('auth-overlay');
-        if (overlay) overlay.style.display = 'none';
+        if (typeof _closeAuthOverlay === 'function') _closeAuthOverlay();
         var returnPage = localStorage.getItem('pendingAuthPage') || 'home';
         localStorage.removeItem('pendingAuthPage');
         if (returnPage && returnPage !== 'home') showPage(returnPage);
@@ -3025,7 +3020,7 @@ function openAuthModal(tab) {
 
 function closeAuthModal(e) {
   if (e && e.target !== document.getElementById('auth-overlay')) return;
-  document.getElementById('auth-overlay').style.display = 'none';
+  _closeAuthOverlay();
 }
 
 function switchAuthTab(tab) {
@@ -3088,8 +3083,7 @@ async function signInWithGoogle() {
     }
 
     if (result && result.user) {
-      var overlay = document.getElementById('auth-overlay');
-      if (overlay) overlay.style.display = 'none';
+      _closeAuthOverlay();
       localStorage.removeItem('pendingAuthPage');
       if (returnPageId && returnPageId !== 'home') {
         showPage(returnPageId);
@@ -3117,7 +3111,7 @@ async function signInUser() {
 
   try {
     await auth.signInWithEmailAndPassword(email, password);
-    document.getElementById('auth-overlay').style.display = 'none';
+    _closeAuthOverlay();
 
     // Return to the page that opened the modal
     var returnPage = localStorage.getItem('pendingAuthPage');
@@ -3163,7 +3157,7 @@ async function signUpUser() {
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, password);
     await cred.user.updateProfile({ displayName: name });
-    document.getElementById('auth-overlay').style.display = 'none';
+    _closeAuthOverlay();
 
     // Send welcome email
     try {
