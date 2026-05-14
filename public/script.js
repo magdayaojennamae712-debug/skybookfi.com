@@ -267,20 +267,37 @@ function updateNavForAuth(user) {
   const navDash     = document.getElementById('nav-dashboard');
   const navAdmin    = document.getElementById('nav-admin');
 
+  // Mobile menu elements
+  const mobileLogin    = document.getElementById('mobile-nav-login');
+  const mobileSignup   = document.getElementById('mobile-nav-signup');
+  const mobileUser     = document.getElementById('mobile-nav-user');
+  const mobileUsername = document.getElementById('mobile-nav-username');
+
   if (user) {
-    navLogin.style.display    = 'none';
-    navSignup.style.display   = 'none';
-    navUser.style.display     = 'flex';
-    navDash.style.display     = 'inline-flex';
-    navUsername.textContent   = user.displayName || user.email.split('@')[0];
-    // Show admin button only for owner
-    if (navAdmin) navAdmin.style.display = user.email === OWNER_EMAIL ? 'inline-flex' : 'none';
+    const displayName = user.displayName || user.email.split('@')[0];
+    // Desktop nav
+    if (navLogin)    navLogin.style.display    = 'none';
+    if (navSignup)   navSignup.style.display   = 'none';
+    if (navUser)     navUser.style.display     = 'flex';
+    if (navDash)     navDash.style.display     = 'inline-flex';
+    if (navUsername) navUsername.textContent   = displayName;
+    if (navAdmin)    navAdmin.style.display    = user.email === OWNER_EMAIL ? 'inline-flex' : 'none';
+    // Mobile menu
+    if (mobileLogin)    mobileLogin.style.display    = 'none';
+    if (mobileSignup)   mobileSignup.style.display   = 'none';
+    if (mobileUser)     mobileUser.style.display     = 'block';
+    if (mobileUsername) mobileUsername.textContent   = '👋 ' + displayName;
   } else {
-    navLogin.style.display    = 'inline-flex';
-    navSignup.style.display   = 'inline-flex';
-    navUser.style.display     = 'none';
-    navDash.style.display     = 'none';
-    if (navAdmin) navAdmin.style.display = 'none';
+    // Desktop nav
+    if (navLogin)  navLogin.style.display  = 'inline-flex';
+    if (navSignup) navSignup.style.display = 'inline-flex';
+    if (navUser)   navUser.style.display   = 'none';
+    if (navDash)   navDash.style.display   = 'none';
+    if (navAdmin)  navAdmin.style.display  = 'none';
+    // Mobile menu
+    if (mobileLogin)  mobileLogin.style.display  = 'block';
+    if (mobileSignup) mobileSignup.style.display = 'block';
+    if (mobileUser)   mobileUser.style.display   = 'none';
   }
 }
 
