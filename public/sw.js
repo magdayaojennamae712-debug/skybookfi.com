@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nordicwings-v42';
+const CACHE_NAME = 'nordicwings-v43';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
