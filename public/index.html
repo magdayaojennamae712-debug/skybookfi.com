@@ -308,17 +308,14 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
 <body onclick="void(0)">
 
   <!-- ── PAGE LOADING SCREEN ─────────────────────────────── -->
-  <div id="page-loader" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s ease;">
+  <div id="page-loader" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:loaderFadeOut .4s ease 1.8s forwards;pointer-events:none;">
     <div style="font-size:2.5rem;margin-bottom:12px;animation:loaderPulse 1.2s ease-in-out infinite;">✈</div>
     <div style="font-size:1.1rem;font-weight:800;color:#1e3a8a;letter-spacing:.02em;">NordicWings</div>
-    <div style="font-size:.82rem;color:#94a3b8;margin-top:6px;">Loading your travel experience...</div>
-    <div style="margin-top:20px;width:48px;height:4px;background:#e2e8f0;border-radius:4px;overflow:hidden;">
-      <div style="height:100%;background:linear-gradient(90deg,#1e3a8a,#3b82f6);border-radius:4px;animation:loaderBar 1.2s ease-in-out infinite;"></div>
-    </div>
+    <div style="font-size:.82rem;color:#94a3b8;margin-top:6px;">Loading...</div>
   </div>
   <style>
     @keyframes loaderPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
-    @keyframes loaderBar { 0%{width:0%;margin-left:0} 50%{width:100%;margin-left:0} 100%{width:0%;margin-left:100%} }
+    @keyframes loaderFadeOut { 0%{opacity:1;visibility:visible} 100%{opacity:0;visibility:hidden;display:none} }
   </style>
 
   <!-- ── OFFLINE BANNER ──────────────────────────────────── -->
@@ -3922,4 +3919,13 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       { code: 'fi', label: '\ud83c\uddeb\ud83c\uddee Finnish' },
       { code: 'tl', label: '\ud83c\uddf5\ud83c\udded Filipino' },
       { code: 'de', label: '🇩🇪 German' },
-      { code: 'fr', label: '🇫🇷 Fren
+      { code: 'fr', label: '🇫🇷 French' },
+      { code: 'es', label: '🇪🇸 Spanish' },
+      { code: 'sv', label: '🇸🇪 Swedish' }
+    ];
+
+    function nwToggleLang(event) {
+      event.stopPropagation();
+      var dd = document.getElementById('lang-dropdown');
+      if (!dd) return;
+     

@@ -106,22 +106,15 @@ function initFirebaseSafe() {
 window.addEventListener('load', initFirebaseSafe);
 
 // ─────────────────────────────────────────────────────────────
-// PAGE LOADER — hide once page is fully ready
+// PAGE LOADER — CSS animation auto-hides at 1.8s; JS also hides it
 // ─────────────────────────────────────────────────────────────
 (function() {
   function hideLoader() {
     var loader = document.getElementById('page-loader');
-    if (!loader) return;
-    loader.style.opacity = '0';
-    setTimeout(function() { loader.style.display = 'none'; }, 420);
+    if (loader) loader.style.display = 'none';
   }
-  if (document.readyState === 'complete') {
-    setTimeout(hideLoader, 300);
-  } else {
-    window.addEventListener('load', function() { setTimeout(hideLoader, 300); });
-  }
-  // Safety fallback — always hide after 4 seconds even if something is slow
-  setTimeout(hideLoader, 4000);
+  // Hide after 2.2s (slightly after CSS fade completes at 1.8s+0.4s)
+  setTimeout(hideLoader, 2200);
 })();
 
 // ─────────────────────────────────────────────────────────────
@@ -4029,3 +4022,7 @@ function loadAdminCashbackClaims() {
       if (tableWrap) tableWrap.style.display='block';
       if (tbody) {
         tbody.innerHTML = rows.map(function(d) {
+          var sc  = d.status==='confirmed'?'#15803d':d.status==='paid'?'#1d4ed8':'#b45309';
+          var sbg = d.status==='confirmed'?'#f0fdf4':d.status==='paid'?'#eff6ff':'#fffbeb';
+          var acts = (d.status==='pending')
+            
