@@ -3233,12 +3233,12 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
 
   <!-- AUTH MODAL -->
   <div id="auth-overlay" class="modal-overlay" onclick="closeAuthModal(event)">
-    <div class="modal-card" onclick="event.stopPropagation()" style="max-width:420px;width:95%;border-radius:22px;overflow:hidden;padding:0;">
+    <div class="modal-card auth-modal-card" onclick="event.stopPropagation()" style="max-width:420px;width:95%;border-radius:22px;padding:0;">
 
       <!-- Modal top header -->
-      <div style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);padding:24px 24px 20px;position:relative;">
+      <div class="auth-modal-header" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);padding:24px 24px 20px;position:relative;">
         <button onclick="closeAuthModal()" style="position:absolute;right:16px;top:16px;background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-        <div style="font-size:2rem;margin-bottom:6px;">✈</div>
+        <div class="auth-modal-plane" style="font-size:2rem;margin-bottom:6px;">✈</div>
         <div id="auth-modal-title" style="color:#fff;font-size:1.2rem;font-weight:800;margin-bottom:2px;">Welcome to NordicWings</div>
         <div id="auth-modal-sub" style="color:#93c5fd;font-size:.85rem;">Sign in to manage your bookings</div>
         <!-- Tabs -->
@@ -3267,7 +3267,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           <span id="login-btn-text">Sign In →</span>
           <span id="login-btn-spinner" class="spinner" style="display:none;"></span>
         </button>
-        <div style="background:#f8faff;border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+        <div class="auth-why-signin" style="background:#f8faff;border-radius:10px;padding:12px 14px;margin-bottom:14px;">
           <div style="font-size:.78rem;color:#64748b;font-weight:600;margin-bottom:6px;">Why sign in?</div>
           <div style="font-size:.8rem;color:#475569;display:flex;flex-direction:column;gap:3px;">
             <span>✅ View and manage your bookings</span>
@@ -3946,6 +3946,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       }
     });
 
-    window.addEventListener('DOMContentLoaded', nwBuildLangList);
-  </script>
-</html>
+    window.
