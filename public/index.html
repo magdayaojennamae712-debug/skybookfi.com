@@ -2206,6 +2206,32 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
                 <tbody id="nl-admin-table-body"></tbody>
               </table>
             </div>
+
+            <!-- ── SEND NEWSLETTER ── -->
+            <div style="margin-top:32px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:24px;">
+              <h4 style="font-size:1rem;font-weight:800;color:#0f172a;margin:0 0 6px;">📨 Send Newsletter to All Subscribers</h4>
+              <p style="font-size:.82rem;color:#64748b;margin:0 0 18px;">Compose a message and send it to everyone on your list at once.</p>
+
+              <div style="margin-bottom:14px;">
+                <label style="display:block;font-size:.78rem;font-weight:700;color:#374151;margin-bottom:5px;">Subject line</label>
+                <input id="nl-compose-subject" type="text" placeholder="e.g. ✈️ Cheap flights to Bangkok this summer!" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:.9rem;font-family:inherit;outline:none;">
+              </div>
+
+              <div style="margin-bottom:14px;">
+                <label style="display:block;font-size:.78rem;font-weight:700;color:#374151;margin-bottom:5px;">Message (plain text — write naturally)</label>
+                <textarea id="nl-compose-body" rows="6" placeholder="Hi there!&#10;&#10;We found some amazing flight deals from Helsinki this week...&#10;&#10;Check them out at nordicwings.net ✈️" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:.9rem;font-family:inherit;outline:none;resize:vertical;"></textarea>
+              </div>
+
+              <div style="margin-bottom:18px;">
+                <label style="display:block;font-size:.78rem;font-weight:700;color:#374151;margin-bottom:5px;">Admin Token (from Railway env: NEWSLETTER_TOKEN)</label>
+                <input id="nl-compose-token" type="password" placeholder="Your secret token" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:.9rem;font-family:inherit;outline:none;">
+              </div>
+
+              <button onclick="sendNewsletter()" id="nl-send-btn" style="background:linear-gradient(135deg,#1d4ed8,#1e40af);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;">
+                📨 Send to All Subscribers
+              </button>
+              <div id="nl-send-result" style="margin-top:14px;display:none;padding:12px 16px;border-radius:10px;font-size:.88rem;font-weight:600;"></div>
+            </div>
           </div>
 
         </div><!-- /tab container -->
@@ -3908,32 +3934,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       var btn = document.getElementById('lang-btn-label');
       var found = NW_LANGS.find(function(l){ return l.code === code; });
       if (btn && found) btn.textContent = found.label;
-    }
-
-    function nwBuildLangList() {
-      var list = document.getElementById('lang-list');
-      if (!list) return;
-      list.innerHTML = '';
-      NW_LANGS.forEach(function(l) {
-        var li = document.createElement('li');
-        li.textContent = l.label;
-        li.style.cssText = 'padding:8px 16px;cursor:pointer;white-space:nowrap;';
-        li.addEventListener('mouseenter', function(){ li.style.background='#f1f5f9'; });
-        li.addEventListener('mouseleave', function(){ li.style.background=''; });
-        li.addEventListener('click', function(){ nwSetLang(l.code); });
-        list.appendChild(li);
-      });
-    }
-
-    document.addEventListener('click', function(e) {
-      var dd = document.getElementById('lang-dropdown');
-      var btn = document.getElementById('lang-btn');
-      if (dd && btn && !btn.contains(e.target)) {
-        dd.style.display = 'none';
-      }
-    });
-
-    window.addEventListener('DOMContentLoaded', nwBuildLangList);
-  </script>
-</html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+ 

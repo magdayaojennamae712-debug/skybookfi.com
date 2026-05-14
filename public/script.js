@@ -4068,20 +4068,18 @@ function loadAdminNewsletter() {
     });
 }
 
-function approveCashbackClaim(docId, btn) {
-  if (!confirm('Approve this cashback claim?')) return;
-  if (btn) { btn.disabled=true; btn.textContent='Saving…'; }
-  db.collection('cashback_claims').doc(docId)
-    .update({status:'confirmed', reviewedAt: firebase.firestore.FieldValue.serverTimestamp()})
-    .then(function() { loadAdminCashbackClaims(); })
-    .catch(function(e) { alert('Error: '+e.message); if (btn) { btn.disabled=false; btn.textContent='✔ Approve'; } });
-}
+// ── Send Newsletter ───────────────────────────────────────────
+function sendNewsletter() {
+  var subject = (document.getElementById('nl-compose-subject') || {}).value || '';
+  var body    = (document.getElementById('nl-compose-body')    || {}).value || '';
+  var token   = (document.getElementById('nl-compose-token')   || {}).value || '';
+  var btn     = document.getElementById('nl-send-btn');
+  var result  = document.getElementById('nl-send-result');
 
-function rejectCashbackClaim(docId, btn) {
-  if (!confirm('Reject this claim?')) return;
-  if (btn) { btn.disabled=true; btn.textContent='Saving…'; }
-  db.collection('cashback_claims').doc(docId)
-    .update({status:'rejected', reviewedAt: firebase.firestore.FieldValue.serverTimestamp()})
-    .then(function() { loadAdminCashbackClaims(); })
-    .catch(function(e) { alert('Error: '+e.message); if (btn) { btn.disabled=false; btn.textContent='✗ Reject'; } });
-}
+  if (!subject.trim()) { alert('Please enter a subject line.'); return; }
+  if (!body.trim())    { alert('Please write a message.'); return; }
+  if (!token.trim())   { alert('Please enter your admin token.'); return; }
+
+  // Convert plain text to simple HTML paragraphs
+  var bodyHtml = body.trim().split(/\n\n+/).map(function(p) {
+    return '<p style="color:#1e293b;font-size:.95rem;line-height:1.
