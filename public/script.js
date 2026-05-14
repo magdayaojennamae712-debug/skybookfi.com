@@ -42,6 +42,10 @@ function initFirebaseSafe() {
         // Signed in — always update nav and close modal
         if (typeof updateNavForAuth === 'function') updateNavForAuth(user);
         if (typeof _closeAuthOverlay === 'function') _closeAuthOverlay();
+        // Track sign-in
+        if (typeof gtag === 'function') {
+          gtag('event', 'login', { method: user.providerData[0] ? user.providerData[0].providerId : 'email' });
+        }
 
         var pendingPage = localStorage.getItem('pendingAuthPage');
         if (pendingPage !== null) {
@@ -412,6 +416,11 @@ function showPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   target.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'instant' });
+
+  // Track page navigation
+  if (typeof gtag === 'function') {
+    gtag('event', 'page_view', { page_title: pageId, page_location: window.location.href });
+  }
 
   // Load data when navigating to special pages
   if (pageId === 'dashboard') loadDashboard();
@@ -1232,6 +1241,16 @@ async function searchFlights() {
                    numAdults, numChildren, numInfants, isRoundTrip, cabinClass };
 
   showPage('results');
+  // Track flight search
+  if (typeof gtag === 'function') {
+    gtag('event', 'search', {
+      search_term: origin + ' → ' + dest,
+      origin: origin, destination: dest,
+      depart_date: departDate, passengers: passengers,
+      trip_type: isRoundTrip ? 'round_trip' : 'one_way',
+      cabin_class: cabinClass
+    });
+  }
   document.getElementById('results-loading').style.display = 'flex';
   document.getElementById('results-list').style.display    = 'none';
   document.getElementById('results-empty').style.display   = 'none';
@@ -1810,6 +1829,16 @@ function showAgencyPage() {
   const allSegs = f.itineraries[0].segments;
   const price   = parseFloat(f.price.grandTotal);
   const sym     = f.price.currency === 'EUR' ? '€' : '$';
+
+  // Track: user selected a flight and is ready to book
+  if (typeof gtag === 'function') {
+    gtag('event', 'select_item', {
+      item_list_name: 'Flight Results',
+      items: [{ item_name: seg.departure.iataCode + ' → ' + lastSeg.arrival.iataCode,
+                item_category: 'Flight', price: price, currency: f.price.currency || 'EUR' }]
+    });
+    gtag('event', 'begin_checkout', { currency: f.price.currency || 'EUR', value: price });
+  }
 
   // Route title
   document.getElementById('agency-route-title').textContent =
@@ -3057,6 +3086,11 @@ function openAuthModal(tab) {
   document.getElementById('auth-overlay').style.display = 'flex';
   document.getElementById('auth-overlay').classList.add('open');
   switchAuthTab(tab || 'login');
+
+  // Track sign-in modal open
+  if (typeof gtag === 'function') {
+    gtag('event', 'login_modal_open', { method: tab || 'login', from_page: returnPageId });
+  }
 }
 
 // Helper: closes the auth overlay by removing both inline style AND 'open' class
