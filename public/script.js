@@ -3078,17 +3078,17 @@ async function signInWithGoogle() {
   // Remember which page opened the sign-in modal so we can return there
   var returnPageId = localStorage.getItem('pendingAuthPage') || 'home';
 
-  // Detect mobile — always use redirect on mobile (popups are unreliable on phones)
-  var isMobile = /Android|iPhone|iPad|iPod|Mobile|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  // Detect iOS — needs redirect (Safari blocks popups)
+  // Android Chrome supports popups fine, same as desktop
+  var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
 
-  if (isMobile) {
-    // Mobile: go straight to redirect — reliable on all mobile browsers
+  if (isIOS) {
+    // iOS Safari: must use redirect (popup blocked by WebKit)
     try {
       await auth.signInWithRedirect(provider);
-      // Page will reload; getRedirectResult() in initFirebaseSafe handles the rest
     } catch (err) {
       const errorEl = document.getElementById('login-error') || document.getElementById('signup-error');
       if (errorEl) { errorEl.textContent = 'Sign-in failed. Please try again.'; errorEl.style.display = 'block'; }
@@ -3096,12 +3096,13 @@ async function signInWithGoogle() {
     return;
   }
 
-  // Desktop: try popup first, fall back to redirect
+  // Android + Desktop: use popup (works reliably, no page reload needed)
   try {
     let result;
     try {
       result = await auth.signInWithPopup(provider);
     } catch (popupErr) {
+      // If popup blocked for any reason, fall back to redirect
       if (popupErr.code === 'auth/popup-blocked' ||
           popupErr.code === 'auth/operation-not-supported-in-this-environment' ||
           popupErr.code === 'auth/internal-error') {
