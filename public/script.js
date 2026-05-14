@@ -39,20 +39,28 @@ function initFirebaseSafe() {
       currentUser = user;
       if (typeof updateNavForAuth === 'function') updateNavForAuth(user);
 
-      // If user just signed in (via redirect) and the auth overlay is still showing, close it
       if (user) {
         var overlay = document.getElementById('auth-overlay');
+        var pendingPage = localStorage.getItem('pendingAuthPage');
+
+        // Always close overlay if open (popup sign-in on desktop)
         if (overlay && overlay.style.display === 'flex') {
           overlay.style.display = 'none';
-          var returnPage = localStorage.getItem('pendingAuthPage') || 'home';
+        }
+
+        // pendingAuthPage in storage = sign-in flow started but page reloaded (redirect sign-in)
+        // This catches iOS Safari where getRedirectResult() returns null due to cookie restrictions
+        if (pendingPage !== null) {
           localStorage.removeItem('pendingAuthPage');
-          if (returnPage && returnPage !== 'home') {
-            showPage(returnPage);
+          if (overlay) overlay.style.display = 'none';
+          if (pendingPage && pendingPage !== 'home') {
+            showPage(pendingPage);
           }
         }
       }
     });
-    // Handle redirect sign-in result (mobile — completes after Google redirect)
+
+    // Handle redirect sign-in result (fires after Google redirect on mobile/desktop)
     auth.getRedirectResult().then(function(result) {
       if (result && result.user) {
         var overlay = document.getElementById('auth-overlay');
