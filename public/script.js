@@ -28,9 +28,23 @@ let auth = null;
 let db   = null;
 let stripe = null;
 
+function showFirebaseError() {
+  // Only show once
+  if (document.getElementById('firebase-error-banner')) return;
+  var banner = document.createElement('div');
+  banner.id = 'firebase-error-banner';
+  banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:8000;background:#fef2f2;border-bottom:2px solid #fca5a5;color:#991b1b;text-align:center;padding:10px 16px;font-size:.88rem;font-weight:600;';
+  banner.innerHTML = '⚠️ Connection issue — sign-in may be unavailable. Please check your internet or <a href="javascript:location.reload()" style="color:#991b1b;text-decoration:underline;">refresh the page</a>.';
+  document.body.prepend(banner);
+}
+
 function initFirebaseSafe() {
   try {
-    if (typeof firebase === 'undefined') return;
+    if (typeof firebase === 'undefined') {
+      // Firebase SDK failed to load (no internet, script blocked, etc.)
+      setTimeout(showFirebaseError, 3000);
+      return;
+    }
     if (firebase.apps && firebase.apps.length > 0) return;
     firebase.initializeApp(FIREBASE_CONFIG);
     auth = firebase.auth();
@@ -59,6 +73,15 @@ function initFirebaseSafe() {
         if (!pendingPage) {
           // Genuinely signed out — update nav to show Sign In
           if (typeof updateNavForAuth === 'function') updateNavForAuth(null);
+          // Session expiry: if user was previously signed in, show a gentle notification
+          if (currentUser !== null) {
+            // currentUser was set before, meaning they just got signed out unexpectedly
+            var toast = document.createElement('div');
+            toast.textContent = '🔒 Your session has ended. Please sign in again.';
+            toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 22px;border-radius:12px;font-size:.88rem;font-weight:600;z-index:9000;box-shadow:0 4px 20px rgba(0,0,0,.25);white-space:nowrap;';
+            document.body.appendChild(toast);
+            setTimeout(function() { toast.remove(); }, 4000);
+          }
         }
         // If pendingPage exists: stay silent — user will arrive in next firing
       }
@@ -81,6 +104,57 @@ function initFirebaseSafe() {
   }
 }
 window.addEventListener('load', initFirebaseSafe);
+
+// ─────────────────────────────────────────────────────────────
+// PAGE LOADER — hide once page is fully ready
+// ─────────────────────────────────────────────────────────────
+(function() {
+  function hideLoader() {
+    var loader = document.getElementById('page-loader');
+    if (!loader) return;
+    loader.style.opacity = '0';
+    setTimeout(function() { loader.style.display = 'none'; }, 420);
+  }
+  if (document.readyState === 'complete') {
+    setTimeout(hideLoader, 300);
+  } else {
+    window.addEventListener('load', function() { setTimeout(hideLoader, 300); });
+  }
+  // Safety fallback — always hide after 4 seconds even if something is slow
+  setTimeout(hideLoader, 4000);
+})();
+
+// ─────────────────────────────────────────────────────────────
+// OFFLINE / ONLINE DETECTION
+// ─────────────────────────────────────────────────────────────
+(function() {
+  var banner = null;
+  function getOfflineBanner() {
+    if (!banner) banner = document.getElementById('offline-banner');
+    return banner;
+  }
+  function showOffline() {
+    var b = getOfflineBanner();
+    if (b) b.style.display = 'block';
+  }
+  function hideOffline() {
+    var b = getOfflineBanner();
+    if (b) b.style.display = 'none';
+  }
+  if (!navigator.onLine) showOffline();
+  window.addEventListener('offline', showOffline);
+  window.addEventListener('online', function() {
+    hideOffline();
+    // Show brief "back online" confirmation
+    var b = getOfflineBanner();
+    if (b) {
+      b.style.background = '#15803d';
+      b.textContent = '✅ You\'re back online!';
+      b.style.display = 'block';
+      setTimeout(function() { b.style.display = 'none'; b.style.background = '#1e293b'; b.textContent = '📡 You\'re offline — please check your internet connection'; }, 2500);
+    }
+  });
+})();
 
 // ─────────────────────────────────────────────────────────────
 // STATE — app-level variables
@@ -3282,14 +3356,25 @@ async function signOutUser() {
 // Map Firebase error codes to friendly messages
 function friendlyAuthError(code) {
   const map = {
-    'auth/user-not-found':      'No account found with this email.',
-    'auth/wrong-password':      'Incorrect password. Please try again.',
-    'auth/email-already-in-use':'An account with this email already exists.',
-    'auth/invalid-email':       'Please enter a valid email address.',
-    'auth/weak-password':       'Password is too weak. Use at least 6 characters.',
-    'auth/too-many-requests':   'Too many attempts. Please try again later.'
+    'auth/user-not-found':          'No account found with this email. Did you mean to sign up?',
+    'auth/wrong-password':          'Incorrect password. Please try again or reset your password.',
+    'auth/invalid-credential':      'Incorrect email or password. Please check and try again.',
+    'auth/email-already-in-use':    'An account already exists with this email. Try signing in instead.',
+    'auth/invalid-email':           'Please enter a valid email address.',
+    'auth/weak-password':           'Password is too short. Please use at least 6 characters.',
+    'auth/too-many-requests':       'Too many failed attempts. Please wait a few minutes and try again.',
+    'auth/network-request-failed':  'No internet connection. Please check your network and try again.',
+    'auth/popup-blocked':           'Pop-up was blocked. Please allow pop-ups for this site and try again.',
+    'auth/popup-closed-by-user':    'Sign-in was cancelled. Please try again.',
+    'auth/cancelled-popup-request': 'Sign-in was cancelled. Please try again.',
+    'auth/account-exists-with-different-credential': 'An account already exists with this email using a different sign-in method. Try signing in with email/password.',
+    'auth/operation-not-allowed':   'This sign-in method is not enabled. Please contact support.',
+    'auth/expired-action-code':     'This link has expired. Please request a new one.',
+    'auth/user-disabled':           'This account has been disabled. Please contact support.',
+    'auth/requires-recent-login':   'For security, please sign out and sign back in to continue.',
+    'auth/internal-error':          'A sign-in error occurred. Please try again or use email/password instead.'
   };
-  return map[code] || 'Something went wrong. Please try again.';
+  return map[code] || 'Something went wrong. Please try again or contact support@nordicwings.net';
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -3944,82 +4029,3 @@ function loadAdminCashbackClaims() {
       if (tableWrap) tableWrap.style.display='block';
       if (tbody) {
         tbody.innerHTML = rows.map(function(d) {
-          var sc  = d.status==='confirmed'?'#15803d':d.status==='paid'?'#1d4ed8':'#b45309';
-          var sbg = d.status==='confirmed'?'#f0fdf4':d.status==='paid'?'#eff6ff':'#fffbeb';
-          var acts = (d.status==='pending')
-            ? '<button onclick="approveCashbackClaim(\''+d._id+'\',this)" style="background:#15803d;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:.75rem;cursor:pointer;margin-right:4px;">✔ Approve</button>'
-            + '<button onclick="rejectCashbackClaim(\''+d._id+'\',this)"  style="background:#dc2626;color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:.75rem;cursor:pointer;">✗ Reject</button>'
-            : '—';
-          return '<tr>'
-            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.8rem;color:#64748b;">'+(d.userEmail||'—')+'</td>'
-            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;"><strong>'+(d.type||'—')+'</strong><br><span style="font-size:.75rem;color:#64748b;">'+(d.partner||'—')+'</span></td>'
-            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-family:monospace;font-size:.82rem;">'+(d.bookingRef||'—')+'</td>'
-            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;">€'+(d.bookingAmount||0).toFixed(2)+'</td>'
-            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-weight:800;color:#15803d;">€'+(d.cashbackAmount||0).toFixed(2)+'</td>'
-            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:.8rem;">'+(d.bookingDate||'—')+'</td>'
-            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;"><span style="background:'+sbg+';color:'+sc+';font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;">'+(d.status||'pending')+'</span></td>'
-            +'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;">'+acts+'</td>'
-            +'</tr>';
-        }).join('');
-      }
-    }).catch(function(err) {
-      if (loading) { loading.style.display='block'; loading.textContent='Error: '+err.message; }
-    });
-}
-
-
-// ── Admin: load newsletter subscribers ───────────────────────
-function loadAdminNewsletter() {
-  var loading  = document.getElementById('nl-admin-loading');
-  var tableWrap= document.getElementById('nl-admin-table-wrap');
-  var empty    = document.getElementById('nl-admin-empty');
-  var tbody    = document.getElementById('nl-admin-table-body');
-  var countEl  = document.getElementById('nl-admin-count');
-  if (!loading) return;
-  loading.style.display = 'block';
-  if (tableWrap) tableWrap.style.display = 'none';
-  if (empty) empty.style.display = 'none';
-
-  db.collection('newsletter_subscribers').orderBy('subscribedAt','desc').get()
-    .then(function(snap) {
-      loading.style.display = 'none';
-      var rows = [];
-      snap.forEach(function(doc) {
-        var d = doc.data(); d._id = doc.id;
-        rows.push(d);
-      });
-      if (countEl) countEl.textContent = rows.length + ' subscriber' + (rows.length !== 1 ? 's' : '');
-      if (!rows.length) { if (empty) empty.style.display = 'block'; return; }
-      if (tableWrap) tableWrap.style.display = 'block';
-      if (tbody) {
-        tbody.innerHTML = rows.map(function(d) {
-          var date = d.subscribedAt && d.subscribedAt.toDate
-            ? d.subscribedAt.toDate().toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})
-            : '—';
-          var sc  = d.status === 'active' ? '#15803d' : '#dc2626';
-          var sbg = d.status === 'active' ? '#f0fdf4' : '#fee2e2';
-          return '<tr>'
-            + '<td style="padding:10px 14px;border-bottom:1px solid #f1f5f9;font-weight:600;">' + (d.email||'—') + '</td>'
-            + '<td style="padding:10px 14px;border-bottom:1px solid #f1f5f9;font-size:.8rem;color:#64748b;">' + (d.source||'homepage') + '</td>'
-            + '<td style="padding:10px 14px;border-bottom:1px solid #f1f5f9;font-size:.82rem;">' + date + '</td>'
-            + '<td style="padding:10px 14px;border-bottom:1px solid #f1f5f9;"><span style="background:'+sbg+';color:'+sc+';font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;">' + (d.status||'active') + '</span></td>'
-            + '</tr>';
-        }).join('');
-      }
-    }).catch(function(err) {
-      if (loading) { loading.style.display = 'block'; loading.textContent = 'Error: ' + err.message; }
-    });
-}
-
-function approveCashbackClaim(docId, btn) {
-  if (!confirm('Approve this cashback claim?')) return;
-  if (btn) { btn.disabled=true; btn.textContent='Saving…'; }
-  db.collection('cashback_claims').doc(docId)
-    .update({status:'confirmed', reviewedAt: firebase.firestore.FieldValue.serverTimestamp()})
-    .then(function() { loadAdminCashbackClaims(); })
-    .catch(function(e) { alert('Error: '+e.message); if (btn) { btn.disabled=false; btn.textContent='✔ Approve'; } });
-}
-
-function rejectCashbackClaim(docId, btn) {
-  if (!confirm('Reject this claim?')) return;
-  if (btn) { btn.

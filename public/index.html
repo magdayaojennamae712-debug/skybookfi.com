@@ -307,6 +307,25 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
 </head>
 <body onclick="void(0)">
 
+  <!-- ── PAGE LOADING SCREEN ─────────────────────────────── -->
+  <div id="page-loader" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s ease;">
+    <div style="font-size:2.5rem;margin-bottom:12px;animation:loaderPulse 1.2s ease-in-out infinite;">✈</div>
+    <div style="font-size:1.1rem;font-weight:800;color:#1e3a8a;letter-spacing:.02em;">NordicWings</div>
+    <div style="font-size:.82rem;color:#94a3b8;margin-top:6px;">Loading your travel experience...</div>
+    <div style="margin-top:20px;width:48px;height:4px;background:#e2e8f0;border-radius:4px;overflow:hidden;">
+      <div style="height:100%;background:linear-gradient(90deg,#1e3a8a,#3b82f6);border-radius:4px;animation:loaderBar 1.2s ease-in-out infinite;"></div>
+    </div>
+  </div>
+  <style>
+    @keyframes loaderPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+    @keyframes loaderBar { 0%{width:0%;margin-left:0} 50%{width:100%;margin-left:0} 100%{width:0%;margin-left:100%} }
+  </style>
+
+  <!-- ── OFFLINE BANNER ──────────────────────────────────── -->
+  <div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:8888;background:#1e293b;color:#fff;text-align:center;padding:10px 16px;font-size:.88rem;font-weight:600;">
+    📡 You're offline — please check your internet connection
+  </div>
+
   <!-- PROMO BANNER -->
   <div id="promo-banner" style="background:#1e40af;color:#fff;text-align:center;padding:10px 44px 10px 12px;font-size:.85rem;font-weight:500;position:relative;width:100%;box-sizing:border-box;">
     &#9992; Compare prices from 20+ airlines &mdash; completely free, no booking fees. &nbsp;<strong style="text-decoration:underline;cursor:pointer;" onclick="window.scrollTo({top:400,behavior:'smooth'})">Search now &rarr;</strong>
@@ -3903,47 +3922,4 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       { code: 'fi', label: '\ud83c\uddeb\ud83c\uddee Finnish' },
       { code: 'tl', label: '\ud83c\uddf5\ud83c\udded Filipino' },
       { code: 'de', label: '🇩🇪 German' },
-      { code: 'fr', label: '🇫🇷 French' },
-      { code: 'es', label: '🇪🇸 Spanish' },
-      { code: 'sv', label: '🇸🇪 Swedish' }
-    ];
-
-    function nwToggleLang(event) {
-      event.stopPropagation();
-      var dd = document.getElementById('lang-dropdown');
-      if (!dd) return;
-      dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function nwSetLang(code) {
-      var dd = document.getElementById('lang-dropdown');
-      if (dd) dd.style.display = 'none';
-      var btn = document.getElementById('lang-btn-label');
-      var found = NW_LANGS.find(function(l){ return l.code === code; });
-      if (btn && found) btn.textContent = found.label;
-    }
-
-    function nwBuildLangList() {
-      var list = document.getElementById('lang-list');
-      if (!list) return;
-      list.innerHTML = '';
-      NW_LANGS.forEach(function(l) {
-        var li = document.createElement('li');
-        li.textContent = l.label;
-        li.style.cssText = 'padding:8px 16px;cursor:pointer;white-space:nowrap;';
-        li.addEventListener('mouseenter', function(){ li.style.background='#f1f5f9'; });
-        li.addEventListener('mouseleave', function(){ li.style.background=''; });
-        li.addEventListener('click', function(){ nwSetLang(l.code); });
-        list.appendChild(li);
-      });
-    }
-
-    document.addEventListener('click', function(e) {
-      var dd = document.getElementById('lang-dropdown');
-      var btn = document.getElementById('lang-btn');
-      if (dd && btn && !btn.contains(e.target)) {
-        dd.style.display = 'none';
-      }
-    });
-
-    window.
+      { code: 'fr', label: '🇫🇷 Fren
