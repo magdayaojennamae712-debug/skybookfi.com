@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    // Force update old service workers
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        regs.forEach(function(r) { r.update(); });
+      });
+    }
+    // Define toggleMobileMenu immediately - before ANY other script
+    window.toggleMobileMenu = function() {
+      var m = document.getElementById('mobile-menu');
+      var b = document.getElementById('hamburger-btn');
+      if (!m) return;
+      var open = m.style.display === 'flex';
+      m.style.display = open ? 'none' : 'flex';
+      if (b) b.setAttribute('aria-expanded', open ? 'false' : 'true');
+    };
+  </script>
   <meta name="trustpilot-one-time-domain-verification-id" content="935a546c-eac9-4e00-975a-2e62726be23a"/>
   <!-- Agoda Partner Verification -->
   <meta name="agd-partner-manual-verification" />
@@ -307,27 +324,13 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
 </head>
 <body onclick="void(0)">
 
-  <!-- ── PAGE LOADING SCREEN ─────────────────────────────── -->
-  <div id="page-loader" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s ease;">
-    <div style="font-size:2.5rem;margin-bottom:12px;animation:loaderPulse 1.2s ease-in-out infinite;">✈</div>
-    <div style="font-size:1.1rem;font-weight:800;color:#1e3a8a;letter-spacing:.02em;">NordicWings</div>
-    <div style="font-size:.82rem;color:#94a3b8;margin-top:6px;">Loading your travel experience...</div>
-    <div style="margin-top:20px;width:48px;height:4px;background:#e2e8f0;border-radius:4px;overflow:hidden;">
-      <div style="height:100%;background:linear-gradient(90deg,#1e3a8a,#3b82f6);border-radius:4px;animation:loaderBar 1.2s ease-in-out infinite;"></div>
-    </div>
-  </div>
-  <style>
-    @keyframes loaderPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
-    @keyframes loaderBar { 0%{width:0%;margin-left:0} 50%{width:100%;margin-left:0} 100%{width:0%;margin-left:100%} }
-  </style>
-
   <!-- ── OFFLINE BANNER ──────────────────────────────────── -->
-  <div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:8888;background:#1e293b;color:#fff;text-align:center;padding:10px 16px;font-size:.88rem;font-weight:600;">
+  <div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:8888;background:#1e293b;color:#fff;text-align:center;padding:10px 16px;font-size:.88rem;font-weight:600;pointer-events:none;">
     📡 You're offline — please check your internet connection
   </div>
 
   <!-- PROMO BANNER -->
-  <div id="promo-banner" style="background:#1e40af;color:#fff;text-align:center;padding:10px 44px 10px 12px;font-size:.85rem;font-weight:500;position:relative;width:100%;box-sizing:border-box;">
+  <div id="promo-banner" style="background:#1e40af;color:#fff;text-align:center;padding:10px 44px 10px 12px;font-size:.85rem;font-weight:500;position:relative;width:100%;box-sizing:border-box;z-index:1;">
     &#9992; Compare prices from 20+ airlines &mdash; completely free, no booking fees. &nbsp;<strong style="text-decoration:underline;cursor:pointer;" onclick="window.scrollTo({top:400,behavior:'smooth'})">Search now &rarr;</strong>
     <button onclick="this.parentElement.style.display='none';" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.25);border:none;color:#fff;font-size:1.1rem;cursor:pointer;padding:2px 8px;border-radius:4px;">&times;</button>
   </div>
@@ -377,30 +380,30 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           </div>
         </div>
       </nav>
-      <button class="mobile-menu-btn" id="hamburger-btn" type="button" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+      <button class="mobile-menu-btn" id="hamburger-btn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMobileMenu()" ontouchstart="event.preventDefault();toggleMobileMenu();">&#9776;</button>
     </div>
   </header>
   <!-- Mobile menu OUTSIDE header — fixes iOS Safari sticky touch bug -->
-  <div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu" id="mobile-menu" style="position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;z-index:99999!important;display:none;flex-direction:column;background:#fff;overflow-y:auto;padding:16px 20px 24px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #f1f5f9;">
       <span style="font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;">Menu</span>
-      <button onclick="toggleMobileMenu()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#64748b;padding:4px 8px;line-height:1;">&#10005;</button>
+      <button ontouchend="this.ontouchend=null;toggleMobileMenu();return false;" onclick="toggleMobileMenu()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#64748b;padding:12px 16px;line-height:1;touch-action:manipulation;-webkit-tap-highlight-color:transparent;">&#10005;</button>
     </div>
-    <a href="javascript:void(0)" onclick="showPage('home');toggleMobileMenu()">🏠 Home</a>
-    <a href="javascript:void(0)" onclick="showPage('hotels');toggleMobileMenu()" style="color:#0ea5e9;font-weight:700;">🏨 Hotels</a>
-    <a href="javascript:void(0)" onclick="showPage('home');setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu()">✈ Destinations</a>
-    <a href="/blog/" onclick="toggleMobileMenu()">📝 Blog</a>
-    <a href="javascript:void(0)" onclick="showPage('book');toggleMobileMenu()" style="color:#0369a1;font-weight:700;">⚓ Sea Travel</a>
-    <a href="javascript:void(0)" onclick="showPage('cashback');toggleMobileMenu()" style="color:#15803d;font-weight:700;background:#dcfce7;border-radius:10px;">💰 Cashback — Earn Money!</a>
-    <a href="javascript:void(0)" onclick="showPage('support');toggleMobileMenu()">❓ Support</a>
-    <button id="mobile-nav-login" onclick="openAuthModal('login');toggleMobileMenu()">Sign In</button>
-    <button id="mobile-nav-signup" onclick="openAuthModal('signup');toggleMobileMenu()">Sign Up Free</button>
+    <button class="mob-nav-btn" ontouchend="this.ontouchend=null;try{showPage('home')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('home')}catch(e){};toggleMobileMenu()">🏠 Home</button>
+    <button class="mob-nav-btn" style="color:#0ea5e9;font-weight:700;" ontouchend="this.ontouchend=null;try{showPage('hotels')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('hotels')}catch(e){};toggleMobileMenu()">🏨 Hotels</button>
+    <button class="mob-nav-btn" ontouchend="this.ontouchend=null;try{showPage('home')}catch(e){};setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu();return false;" onclick="try{showPage('home')}catch(e){};setTimeout(function(){var el=document.getElementById('destinations');if(el)el.scrollIntoView({behavior:'smooth'});},200);toggleMobileMenu()">✈ Destinations</button>
+    <a href="/blog/" ontouchend="toggleMobileMenu()" onclick="toggleMobileMenu()" style="display:block;padding:14px 0;color:var(--text);font-size:1rem;font-weight:500;text-decoration:none;touch-action:manipulation;">📝 Blog</a>
+    <button class="mob-nav-btn" style="color:#0369a1;font-weight:700;" ontouchend="this.ontouchend=null;try{showPage('book')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('book')}catch(e){};toggleMobileMenu()">⚓ Sea Travel</button>
+    <button class="mob-nav-btn" style="color:#15803d;font-weight:700;background:#dcfce7;border-radius:10px;" ontouchend="this.ontouchend=null;try{showPage('cashback')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('cashback')}catch(e){};toggleMobileMenu()">💰 Cashback — Earn Money!</button>
+    <button class="mob-nav-btn" ontouchend="this.ontouchend=null;try{showPage('support')}catch(e){};toggleMobileMenu();return false;" onclick="try{showPage('support')}catch(e){};toggleMobileMenu()">❓ Support</button>
+    <button id="mobile-nav-login" ontouchend="this.ontouchend=null;try{openAuthModal('login')}catch(e){};toggleMobileMenu();return false;" onclick="try{openAuthModal('login')}catch(e){};toggleMobileMenu()">Sign In</button>
+    <button id="mobile-nav-signup" ontouchend="this.ontouchend=null;try{openAuthModal('signup')}catch(e){};toggleMobileMenu();return false;" onclick="try{openAuthModal('signup')}catch(e){};toggleMobileMenu()">Sign Up Free</button>
     <div id="mobile-nav-user" style="display:none;padding:8px 0;border-top:1px solid #f1f5f9;margin-top:4px;">
       <span id="mobile-nav-username" style="font-weight:700;color:#1e3a8a;font-size:.95rem;"></span>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
-        <button onclick="showPage('dashboard');toggleMobileMenu()" style="background:#1e3a8a;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;">📁 My Bookings</button>
-        <button id="mobile-nav-admin" onclick="showPage('admin');toggleMobileMenu()" style="display:none;background:#fef3c7;color:#92400e;border:none;padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;">📊 Business</button>
-        <button onclick="firebase.auth().signOut();toggleMobileMenu()" style="background:#f1f5f9;color:#64748b;border:none;padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;">Sign Out</button>
+        <button onclick="try{showPage('dashboard')}catch(e){};toggleMobileMenu()" style="background:#1e3a8a;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;">📁 My Bookings</button>
+        <button id="mobile-nav-admin" onclick="try{showPage('admin')}catch(e){};toggleMobileMenu()" style="display:none;background:#fef3c7;color:#92400e;border:none;padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;">📊 Business</button>
+        <button onclick="try{firebase.auth().signOut()}catch(e){};toggleMobileMenu()" style="background:#f1f5f9;color:#64748b;border:none;padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;">Sign Out</button>
       </div>
     </div>
     <div style="border-top:1px solid #e2e8f0;margin-top:4px;padding-top:12px;">
@@ -2220,6 +2223,32 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
                 <tbody id="nl-admin-table-body"></tbody>
               </table>
             </div>
+
+            <!-- ── SEND NEWSLETTER ── -->
+            <div style="margin-top:32px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:24px;">
+              <h4 style="font-size:1rem;font-weight:800;color:#0f172a;margin:0 0 6px;">📨 Send Newsletter to All Subscribers</h4>
+              <p style="font-size:.82rem;color:#64748b;margin:0 0 18px;">Compose a message and send it to everyone on your list at once.</p>
+
+              <div style="margin-bottom:14px;">
+                <label style="display:block;font-size:.78rem;font-weight:700;color:#374151;margin-bottom:5px;">Subject line</label>
+                <input id="nl-compose-subject" type="text" placeholder="e.g. ✈️ Cheap flights to Bangkok this summer!" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:.9rem;font-family:inherit;outline:none;">
+              </div>
+
+              <div style="margin-bottom:14px;">
+                <label style="display:block;font-size:.78rem;font-weight:700;color:#374151;margin-bottom:5px;">Message (plain text — write naturally)</label>
+                <textarea id="nl-compose-body" rows="6" placeholder="Hi there!&#10;&#10;We found some amazing flight deals from Helsinki this week...&#10;&#10;Check them out at nordicwings.net ✈️" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:.9rem;font-family:inherit;outline:none;resize:vertical;"></textarea>
+              </div>
+
+              <div style="margin-bottom:18px;">
+                <label style="display:block;font-size:.78rem;font-weight:700;color:#374151;margin-bottom:5px;">Admin Token (from Railway env: NEWSLETTER_TOKEN)</label>
+                <input id="nl-compose-token" type="password" placeholder="Your secret token" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:.9rem;font-family:inherit;outline:none;">
+              </div>
+
+              <button onclick="sendNewsletter()" id="nl-send-btn" style="background:linear-gradient(135deg,#1d4ed8,#1e40af);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;">
+                📨 Send to All Subscribers
+              </button>
+              <div id="nl-send-result" style="margin-top:14px;display:none;padding:12px 16px;border-radius:10px;font-size:.88rem;font-weight:600;"></div>
+            </div>
           </div>
 
         </div><!-- /tab container -->
@@ -3804,40 +3833,23 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       document.getElementById('depart-input').value = dt.toISOString().split('T')[0];
       document.querySelector('.search-card').scrollIntoView({ behavior: 'smooth' });
     }
-    function toggleMobileMenu() {
+    window.toggleMobileMenu = function() {
       var menu = document.getElementById('mobile-menu');
       var btn  = document.getElementById('hamburger-btn');
       if (!menu) return;
       var isOpen = menu.classList.toggle('open');
       if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    }
+    };
+    var toggleMobileMenu = window.toggleMobileMenu;
 
-    // Close mobile menu when a link/button inside it is tapped
+    // Hamburger button — single click handler only
     (function() {
       function initHamburger() {
-        var btn  = document.getElementById('hamburger-btn');
-        var menu = document.getElementById('mobile-menu');
-        if (!btn || !menu) return;
-
-        // Single unified click handler — no touchend/click double-fire
+        var btn = document.getElementById('hamburger-btn');
+        if (!btn) return;
         btn.addEventListener('click', function(e) {
           e.stopPropagation();
           toggleMobileMenu();
-        });
-
-        // Close menu when tapping any item inside it
-        menu.addEventListener('click', function() {
-          menu.classList.remove('open');
-          if (btn) btn.setAttribute('aria-expanded', 'false');
-        });
-
-        // Close menu when tapping outside
-        document.addEventListener('click', function(e) {
-          if (menu.classList.contains('open') &&
-              !menu.contains(e.target) && e.target !== btn) {
-            menu.classList.remove('open');
-            if (btn) btn.setAttribute('aria-expanded', 'false');
-          }
         });
       }
       if (document.readyState === 'loading') {
@@ -3922,4 +3934,16 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       { code: 'fi', label: '\ud83c\uddeb\ud83c\uddee Finnish' },
       { code: 'tl', label: '\ud83c\uddf5\ud83c\udded Filipino' },
       { code: 'de', label: '🇩🇪 German' },
-      { code: 'fr', label: '🇫🇷 Fren
+      { code: 'fr', label: '🇫🇷 French' },
+      { code: 'es', label: '🇪🇸 Spanish' },
+      { code: 'sv', label: '🇸🇪 Swedish' }
+    ];
+
+    function nwToggleLang(event) {
+      event.stopPropagation();
+      var dd = document.getElementById('lang-dropdown');
+      if (!dd) return;
+      dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+    }
+
+    functio

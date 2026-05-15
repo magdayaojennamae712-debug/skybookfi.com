@@ -2070,7 +2070,79 @@ app.post('/api/welcome-email', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log('NordicWings is running on port ' + PORT);
-  console.log('Security: Helmet + CSP + Rate limiting + Input validation enabled');
+// ── ROUTE: POST /api/send-newsletter ─────────────────────────
+
+app.post('/api/send-newsletter', async (req, res) => {
+  const { subject, bodyHtml, bodyText, senderToken } = req.body || {};
+  if (!senderToken || senderToken !== process.env.NEWSLETTER_TOKEN) {
+    return res.status(403).json({ ok: false, error: 'Unauthorized' });
+  }
+  if (!subject || !bodyHtml) {
+    return res.status(400).json({ ok: false, error: 'subject and bodyHtml are required' });
+  }
+
+  let subscribers = [];
+  try {
+    const snap = await db.collection('newsletter_subscribers')
+      .where('status', '==', 'active').get();
+    snap.forEach(doc => {
+      const d = doc.data();
+      if (d.email) subscribers.push(d.email);
+    });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: 'Firestore error: ' + err.message });
+  }
+
+  if (!subscribers.length) {
+    return res.json({ ok: true, sent: 0, failed: 0, total: 0, message: 'No active subscribers' });
+  }
+
+  const wrapHtml = (body) => `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${subject}</title></head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:system-ui,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:32px 16px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08);">
+        <tr><td style="background:linear-gradient(135deg,#0f172a,#1e40af);padding:28px 32px;text-align:center;">
+          <div style="font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.5px;">✈ NordicWings</div>
+          <div style="font-size:.8rem;color:#93c5fd;margin-top:4px;">Finland's Flight Search</div>
+        </td></tr>
+        <tr><td style="padding:32px;">
+          ${body}
+        </td></tr>
+        <tr><td style="background:#f8fafc;padding:20px 32px;text-align:center;border-top:1px solid #e2e8f0;">
+          <p style="margin:0;font-size:.75rem;color:#94a3b8;">
+            © 2025 NordicWings.net &nbsp;·&nbsp;
+            <a href="https://nordicwings.net" style="color:#1d4ed8;text-decoration:none;">Visit Website</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+
+  let sent = 0, failed = 0;
+  for (const email of subscribers) {
+    try {
+      await emailTransporter.sendMail({
+        from:    `"NordicWings ✈" <${process.env.GMAIL_USER}>`,
+        to:      email,
+        subject: subject,
+        html:    wrapHtml(bodyHtml),
+        text:    bodyText || subject
+      });
+      sent++;
+    } catch (err) {
+      console.error(`Newsletter send failed for ${email}:`, err.message);
+      failed++;
+    }
+    // Small delay to avoid Gmail rate limits
+    await new Promise(r => setTimeout(r, 300));
+  }
+
+  console.log(`📧 Newsletter sent: ${sent} ok, ${failed} failed out of ${subscribers.length}`);
+  res.json({ ok: true, sent, failed, total: subscribers.length });
 });
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

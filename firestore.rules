@@ -79,4 +79,18 @@ service cloud.firestore {
     }
 
     // NEWSLETTER SUBSCRIBERS — anyone can subscribe, only admin can read list
-    match /newsletter_subscr
+    match /newsletter_subscribers/{docId} {
+      // ✅ Anyone (logged in or not) can subscribe
+      allow create: if request.resource.data.email is string
+                    && request.resource.data.email.size() > 5;
+      // ✅ Admin can read all subscribers
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // Block all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
