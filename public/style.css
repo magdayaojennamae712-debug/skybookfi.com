@@ -170,6 +170,7 @@ img { max-width: 100%; display: block; }
   overflow-y: auto;
   z-index: 99999;
   box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  -webkit-overflow-scrolling: touch;
 }
 .mobile-menu.open { display: flex; }
 .mobile-menu a, .mobile-menu button, .mob-nav-btn {

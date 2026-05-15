@@ -363,7 +363,7 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
           </div>
         </div>
       </nav>
-      <button class="mobile-menu-btn" id="hamburger-btn" type="button" aria-label="Open menu" aria-expanded="false" onclick="(function(btn){var m=document.getElementById('mobile-menu');if(!m)return;var o=m.classList.toggle('open');btn.setAttribute('aria-expanded',o?'true':'false');})(this)">&#9776;</button>
+      <button class="mobile-menu-btn" id="hamburger-btn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMobileMenu()" ontouchstart="event.preventDefault();toggleMobileMenu();">&#9776;</button>
     </div>
   </header>
   <!-- Mobile menu OUTSIDE header — fixes iOS Safari sticky touch bug -->
@@ -3822,11 +3822,6 @@ Helsinki Tallinn ferry, Helsinki Stockholm ferry, Turku Stockholm ferry, Baltic 
       if (!menu) return;
       var isOpen = menu.classList.toggle('open');
       if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      if (isOpen) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-      }
     };
     var toggleMobileMenu = window.toggleMobileMenu;
 
