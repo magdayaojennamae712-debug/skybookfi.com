@@ -335,4 +335,13 @@
     <loc>https://nordicwings.net/?from=HEL&amp;to=LAX</loc>
     <lastmod>2026-05-15</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.7</pri
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nordicwings.net/?from=HEL&amp;to=CUN</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.68</priority>
+  </url>
+
+</urlset>
